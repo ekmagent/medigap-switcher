@@ -28,7 +28,7 @@ export default function HealthPage1() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
-        <QuoteProgress currentStep={7} />
+        <QuoteProgress currentStep={8} />
 
         <div className="max-w-lg mx-auto">
           <h1 className="text-2xl font-bold text-center mb-2">

@@ -26,7 +26,7 @@ export default function EnrollDOBPage() {
 
   return (
     <>
-      <EnrollmentProgress currentStep={2} />
+      <EnrollmentProgress currentStep={1} />
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold text-center mb-2">Date of Birth</h1>
         <p className="text-center text-muted-foreground mb-8">Confirm your date of birth</p>

@@ -42,6 +42,7 @@ export default function LoadingPage() {
             tobacco: formData.tobacco === "yes",
             effectiveDate: formData.effectiveDate,
             planType: formData.currentPlan !== "other" ? formData.currentPlan : undefined,
+            hasHouseholdMember: formData.household || undefined,
           }),
         })
 

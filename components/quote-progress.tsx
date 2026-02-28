@@ -9,6 +9,7 @@ const STEPS = [
   "Date of Birth",
   "Gender",
   "Tobacco",
+  "Household",
   "Health",
   "Loading",
   "Results",

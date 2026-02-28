@@ -190,7 +190,7 @@ export default function ResultsPage() {
           companyNaic: quote.companyNaic,
         })
       )
-      router.push("/enroll/replacement")
+      router.push("/enroll/date-of-birth")
     }
   }
 

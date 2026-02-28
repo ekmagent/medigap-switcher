@@ -28,7 +28,7 @@ export default function AddressPage() {
 
   return (
     <>
-      <EnrollmentProgress currentStep={3} />
+      <EnrollmentProgress currentStep={2} />
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold text-center mb-2">Residential Address</h1>
         <p className="text-center text-muted-foreground mb-8">Where do you live?</p>

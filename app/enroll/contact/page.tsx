@@ -33,7 +33,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <EnrollmentProgress currentStep={5} />
+      <EnrollmentProgress currentStep={4} />
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold text-center mb-2">Contact Information</h1>
         <p className="text-center text-muted-foreground mb-8">Confirm your contact details</p>

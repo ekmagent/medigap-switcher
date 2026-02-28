@@ -3,7 +3,6 @@
 import { Progress } from "@/components/ui/progress"
 
 const STEPS = [
-  "Current Policy",
   "Date of Birth",
   "Address",
   "Mailing Address",

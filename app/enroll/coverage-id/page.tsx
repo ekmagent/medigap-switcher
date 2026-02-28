@@ -24,7 +24,7 @@ export default function CoverageIdPage() {
 
   return (
     <>
-      <EnrollmentProgress currentStep={7} />
+      <EnrollmentProgress currentStep={6} />
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold text-center mb-2">Medicare Beneficiary Identifier</h1>
         <p className="text-center text-muted-foreground mb-8">

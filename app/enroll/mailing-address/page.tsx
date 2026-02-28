@@ -32,7 +32,7 @@ export default function MailingAddressPage() {
 
   return (
     <>
-      <EnrollmentProgress currentStep={4} />
+      <EnrollmentProgress currentStep={3} />
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold text-center mb-2">Mailing Address</h1>
         <p className="text-center text-muted-foreground mb-8">

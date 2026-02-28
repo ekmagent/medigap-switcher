@@ -92,14 +92,6 @@ export default function ReviewPage() {
       ],
     },
     {
-      title: "Current Policy (Replacing)",
-      items: [
-        { label: "Current Carrier", value: enrollmentData.currentCarrier },
-        { label: "Current Plan", value: enrollmentData.currentPlan },
-        { label: "Termination Date", value: enrollmentData.terminationDate },
-      ],
-    },
-    {
       title: "Personal Information",
       items: [
         { label: "Name", value: `${enrollmentData.firstName} ${enrollmentData.lastName}` },
@@ -129,7 +121,7 @@ export default function ReviewPage() {
 
   return (
     <>
-      <EnrollmentProgress currentStep={8} />
+      <EnrollmentProgress currentStep={7} />
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold text-center mb-2">Review Your Application</h1>
         <p className="text-center text-muted-foreground mb-8">

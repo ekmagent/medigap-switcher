@@ -13,6 +13,7 @@ export interface SwitcherFormData {
   dateOfBirth: string // MM/DD/YYYY
   gender: string // "Male" | "Female"
   tobacco: string // "yes" | "no"
+  household: string // "yes" | "no"
 
   // Computed fields
   quotingAge?: number
@@ -87,6 +88,7 @@ const defaultFormData: SwitcherFormData = {
   dateOfBirth: "",
   gender: "",
   tobacco: "",
+  household: "",
   quotingAge: undefined,
   effectiveDate: undefined,
   fbp: "",

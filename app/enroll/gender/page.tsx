@@ -15,7 +15,7 @@ export default function EnrollGenderPage() {
 
   return (
     <>
-      <EnrollmentProgress currentStep={6} />
+      <EnrollmentProgress currentStep={5} />
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold text-center mb-2">Gender</h1>
         <p className="text-center text-muted-foreground mb-8">Confirm your gender</p>
