@@ -39,10 +39,10 @@ export default function CurrentPlanPage() {
               <button
                 key={plan.value}
                 onClick={() => handleSelect(plan.value)}
-                className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
+                className={`w-full text-left p-4 rounded-xl border-2 transition-all hover:scale-[1.01] ${
                   formData.currentPlan === plan.value
-                    ? "border-primary bg-primary/5"
-                    : "border-gray-200 bg-white hover:border-primary/50"
+                    ? "border-[#4ade80] bg-[#4ade80]/10"
+                    : "border-gray-200 bg-white hover:border-[#4ade80]/50"
                 }`}
               >
                 <div className="font-semibold text-lg">{plan.label}</div>

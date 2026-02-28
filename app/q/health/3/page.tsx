@@ -62,7 +62,7 @@ export default function HealthPage3() {
           <div className="space-y-3">
             <button
               onClick={() => handleAnswer(false)}
-              className="w-full text-left p-5 rounded-xl border-2 border-gray-200 bg-white hover:border-primary/50 transition-all text-lg font-medium"
+              className="w-full text-center p-5 rounded-xl border-2 border-[#4ade80] bg-[#4ade80] text-white hover:bg-[#22c55e] transition-all text-lg font-bold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
             >
               No, none of these apply
             </button>

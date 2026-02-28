@@ -98,7 +98,7 @@ export default function DateOfBirthPage() {
           <Button
             onClick={handleContinue}
             disabled={dob.length < 10}
-            className="w-full"
+            className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-lg shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
             size="lg"
           >
             Continue

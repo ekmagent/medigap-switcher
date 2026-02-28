@@ -41,7 +41,7 @@ export default function LoadingPage() {
             gender: formData.gender,
             tobacco: formData.tobacco === "yes",
             effectiveDate: formData.effectiveDate,
-            // No planType filter — fetch ALL plans so we can show F, G, N, C comparisons
+            planType: formData.currentPlan !== "other" ? formData.currentPlan : undefined,
           }),
         })
 
