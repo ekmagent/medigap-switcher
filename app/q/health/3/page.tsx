@@ -3,25 +3,28 @@
 import { useRouter } from "next/navigation"
 import { QuoteProgress } from "@/components/quote-progress"
 
-// Page 1 of 3: Current Status + Last 6 Months
+// Page 3 of 3: Chronic / Lifetime Conditions
 const CONDITIONS = [
-  "Currently hospitalized, in a nursing facility, assisted living, or receiving home health care",
-  "Require a walker, wheelchair, or motorized mobility aid",
-  "Advised to have surgery, medical tests, or treatments not yet completed",
-  "Require supplemental oxygen",
-  "Have an implanted cardiac defibrillator",
-  "Have angina (chest pain due to heart disease)",
-  "Require more than 50 units of insulin per day",
+  "COPD, emphysema, or chronic respiratory disease (excluding asthma)",
+  "Congestive heart failure or cardiomyopathy",
+  "Chronic kidney disease, kidney failure, or dialysis",
+  "Organ transplant (excluding corneal)",
+  "Alzheimer's, dementia, or organic brain syndrome",
+  "Multiple sclerosis, ALS, Parkinson's, or muscular dystrophy",
+  "Systemic lupus, rheumatoid arthritis, or myasthenia gravis",
+  "HIV/AIDS",
+  "Cirrhosis, liver fibrosis, or chronic hepatitis B",
+  "Leukemia, lymphoma, myeloma, or metastatic cancer",
 ]
 
-export default function HealthPage1() {
+export default function HealthPage3() {
   const router = useRouter()
 
   const handleAnswer = (yes: boolean) => {
     if (yes) {
       router.push("/q/health/disqualified")
     } else {
-      router.push("/q/health/2")
+      router.push("/q/loading")
     }
   }
 
@@ -32,13 +35,13 @@ export default function HealthPage1() {
 
         <div className="max-w-lg mx-auto">
           <h1 className="text-2xl font-bold text-center mb-2">
-            A few quick health questions
+            Last one
           </h1>
           <p className="text-center text-muted-foreground mb-2">
-            Step 1 of 3
+            Step 3 of 3
           </p>
           <p className="text-center text-muted-foreground mb-8">
-            Do any of the following currently apply to you?
+            Have you ever been diagnosed with any of the following?
           </p>
 
           <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
