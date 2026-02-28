@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useSwitcherForm } from "@/contexts/switcher-form-context"
 import { Button } from "@/components/ui/button"
@@ -17,6 +17,33 @@ import {
   Star,
   ChevronDown,
 } from "lucide-react"
+
+function useCountUp(target: number, duration = 1200, delay = 400) {
+  const [value, setValue] = useState(0)
+  const started = useRef(false)
+
+  useEffect(() => {
+    if (started.current || target <= 0) return
+    started.current = true
+
+    const timeout = setTimeout(() => {
+      const startTime = Date.now()
+      const tick = () => {
+        const elapsed = Date.now() - startTime
+        const progress = Math.min(elapsed / duration, 1)
+        // Ease-out cubic
+        const eased = 1 - Math.pow(1 - progress, 3)
+        setValue(Math.round(eased * target))
+        if (progress < 1) requestAnimationFrame(tick)
+      }
+      requestAnimationFrame(tick)
+    }, delay)
+
+    return () => clearTimeout(timeout)
+  }, [target, duration, delay])
+
+  return value
+}
 
 export default function ResultsPage() {
   const router = useRouter()
@@ -39,18 +66,25 @@ export default function ResultsPage() {
 
   // Find the best quote: cheapest that also has a good StableScore
   const sortedQuotes = [...quotes].sort((a, b) => {
-    // Primary: cheapest price
-    // Tiebreaker: highest StableScore
     const priceDiff = a.monthlyPremium - b.monthlyPremium
     if (Math.abs(priceDiff) < 1) return b.stableScore - a.stableScore
     return priceDiff
   })
 
   const bestQuote = sortedQuotes[0]
-  const otherQuotes = sortedQuotes.slice(1, 4) // Show up to 3 more
+  const otherQuotes = sortedQuotes.slice(1, 4)
 
   const bestSavings = currentPremium - (bestQuote?.monthlyPremium || 0)
   const bestAnnualSavings = bestSavings * 12
+  const hasBigSavings = bestAnnualSavings > 250
+  const hasHugeSavings = bestAnnualSavings > 600
+
+  // Animated counters
+  const animatedAnnual = useCountUp(bestSavings > 0 ? Math.round(bestAnnualSavings) : 0)
+  const animatedMonthly = useCountUp(bestSavings > 0 ? Math.round(bestSavings) : 0)
+
+  // Savings percent vs current premium
+  const savingsPercent = currentPremium > 0 ? Math.round((bestSavings / currentPremium) * 100) : 0
 
   const formatPhone = (value: string) => {
     const digits = value.replace(/\D/g, "")
@@ -111,7 +145,6 @@ export default function ResultsPage() {
         throw new Error(data.error || "Invalid verification code")
       }
 
-      // Create lead
       await fetch("/api/leads/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -130,7 +163,6 @@ export default function ResultsPage() {
         }),
       })
 
-      // Update form context
       updateFormData("firstName", firstName)
       updateFormData("lastName", lastName)
       updateFormData("email", email)
@@ -192,7 +224,7 @@ export default function ResultsPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center p-8">
           <h2 className="text-xl font-bold mb-4">No quotes found</h2>
-          <p className="text-muted-foreground mb-6">We couldn't find any rates for your area. Try adjusting your information.</p>
+          <p className="text-muted-foreground mb-6">We couldn&apos;t find any rates for your area. Try adjusting your information.</p>
           <Button onClick={() => router.push("/q/current-plan")}>Start Over</Button>
         </div>
       </div>
@@ -208,24 +240,56 @@ export default function ResultsPage() {
       <div className="container mx-auto px-4 py-6">
         <div className="max-w-lg mx-auto">
 
-          {/* Savings headline */}
+          {/* Savings headline — animated */}
           {currentPremium > 0 && bestSavings > 0 && (
             <div className="text-center mb-6">
-              <div className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-semibold mb-3">
-                <TrendingDown className="w-4 h-4" />
+              {/* Checkmark + tagline */}
+              <div className="animate-fade-up inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="animate-check-draw">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
                 We found savings on your {planLabel}
               </div>
-              <h1 className="text-3xl sm:text-4xl font-black text-foreground">
-                Save ${Math.round(bestAnnualSavings)}/year
-              </h1>
-              <p className="text-muted-foreground mt-1">
-                on the same coverage you have today
-              </p>
+
+              {/* Big animated savings number */}
+              <div className="animate-count-pop">
+                <h1 className="text-5xl sm:text-6xl font-black text-foreground tracking-tight">
+                  ${animatedAnnual.toLocaleString()}
+                </h1>
+                <p className="text-lg font-semibold text-green-600 mt-1">
+                  saved per year
+                </p>
+              </div>
+
+              {/* Overpaying messaging — only for significant savings */}
+              {hasBigSavings && (
+                <div className="animate-fade-up-delay-2 mt-4">
+                  <div className="bg-amber-50 border border-amber-100 rounded-xl px-4 py-3 text-sm">
+                    {hasHugeSavings ? (
+                      <p className="text-amber-800">
+                        <span className="font-bold">You&apos;re paying {savingsPercent}% more than you need to.</span>{" "}
+                        Savings this large are uncommon — most people we help save under $300/year.
+                      </p>
+                    ) : (
+                      <p className="text-amber-800">
+                        <span className="font-bold">Your current rate is well above average.</span>{" "}
+                        Switching now locks in these savings before your next rate increase.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {!hasBigSavings && (
+                <p className="animate-fade-up-delay-1 text-muted-foreground mt-2 text-sm">
+                  on the same {planLabel} coverage you have today
+                </p>
+              )}
             </div>
           )}
 
           {currentPremium > 0 && bestSavings <= 0 && (
-            <div className="text-center mb-6">
+            <div className="text-center mb-6 animate-fade-up">
               <h1 className="text-3xl font-bold text-foreground">
                 Your Best Rate
               </h1>
@@ -236,7 +300,7 @@ export default function ResultsPage() {
           )}
 
           {currentPremium === 0 && (
-            <div className="text-center mb-6">
+            <div className="text-center mb-6 animate-fade-up">
               <h1 className="text-3xl font-bold text-foreground">
                 Your Best Rate
               </h1>
@@ -247,7 +311,7 @@ export default function ResultsPage() {
           )}
 
           {/* Featured Quote Card */}
-          <div className="relative">
+          <div className="relative animate-fade-up-delay-1">
             {/* Best Value badge */}
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
               <span className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-5 py-1.5 rounded-full text-sm font-bold shadow-lg">
@@ -255,7 +319,7 @@ export default function ResultsPage() {
               </span>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-xl border-2 border-green-200 overflow-hidden pt-5">
+            <div className={`bg-white rounded-2xl shadow-xl border-2 border-green-200 overflow-hidden pt-5 ${hasBigSavings ? "animate-savings-glow" : ""}`}>
               {/* Carrier info */}
               <div className="px-6 pt-4 pb-3">
                 <div className="flex items-center justify-between">
@@ -282,16 +346,14 @@ export default function ResultsPage() {
                   </div>
 
                   {/* StableScore badge */}
-                  <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg ring-2 ${
+                  <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg ring-2 animate-scale-in ${
                     bestQuote.stableScore >= 75
                       ? "bg-gradient-to-br from-green-400 to-emerald-600 ring-green-300"
                       : bestQuote.stableScore >= 50
                         ? "bg-gradient-to-br from-blue-400 to-blue-600 ring-blue-300"
                         : "bg-gradient-to-br from-yellow-400 to-yellow-600 ring-yellow-300"
                   }`}>
-                    <div className="text-center">
-                      <span className="text-xl font-black text-white">{Math.round(bestQuote.stableScore)}</span>
-                    </div>
+                    <span className="text-xl font-black text-white">{Math.round(bestQuote.stableScore)}</span>
                   </div>
                 </div>
               </div>
@@ -300,26 +362,26 @@ export default function ResultsPage() {
               <div className="px-6 py-5 bg-gray-50/50">
                 <div className="text-center">
                   {currentPremium > 0 && bestSavings > 0 && (
-                    <p className="text-2xl font-bold text-muted-foreground line-through mb-1">
+                    <p className="text-2xl font-bold text-muted-foreground/60 line-through mb-1 animate-fade-up">
                       ${currentPremium.toFixed(2)}/mo
                     </p>
                   )}
-                  <p className="text-5xl sm:text-6xl font-black text-foreground tracking-tight">
+                  <p className="text-5xl sm:text-6xl font-black text-foreground tracking-tight animate-count-pop">
                     ${bestQuote.monthlyPremium.toFixed(2)}
                   </p>
                   <p className="text-muted-foreground font-medium mt-1">/month</p>
 
                   {currentPremium > 0 && bestSavings > 0 && (
-                    <div className="mt-3 inline-flex items-center gap-1.5 bg-green-100 text-green-700 px-4 py-2 rounded-full font-bold">
+                    <div className="animate-fade-up-delay-2 mt-3 inline-flex items-center gap-1.5 bg-green-100 text-green-700 px-4 py-2 rounded-full font-bold text-sm">
                       <TrendingDown className="w-4 h-4" />
-                      Save ${Math.round(bestSavings)}/mo (${Math.round(bestAnnualSavings)}/yr)
+                      Save ${animatedMonthly}/mo (${animatedAnnual.toLocaleString()}/yr)
                     </div>
                   )}
                 </div>
               </div>
 
               {/* CTA Section */}
-              <div className="px-6 py-5">
+              <div className="px-6 py-5 animate-fade-up-delay-3">
                 {isUnlocked ? (
                   <div className="space-y-3">
                     <Button
@@ -328,7 +390,7 @@ export default function ResultsPage() {
                       size="lg"
                     >
                       {currentPremium > 0 && bestSavings > 0
-                        ? `Enroll Now to Save $${Math.round(bestAnnualSavings)}/Year`
+                        ? `Enroll Now to Save $${Math.round(bestAnnualSavings).toLocaleString()}/Year`
                         : "Enroll Now"
                       }
                       <ArrowRight className="w-5 h-5 ml-2" />
@@ -363,7 +425,7 @@ export default function ResultsPage() {
           </div>
 
           {/* Trust signals */}
-          <div className="flex items-center justify-center gap-6 mt-6 text-xs text-muted-foreground">
+          <div className="flex items-center justify-center gap-6 mt-6 text-xs text-muted-foreground animate-fade-up-delay-3">
             <span className="flex items-center gap-1">
               <Shield className="w-3.5 h-3.5" />
               Licensed agents
@@ -380,7 +442,7 @@ export default function ResultsPage() {
 
           {/* Other quotes — collapsed by default */}
           {otherQuotes.length > 0 && (
-            <div className="mt-8">
+            <div className="mt-8 animate-fade-up-delay-3">
               <button
                 onClick={() => setShowMoreQuotes(!showMoreQuotes)}
                 className="w-full flex items-center justify-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-3"
@@ -459,10 +521,10 @@ export default function ResultsPage() {
             </div>
           )}
 
-          {/* Unlock Panel (inline) */}
+          {/* Unlock Panel (modal) */}
           {showUnlockPanel && !isUnlocked && (
             <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+              <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-scale-in">
                 <div className="flex items-center gap-2 mb-2">
                   <Unlock className="w-5 h-5 text-primary" />
                   <h3 className="font-bold text-lg">Unlock Your Rate</h3>
