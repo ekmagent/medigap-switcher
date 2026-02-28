@@ -8,7 +8,7 @@ export default function HealthDisqualifiedPage() {
   const router = useRouter()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-md mx-auto text-center">
           <div className="bg-white rounded-2xl shadow-xl p-8">

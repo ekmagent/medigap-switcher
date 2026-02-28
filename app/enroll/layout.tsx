@@ -2,6 +2,7 @@
 
 import { EnrollmentProvider } from "@/contexts/enrollment-context"
 import { EnrollmentProgress } from "@/components/enrollment-progress"
+import { SiteHeader } from "@/components/site-header"
 
 export default function EnrollmentLayout({
   children,
@@ -10,7 +11,8 @@ export default function EnrollmentLayout({
 }) {
   return (
     <EnrollmentProvider>
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100">
+      <SiteHeader />
+      <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8">
           {children}
         </div>

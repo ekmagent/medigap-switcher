@@ -74,7 +74,7 @@ export default function LoadingPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="max-w-md mx-auto text-center p-8">
           <h2 className="text-xl font-bold mb-4">Something went wrong</h2>
           <p className="text-muted-foreground mb-6">{error}</p>
@@ -90,7 +90,7 @@ export default function LoadingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 flex items-center justify-center">
+    <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="max-w-md mx-auto text-center p-8">
         <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-6" />
         <h2 className="text-xl font-bold mb-2">Finding Your Best Rates</h2>
