@@ -17,6 +17,7 @@ import {
   Star,
   ChevronDown,
 } from "lucide-react"
+import { generateEventId, getFbp, getFbc } from "@/lib/fb-pixel"
 
 function useCountUp(target: number, duration = 1200, delay = 400) {
   const [value, setValue] = useState(0)
@@ -191,6 +192,23 @@ export default function ResultsPage() {
         }),
       }).catch(() => {})
 
+      // Fire-and-forget CAPI Lead event
+      fetch("/api/tracking/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventId: generateEventId(),
+          firstName,
+          lastName,
+          email,
+          phone: rawPhone,
+          zipCode: formData.zipCode,
+          state: formData.state,
+          fbp: getFbp(),
+          fbc: getFbc(),
+        }),
+      }).catch(() => {})
+
       updateFormData("firstName", firstName)
       updateFormData("lastName", lastName)
       updateFormData("email", email)
@@ -205,8 +223,31 @@ export default function ResultsPage() {
     }
   }
 
+  const fireAddToCart = (quote: typeof bestQuote) => {
+    if (!quote) return
+    fetch("/api/tracking/add-to-cart", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        eventId: generateEventId(),
+        firstName,
+        lastName,
+        email,
+        phone: phone.replace(/\D/g, ""),
+        zipCode: formData.zipCode,
+        state: formData.state,
+        fbp: getFbp(),
+        fbc: getFbc(),
+        carrierName: quote.carrierName,
+        planName: quote.planName,
+        monthlyPremium: quote.monthlyPremium,
+      }),
+    }).catch(() => {})
+  }
+
   const handleEnrollOnline = (quote: typeof bestQuote) => {
     if (quote) {
+      fireAddToCart(quote)
       localStorage.setItem(
         "medigap-switcher-selected-quote",
         JSON.stringify({
@@ -223,6 +264,7 @@ export default function ResultsPage() {
   }
 
   const handleCallMe = async (quote: typeof bestQuote) => {
+    fireAddToCart(quote)
     try {
       await fetch("/api/call-request", {
         method: "POST",

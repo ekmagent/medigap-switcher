@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useEnrollment } from "@/contexts/enrollment-context"
+import { generateEventId, getFbp, getFbc } from "@/lib/fb-pixel"
 import { EnrollmentProgress } from "@/components/enrollment-progress"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2 } from "lucide-react"
@@ -74,6 +75,28 @@ export default function ReviewPage() {
           }),
         })
       }
+
+      // Fire-and-forget CAPI InitiateCheckout event
+      fetch("/api/tracking/initiate-checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventId: generateEventId(),
+          firstName: enrollmentData.firstName,
+          lastName: enrollmentData.lastName,
+          email: enrollmentData.email,
+          phone: enrollmentData.phone,
+          zipCode: enrollmentData.zipCode,
+          state: enrollmentData.state,
+          fbp: getFbp(),
+          fbc: getFbc(),
+          carrierName: enrollmentData.selectedCarrier,
+          planName: enrollmentData.selectedPlan,
+          monthlyPremium: enrollmentData.monthlyPremium,
+          leadId: enrollmentData.leadId,
+          applicationId,
+        }),
+      }).catch(() => {})
 
       router.push("/enroll/success")
     } catch (err: any) {
