@@ -456,7 +456,7 @@ export default function ResultsPage() {
                   <div className="space-y-3">
                     <Button
                       onClick={() => handleEnrollOnline(bestQuote)}
-                      className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] h-14 rounded-xl"
+                      className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-lg shadow-lg hover:shadow-xl transition-[color,background-color,border-color,box-shadow,transform] hover:scale-[1.02] active:scale-[0.98] h-14 rounded-xl"
                       size="lg"
                     >
                       {currentPremium > 0 && bestSavings > 0
@@ -479,7 +479,7 @@ export default function ResultsPage() {
                   <div className="space-y-3">
                     <Button
                       onClick={() => setShowUnlockPanel(true)}
-                      className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] h-14 rounded-xl"
+                      className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-lg shadow-lg hover:shadow-xl transition-[color,background-color,border-color,box-shadow,transform] hover:scale-[1.02] active:scale-[0.98] h-14 rounded-xl"
                       size="lg"
                     >
                       <Lock className="w-5 h-5 mr-2" />

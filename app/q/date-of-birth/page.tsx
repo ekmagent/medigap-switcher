@@ -121,7 +121,7 @@ export default function DateOfBirthPage() {
                     <button
                       key={m.value}
                       onClick={() => handleSelectMonth(m.value)}
-                      className={`py-3 rounded-xl border-2 text-sm font-semibold transition-all active:scale-95 ${
+                      className={`py-3 rounded-xl border-2 text-sm font-semibold transition-[color,background-color,border-color,transform] active:scale-95 ${
                         month === m.value
                           ? "border-[#4ade80] bg-[#4ade80] text-white shadow-md"
                           : "border-gray-200 bg-white text-foreground hover:border-[#4ade80]/50"
@@ -142,7 +142,7 @@ export default function DateOfBirthPage() {
                       <button
                         key={y}
                         onClick={() => handleSelectYear(y)}
-                        className={`py-3 rounded-xl border-2 text-sm font-semibold transition-all active:scale-95 ${
+                        className={`py-3 rounded-xl border-2 text-sm font-semibold transition-[color,background-color,border-color,transform] active:scale-95 ${
                           year === y
                             ? "border-[#4ade80] bg-[#4ade80] text-white shadow-md"
                             : "border-gray-200 bg-white text-foreground hover:border-[#4ade80]/50"
@@ -185,7 +185,7 @@ export default function DateOfBirthPage() {
               <Button
                 onClick={handleManualContinue}
                 disabled={manualDob.length < 10}
-                className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-lg shadow-md hover:shadow-lg transition-all hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-lg shadow-md hover:shadow-lg transition-[color,background-color,border-color,box-shadow,transform] hover:scale-[1.02] active:scale-[0.98]"
                 size="lg"
               >
                 Continue

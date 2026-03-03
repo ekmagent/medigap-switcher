@@ -42,9 +42,9 @@ export function StepWrapper({
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Check flash overlay */}
+      {/* Check flash overlay — pointer-events-none so taps pass through */}
       {showCheck && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 pointer-events-none">
           <div className="animate-step-check">
             <svg width="56" height="56" viewBox="0 0 24 24" fill="none" className="text-[#4ade80]">
               <circle cx="12" cy="12" r="11" stroke="currentColor" strokeWidth="2" className="animate-circle-draw" />
@@ -63,7 +63,7 @@ export function StepWrapper({
 
       {/* Page content with fade-in */}
       <div
-        className={`transition-all duration-300 ease-out ${
+        className={`transition-[opacity,transform] duration-300 ease-out ${
           show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
         }`}
       >

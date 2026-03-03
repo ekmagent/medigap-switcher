@@ -45,7 +45,7 @@ export default function CurrentPlanPage() {
               <button
                 key={plan.value}
                 onClick={() => handleSelect(plan.value)}
-                className={`w-full text-left p-4 rounded-xl border-2 transition-all hover:scale-[1.01] ${
+                className={`w-full text-left p-4 rounded-xl border-2 transition-[color,background-color,border-color,transform] hover:scale-[1.01] ${
                   formData.currentPlan === plan.value
                     ? "border-[#4ade80] bg-[#4ade80]/10"
                     : "border-gray-200 bg-white hover:border-[#4ade80]/50"
@@ -60,7 +60,7 @@ export default function CurrentPlanPage() {
             {!showOther ? (
               <button
                 onClick={() => setShowOther(true)}
-                className="w-full flex items-center justify-center gap-2 p-4 rounded-xl border-2 border-dashed border-gray-200 bg-white hover:border-gray-300 transition-all text-muted-foreground"
+                className="w-full flex items-center justify-center gap-2 p-4 rounded-xl border-2 border-dashed border-gray-200 bg-white hover:border-gray-300 transition-colors text-muted-foreground"
               >
                 <span className="font-medium">I have a different plan</span>
                 <ChevronDown className="w-4 h-4" />
@@ -70,7 +70,7 @@ export default function CurrentPlanPage() {
                 <button
                   key={plan.value}
                   onClick={() => handleSelect(plan.value)}
-                  className={`w-full text-left p-4 rounded-xl border-2 transition-all hover:scale-[1.01] ${
+                  className={`w-full text-left p-4 rounded-xl border-2 transition-[color,background-color,border-color,transform] hover:scale-[1.01] ${
                     formData.currentPlan === plan.value
                       ? "border-[#4ade80] bg-[#4ade80]/10"
                       : "border-gray-200 bg-white hover:border-[#4ade80]/50"

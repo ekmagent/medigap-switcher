@@ -34,7 +34,7 @@ export default function HouseholdPage() {
               <button
                 key={option.value}
                 onClick={() => handleSelect(option.value)}
-                className={`w-full text-left p-5 rounded-xl border-2 transition-all hover:scale-[1.01] ${
+                className={`w-full text-left p-5 rounded-xl border-2 transition-[color,background-color,border-color,transform] hover:scale-[1.01] ${
                   formData.household === option.value
                     ? "border-[#4ade80] bg-[#4ade80]/10"
                     : "border-gray-200 bg-white hover:border-[#4ade80]/50"

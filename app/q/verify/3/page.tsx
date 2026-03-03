@@ -51,13 +51,13 @@ export default function VerifyPage3() {
           <div className="space-y-3">
             <button
               onClick={() => handleAnswer(false)}
-              className="w-full text-center p-4 rounded-xl border-2 border-[#4ade80] bg-[#4ade80] text-white hover:bg-[#22c55e] transition-all text-lg font-bold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full text-center p-4 rounded-xl border-2 border-[#4ade80] bg-[#4ade80] text-white hover:bg-[#22c55e] transition-[color,background-color,border-color,box-shadow,transform] text-lg font-bold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
             >
               No, none of these
             </button>
             <button
               onClick={() => handleAnswer(true)}
-              className="w-full text-center p-4 rounded-xl border-2 border-gray-200 bg-white hover:border-destructive/50 transition-all text-base font-medium"
+              className="w-full text-center p-4 rounded-xl border-2 border-gray-200 bg-white hover:border-destructive/50 transition-colors text-base font-medium"
             >
               Yes
             </button>
