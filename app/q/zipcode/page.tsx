@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { MapPin } from "lucide-react"
+import { StepWrapper } from "@/components/step-wrapper"
 
 export default function ZipCodePage() {
   const router = useRouter()
@@ -75,8 +76,7 @@ export default function ZipCodePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+    <StepWrapper step={3}>
         <QuoteProgress currentStep={3} />
 
         <div className="max-w-md mx-auto">
@@ -137,7 +137,6 @@ export default function ZipCodePage() {
             </Button>
           )}
         </div>
-      </div>
-    </div>
+    </StepWrapper>
   )
 }

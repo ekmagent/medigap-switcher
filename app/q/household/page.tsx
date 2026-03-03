@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useSwitcherForm } from "@/contexts/switcher-form-context"
 import { QuoteProgress } from "@/components/quote-progress"
+import { StepWrapper } from "@/components/step-wrapper"
 
 export default function HouseholdPage() {
   const router = useRouter()
@@ -14,8 +15,7 @@ export default function HouseholdPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+    <StepWrapper step={7}>
         <QuoteProgress currentStep={7} />
 
         <div className="max-w-md mx-auto">
@@ -50,7 +50,6 @@ export default function HouseholdPage() {
             Many carriers offer a discount when multiple people in the same household are insured.
           </p>
         </div>
-      </div>
-    </div>
+    </StepWrapper>
   )
 }

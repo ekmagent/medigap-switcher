@@ -7,6 +7,7 @@ import { QuoteProgress } from "@/components/quote-progress"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { getMedigapRateAge } from "@/lib/medigap-age"
+import { StepWrapper } from "@/components/step-wrapper"
 
 const MONTHS = [
   { value: 1, short: "Jan" },
@@ -99,8 +100,7 @@ export default function DateOfBirthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+    <StepWrapper step={4}>
         <QuoteProgress currentStep={4} />
 
         <div className="max-w-md mx-auto">
@@ -200,7 +200,6 @@ export default function DateOfBirthPage() {
             </>
           )}
         </div>
-      </div>
-    </div>
+    </StepWrapper>
   )
 }

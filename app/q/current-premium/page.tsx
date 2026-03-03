@@ -6,6 +6,7 @@ import { useSwitcherForm } from "@/contexts/switcher-form-context"
 import { QuoteProgress } from "@/components/quote-progress"
 import { Button } from "@/components/ui/button"
 import { DollarSign } from "lucide-react"
+import { StepWrapper } from "@/components/step-wrapper"
 
 export default function CurrentPremiumPage() {
   const router = useRouter()
@@ -30,11 +31,10 @@ export default function CurrentPremiumPage() {
   const numValue = parseFloat(value) || 0
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <QuoteProgress currentStep={2} />
+    <StepWrapper step={2}>
+      <QuoteProgress currentStep={2} />
 
-        <div className="max-w-md mx-auto">
+      <div className="max-w-md mx-auto">
           <h1 className="text-2xl font-bold text-center mb-2">
             How much do you pay for your Medicare Supplement?
           </h1>
@@ -69,8 +69,7 @@ export default function CurrentPremiumPage() {
           >
             Continue
           </Button>
-        </div>
       </div>
-    </div>
+    </StepWrapper>
   )
 }

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useSwitcherForm } from "@/contexts/switcher-form-context"
 import { QuoteProgress } from "@/components/quote-progress"
+import { StepWrapper } from "@/components/step-wrapper"
 
 export default function GenderPage() {
   const router = useRouter()
@@ -14,8 +15,7 @@ export default function GenderPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+    <StepWrapper step={5}>
         <QuoteProgress currentStep={5} />
 
         <div className="max-w-md mx-auto">
@@ -45,7 +45,6 @@ export default function GenderPage() {
             ))}
           </div>
         </div>
-      </div>
-    </div>
+    </StepWrapper>
   )
 }

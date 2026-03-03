@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { useSwitcherForm } from "@/contexts/switcher-form-context"
 import { QuoteProgress } from "@/components/quote-progress"
 import { ChevronDown } from "lucide-react"
+import { StepWrapper } from "@/components/step-wrapper"
 
 const PRIMARY_PLANS = [
   { value: "G", label: "Plan G", description: "Most popular — you pay only the Part B deductible" },
@@ -28,17 +29,16 @@ export default function CurrentPlanPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
-        <QuoteProgress currentStep={1} />
+    <StepWrapper step={1}>
+      <QuoteProgress currentStep={1} />
 
-        <div className="max-w-md mx-auto">
-          <h1 className="text-2xl font-bold text-center mb-2">
-            What Medigap plan do you currently have?
-          </h1>
-          <p className="text-center text-muted-foreground mb-8">
-            Select your current Medicare Supplement plan type
-          </p>
+      <div className="max-w-md mx-auto">
+        <h1 className="text-2xl font-bold text-center mb-2">
+          What Medigap plan do you currently have?
+        </h1>
+        <p className="text-center text-muted-foreground mb-8">
+          Select your current Medicare Supplement plan type
+        </p>
 
           <div className="space-y-3">
             {PRIMARY_PLANS.map((plan) => (
@@ -82,8 +82,7 @@ export default function CurrentPlanPage() {
               ))
             )}
           </div>
-        </div>
       </div>
-    </div>
+    </StepWrapper>
   )
 }

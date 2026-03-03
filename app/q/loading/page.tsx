@@ -1,31 +1,49 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useSwitcherForm } from "@/contexts/switcher-form-context"
-import { Loader2 } from "lucide-react"
+import { Shield, Search, TrendingDown, CheckCircle2 } from "lucide-react"
 
-const LOADING_MESSAGES = [
-  "Searching 30+ carriers in your area...",
-  "Comparing rates for your plan type...",
-  "Calculating potential savings...",
-  "Finding the most stable carriers...",
-  "Almost there...",
+const STAGES = [
+  { icon: Search, label: "Scanning carriers in your area", duration: 1800 },
+  { icon: Shield, label: "Checking carrier stability ratings", duration: 1800 },
+  { icon: TrendingDown, label: "Calculating your savings", duration: 1800 },
+  { icon: CheckCircle2, label: "Found your best rates!", duration: 800 },
 ]
 
 export default function LoadingPage() {
   const router = useRouter()
   const { formData, setQuotes, setIsLoadingQuotes, setQuotesError } = useSwitcherForm()
-  const [messageIndex, setMessageIndex] = useState(0)
+  const [stageIndex, setStageIndex] = useState(0)
+  const [carrierCount, setCarrierCount] = useState(0)
   const [error, setError] = useState("")
+  const quotesReady = useRef(false)
 
+  // Animated carrier counter (counts up to ~32)
   useEffect(() => {
+    let count = 0
     const interval = setInterval(() => {
-      setMessageIndex((prev) => (prev + 1) % LOADING_MESSAGES.length)
-    }, 2500)
+      count += 1
+      if (count <= 32) {
+        setCarrierCount(count)
+      } else {
+        clearInterval(interval)
+      }
+    }, 140)
     return () => clearInterval(interval)
   }, [])
 
+  // Stage progression
+  useEffect(() => {
+    if (stageIndex >= STAGES.length - 1) return
+    const timer = setTimeout(() => {
+      setStageIndex((prev) => Math.min(prev + 1, STAGES.length - 1))
+    }, STAGES[stageIndex].duration)
+    return () => clearTimeout(timer)
+  }, [stageIndex])
+
+  // Fetch quotes
   useEffect(() => {
     const fetchQuotes = async () => {
       setIsLoadingQuotes(true)
@@ -57,7 +75,7 @@ export default function LoadingPage() {
         }
 
         setQuotes(data.data.quotes)
-        router.push("/q/results")
+        quotesReady.current = true
       } catch (err: any) {
         console.error("Quote fetch error:", err)
         setError(err.message || "Failed to fetch quotes")
@@ -72,6 +90,20 @@ export default function LoadingPage() {
       router.push("/q/current-plan")
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Navigate when both stages complete AND quotes are ready
+  useEffect(() => {
+    if (stageIndex === STAGES.length - 1) {
+      const checkAndNavigate = () => {
+        if (quotesReady.current) {
+          router.push("/q/results")
+        } else {
+          setTimeout(checkAndNavigate, 200)
+        }
+      }
+      setTimeout(checkAndNavigate, 600)
+    }
+  }, [stageIndex, router])
 
   if (error) {
     return (
@@ -90,14 +122,65 @@ export default function LoadingPage() {
     )
   }
 
+  const progress = Math.round(((stageIndex + 1) / STAGES.length) * 100)
+
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="max-w-md mx-auto text-center p-8">
-        <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-6" />
-        <h2 className="text-xl font-bold mb-2">Finding Your Best Rates</h2>
-        <p className="text-muted-foreground animate-pulse">
-          {LOADING_MESSAGES[messageIndex]}
-        </p>
+      <div className="max-w-sm mx-auto text-center px-6">
+        {/* Carrier count */}
+        <div className="animate-fade-up mb-6">
+          <span className="text-5xl font-black text-foreground tabular-nums">
+            {carrierCount}
+          </span>
+          <p className="text-sm font-medium text-muted-foreground mt-1">
+            carriers checked
+          </p>
+        </div>
+
+        {/* Stage progress */}
+        <div className="space-y-3 mb-8">
+          {STAGES.map((stage, i) => {
+            const StageIcon = stage.icon
+            const isActive = i === stageIndex
+            const isDone = i < stageIndex
+
+            return (
+              <div
+                key={i}
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-300 ${
+                  isActive
+                    ? "bg-[#4ade80]/10 border border-[#4ade80]/30"
+                    : isDone
+                      ? "bg-gray-50"
+                      : "opacity-40"
+                }`}
+              >
+                <div className={`flex-shrink-0 transition-colors duration-300 ${
+                  isDone ? "text-[#4ade80]" : isActive ? "text-[#4ade80] animate-pulse" : "text-gray-300"
+                }`}>
+                  {isDone ? (
+                    <CheckCircle2 className="w-5 h-5" />
+                  ) : (
+                    <StageIcon className="w-5 h-5" />
+                  )}
+                </div>
+                <span className={`text-sm font-medium transition-colors duration-300 ${
+                  isActive ? "text-foreground" : isDone ? "text-muted-foreground" : "text-muted-foreground/60"
+                }`}>
+                  {stage.label}
+                </span>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Mini progress bar */}
+        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden max-w-xs mx-auto">
+          <div
+            className="h-full rounded-full progress-shimmer transition-all duration-500 ease-out"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
       </div>
     </div>
   )
