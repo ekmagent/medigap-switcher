@@ -10,7 +10,7 @@ export default function HouseholdPage() {
 
   const handleSelect = (value: string) => {
     updateFormData("household", value)
-    router.push("/q/health")
+    router.push("/q/verify")
   }
 
   return (

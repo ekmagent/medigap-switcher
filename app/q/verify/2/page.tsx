@@ -3,28 +3,22 @@
 import { useRouter } from "next/navigation"
 import { QuoteProgress } from "@/components/quote-progress"
 
-// Page 3 of 3: Chronic / Lifetime Conditions
+// Page 2 of 3: Last 2 Years
 const CONDITIONS = [
-  "COPD, emphysema, or chronic respiratory disease (excluding asthma)",
-  "Congestive heart failure or cardiomyopathy",
-  "Chronic kidney disease, kidney failure, or dialysis",
-  "Organ transplant (excluding corneal)",
-  "Alzheimer's, dementia, or organic brain syndrome",
-  "Multiple sclerosis, ALS, Parkinson's, or muscular dystrophy",
-  "Systemic lupus, rheumatoid arthritis, or myasthenia gravis",
-  "HIV/AIDS",
-  "Cirrhosis, liver fibrosis, or chronic hepatitis B",
-  "Leukemia, lymphoma, myeloma, or metastatic cancer",
+  "Heart attack, stroke, or TIA (mini-stroke)",
+  "Surgery for any heart or circulatory disease",
+  "Diagnosed with or treated for cancer (excluding non-melanoma skin cancer)",
+  "Diagnosed with or treated for atrial fibrillation",
 ]
 
-export default function HealthPage3() {
+export default function HealthPage2() {
   const router = useRouter()
 
   const handleAnswer = (yes: boolean) => {
     if (yes) {
-      router.push("/q/health/disqualified")
+      router.push("/q/verify/review")
     } else {
-      router.push("/q/loading")
+      router.push("/q/verify/3")
     }
   }
 
@@ -35,13 +29,13 @@ export default function HealthPage3() {
 
         <div className="max-w-lg mx-auto">
           <h1 className="text-2xl font-bold text-center mb-2">
-            Last one
+            Health questions continued
           </h1>
           <p className="text-center text-muted-foreground mb-2">
-            Step 3 of 3
+            Step 2 of 3
           </p>
           <p className="text-center text-muted-foreground mb-8">
-            Have you ever been diagnosed with any of the following?
+            In the last 2 years, have you experienced any of the following?
           </p>
 
           <div className="bg-white rounded-xl p-6 shadow-sm mb-8">

@@ -10,7 +10,7 @@ const STEPS = [
   "Gender",
   "Tobacco",
   "Household",
-  "Health",
+  "Verify",
   "Loading",
   "Results",
 ]

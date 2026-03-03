@@ -3,22 +3,25 @@
 import { useRouter } from "next/navigation"
 import { QuoteProgress } from "@/components/quote-progress"
 
-// Page 2 of 3: Last 2 Years
+// Page 1 of 3: Current Status + Last 6 Months
 const CONDITIONS = [
-  "Heart attack, stroke, or TIA (mini-stroke)",
-  "Surgery for any heart or circulatory disease",
-  "Diagnosed with or treated for cancer (excluding non-melanoma skin cancer)",
-  "Diagnosed with or treated for atrial fibrillation",
+  "Currently hospitalized, in a nursing facility, assisted living, or receiving home health care",
+  "Require a walker, wheelchair, or motorized mobility aid",
+  "Advised to have surgery, medical tests, or treatments not yet completed",
+  "Require supplemental oxygen",
+  "Have an implanted cardiac defibrillator",
+  "Have angina (chest pain due to heart disease)",
+  "Require more than 50 units of insulin per day",
 ]
 
-export default function HealthPage2() {
+export default function HealthPage1() {
   const router = useRouter()
 
   const handleAnswer = (yes: boolean) => {
     if (yes) {
-      router.push("/q/health/disqualified")
+      router.push("/q/verify/review")
     } else {
-      router.push("/q/health/3")
+      router.push("/q/verify/2")
     }
   }
 
@@ -29,13 +32,13 @@ export default function HealthPage2() {
 
         <div className="max-w-lg mx-auto">
           <h1 className="text-2xl font-bold text-center mb-2">
-            Health questions continued
+            A few quick health questions
           </h1>
           <p className="text-center text-muted-foreground mb-2">
-            Step 2 of 3
+            Step 1 of 3
           </p>
           <p className="text-center text-muted-foreground mb-8">
-            In the last 2 years, have you experienced any of the following?
+            Do any of the following currently apply to you?
           </p>
 
           <div className="bg-white rounded-xl p-6 shadow-sm mb-8">
