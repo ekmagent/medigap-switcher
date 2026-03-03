@@ -163,6 +163,34 @@ export default function ResultsPage() {
         }),
       })
 
+      // Fire-and-forget GHL sync via Make.com
+      const monthlySavings = currentPremium - (bestQuote?.monthlyPremium || 0)
+      fetch("/api/ghl/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone: rawPhone,
+          zipCode: formData.zipCode,
+          county: formData.county,
+          state: formData.state,
+          dateOfBirth: formData.dateOfBirth,
+          gender: formData.gender,
+          tobacco: formData.tobacco,
+          currentPlan: formData.currentPlan,
+          currentPremium: formData.currentPremium,
+          household: formData.household,
+          bestQuoteCarrier: bestQuote?.carrierName,
+          bestQuotePlan: bestQuote?.planName,
+          bestQuotePremium: bestQuote?.monthlyPremium,
+          bestQuoteStableScore: bestQuote?.stableScore,
+          monthlySavings: Math.max(0, Math.round(monthlySavings * 100) / 100),
+          annualSavings: Math.max(0, Math.round(monthlySavings * 12 * 100) / 100),
+        }),
+      }).catch(() => {})
+
       updateFormData("firstName", firstName)
       updateFormData("lastName", lastName)
       updateFormData("email", email)
