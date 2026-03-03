@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 
 const ENCOURAGEMENTS: Record<number, string> = {
   1: "",
@@ -22,21 +22,25 @@ export function StepWrapper({
   step: number
   children: React.ReactNode
 }) {
-  const [show, setShow] = useState(false)
+  // Start visible so server-rendered HTML is never blank on slow connections
   const [showCheck, setShowCheck] = useState(false)
+  const [animateIn, setAnimateIn] = useState(false)
+  const hasAnimated = useRef(false)
   const encouragement = ENCOURAGEMENTS[step] || ""
 
   useEffect(() => {
-    // Brief green check flash, then fade in page content
+    if (hasAnimated.current) return
+    hasAnimated.current = true
+
     if (step > 1) {
       setShowCheck(true)
       const checkTimer = setTimeout(() => {
         setShowCheck(false)
-        setShow(true)
-      }, 500)
+        setAnimateIn(true)
+      }, 450)
       return () => clearTimeout(checkTimer)
     } else {
-      setShow(true)
+      setAnimateIn(true)
     }
   }, [step])
 
@@ -61,15 +65,11 @@ export function StepWrapper({
         </div>
       )}
 
-      {/* Page content with fade-in */}
-      <div
-        className={`transition-[opacity,transform] duration-300 ease-out ${
-          show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-        }`}
-      >
+      {/* Content — always visible (no opacity-0 default), animation is enhancement only */}
+      <div className={animateIn ? "animate-fade-up" : ""}>
         <div className="container mx-auto px-4 py-8">
           {/* Encouragement badge */}
-          {encouragement && show && (
+          {encouragement && animateIn && (
             <div className="text-center mb-1 animate-fade-up">
               <span className="inline-block text-xs font-semibold text-[#4ade80] tracking-wide">
                 {encouragement}
