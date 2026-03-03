@@ -56,6 +56,10 @@ export default function ContactPage() {
           <div>
             <Label htmlFor="phone">Phone</Label>
             <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(formatPhone(e.target.value))} />
+            <p className="text-[11px] leading-snug text-muted-foreground mt-2">
+              By continuing, you consent to receive calls and texts (including autodialed) from HealthPlans.now and its licensed agents at this number regarding your application. Consent is not required to purchase. Msg &amp; data rates may apply.{" "}
+              <a href="/privacy" className="underline hover:text-foreground">Privacy Policy</a>
+            </p>
           </div>
         </div>
 

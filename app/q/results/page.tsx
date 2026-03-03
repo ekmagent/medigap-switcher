@@ -582,6 +582,11 @@ export default function ResultsPage() {
                         placeholder="(555) 555-5555"
                       />
                     </div>
+                    <p className="text-[11px] leading-snug text-muted-foreground">
+                      By clicking &quot;Send Verification Code,&quot; you consent to receive calls, text messages (including via autodialer and prerecorded/artificial voice), and emails from HealthPlans.now and its licensed agents at the number and email provided, for marketing purposes including quotes and plan information. Consent is not a condition of purchase. Message &amp; data rates may apply. You may revoke consent at any time. View our{" "}
+                      <a href="/privacy" className="underline hover:text-foreground">Privacy Policy</a> and{" "}
+                      <a href="/terms" className="underline hover:text-foreground">Terms of Service</a>.
+                    </p>
                     <Button
                       onClick={handleSendCode}
                       disabled={loading}
