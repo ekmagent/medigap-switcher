@@ -119,8 +119,10 @@ export default function ResultsPage() {
       return
     }
 
-    setLoading(true)
     setError("")
+
+    // Show code input immediately (optimistic) so user is ready when SMS arrives
+    setUnlockStep("verify")
 
     try {
       const rawPhone = phone.replace(/\D/g, "")
@@ -134,12 +136,9 @@ export default function ResultsPage() {
         const data = await response.json().catch(() => ({}))
         throw new Error(data.error || "Failed to send verification code")
       }
-
-      setUnlockStep("verify")
     } catch (err: any) {
       setError(err.message)
-    } finally {
-      setLoading(false)
+      setUnlockStep("info")
     }
   }
 
