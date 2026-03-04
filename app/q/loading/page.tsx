@@ -14,7 +14,7 @@ const STAGES = [
 
 export default function LoadingPage() {
   const router = useRouter()
-  const { formData, setQuotes, setIsLoadingQuotes, setQuotesError } = useSwitcherForm()
+  const { formData, setQuotes, setSelectedQuote, setIsLoadingQuotes, setQuotesError } = useSwitcherForm()
   const [stageIndex, setStageIndex] = useState(0)
   const [carrierCount, setCarrierCount] = useState(0)
   const [error, setError] = useState("")
@@ -61,6 +61,7 @@ export default function LoadingPage() {
             effectiveDate: formData.effectiveDate,
             planType: formData.currentPlan !== "other" ? formData.currentPlan : undefined,
             hasHouseholdMember: formData.household || undefined,
+            currentPremium: formData.currentPremium ? parseFloat(formData.currentPremium) : undefined,
           }),
         })
 
@@ -75,6 +76,7 @@ export default function LoadingPage() {
         }
 
         setQuotes(data.data.quotes)
+        setSelectedQuote(data.data.selectedQuote || data.data.quotes[0])
         quotesReady.current = true
       } catch (err: any) {
         console.error("Quote fetch error:", err)

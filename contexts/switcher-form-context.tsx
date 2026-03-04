@@ -73,6 +73,8 @@ interface SwitcherFormContextType {
   resetFormData: () => void
   quotes: Quote[]
   setQuotes: (quotes: Quote[]) => void
+  selectedQuote: Quote | null
+  setSelectedQuote: (quote: Quote | null) => void
   isLoadingQuotes: boolean
   setIsLoadingQuotes: (loading: boolean) => void
   quotesError: string | null
@@ -119,6 +121,7 @@ export function SwitcherFormProvider({ children }: { children: React.ReactNode }
   const [formData, setFormData] = useState<SwitcherFormData>(defaultFormData)
   const [isLoaded, setIsLoaded] = useState(false)
   const [quotes, setQuotes] = useState<Quote[]>([])
+  const [selectedQuote, setSelectedQuote] = useState<Quote | null>(null)
   const [isLoadingQuotes, setIsLoadingQuotes] = useState(false)
   const [quotesError, setQuotesError] = useState<string | null>(null)
 
@@ -129,6 +132,7 @@ export function SwitcherFormProvider({ children }: { children: React.ReactNode }
         const parsed = JSON.parse(savedData)
         setFormData(parsed.formData || parsed)
         setQuotes(parsed.quotes || [])
+        setSelectedQuote(parsed.selectedQuote || null)
       } catch (error) {
         console.error("Error loading form data:", error)
       }
@@ -138,9 +142,9 @@ export function SwitcherFormProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ formData, quotes }))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ formData, quotes, selectedQuote }))
     }
-  }, [formData, quotes, isLoaded])
+  }, [formData, quotes, selectedQuote, isLoaded])
 
   const updateFormData = (field: keyof SwitcherFormData, value: any) => {
     setFormData((prev) => ({
@@ -152,6 +156,7 @@ export function SwitcherFormProvider({ children }: { children: React.ReactNode }
   const resetFormData = () => {
     setFormData(defaultFormData)
     setQuotes([])
+    setSelectedQuote(null)
     localStorage.removeItem(STORAGE_KEY)
   }
 
@@ -163,6 +168,8 @@ export function SwitcherFormProvider({ children }: { children: React.ReactNode }
         resetFormData,
         quotes,
         setQuotes,
+        selectedQuote,
+        setSelectedQuote,
         isLoadingQuotes,
         setIsLoadingQuotes,
         quotesError,

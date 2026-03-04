@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useSwitcherForm } from "@/contexts/switcher-form-context"
+import { getCarrierDisplayInfo, getCarrierLogoFallback } from "@/lib/carrier-mapping"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,7 +16,6 @@ import {
   ArrowRight,
   CheckCircle2,
   Star,
-  ChevronDown,
 } from "lucide-react"
 import { generateEventId, getFbp, getFbc } from "@/lib/fb-pixel"
 
@@ -46,12 +46,35 @@ function useCountUp(target: number, duration = 1200, delay = 400) {
   return value
 }
 
+function CarrierLogo({ carrierName }: { carrierName: string }) {
+  const displayInfo = getCarrierDisplayInfo(carrierName)
+  const fallback = getCarrierLogoFallback(displayInfo.displayName)
+
+  if (displayInfo.logoUrl) {
+    return (
+      <img
+        src={displayInfo.logoUrl}
+        alt={displayInfo.displayName}
+        className="h-10 w-auto max-w-[80px] object-contain"
+      />
+    )
+  }
+
+  return (
+    <div
+      className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-lg"
+      style={{ backgroundColor: fallback.bgColor }}
+    >
+      {fallback.initial}
+    </div>
+  )
+}
+
 export default function ResultsPage() {
   const router = useRouter()
-  const { formData, quotes, updateFormData } = useSwitcherForm()
+  const { formData, quotes, selectedQuote: ctxSelectedQuote, updateFormData } = useSwitcherForm()
   const [isUnlocked, setIsUnlocked] = useState(formData.isUnlocked || false)
   const [showUnlockPanel, setShowUnlockPanel] = useState(false)
-  const [showMoreQuotes, setShowMoreQuotes] = useState(false)
   const [unlockStep, setUnlockStep] = useState<"info" | "verify">("info")
 
   // Unlock form state
@@ -65,15 +88,8 @@ export default function ResultsPage() {
 
   const currentPremium = parseFloat(formData.currentPremium) || 0
 
-  // Find the best quote: cheapest that also has a good StableScore
-  const sortedQuotes = [...quotes].sort((a, b) => {
-    const priceDiff = a.monthlyPremium - b.monthlyPremium
-    if (Math.abs(priceDiff) < 1) return b.stableScore - a.stableScore
-    return priceDiff
-  })
-
-  const bestQuote = sortedQuotes[0]
-  const otherQuotes = sortedQuotes.slice(1, 4)
+  // Use API-selected quote, fallback to cheapest from quotes array
+  const bestQuote = ctxSelectedQuote || quotes[0]
 
   const bestSavings = currentPremium - (bestQuote?.monthlyPremium || 0)
   const bestAnnualSavings = bestSavings * 12
@@ -86,6 +102,9 @@ export default function ResultsPage() {
 
   // Savings percent vs current premium
   const savingsPercent = currentPremium > 0 ? Math.round((bestSavings / currentPremium) * 100) : 0
+
+  // Carrier display info
+  const carrierDisplay = bestQuote ? getCarrierDisplayInfo(bestQuote.carrierName) : null
 
   const formatPhone = (value: string) => {
     const digits = value.replace(/\D/g, "")
@@ -393,37 +412,47 @@ export default function ResultsPage() {
               {/* Carrier info */}
               <div className="px-6 pt-4 pb-3">
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="flex items-center gap-3">
+                    {/* Carrier logo or placeholder */}
                     {isUnlocked ? (
-                      <h3 className="font-bold text-xl text-foreground">{bestQuote.carrierName}</h3>
+                      <CarrierLogo carrierName={bestQuote.carrierName} />
                     ) : (
-                      <div className="flex items-center gap-2">
-                        <div className="font-bold text-xl select-none text-foreground" style={{ filter: "blur(7px)" }}>
-                          Top Rated Carrier
-                        </div>
-                        <Lock className="w-4 h-4 text-muted-foreground" />
+                      <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+                        <Shield className="w-5 h-5 text-gray-400" />
                       </div>
                     )}
-                    <div className="flex items-center gap-3 mt-1">
-                      <span className="text-sm text-muted-foreground">{bestQuote.planName}</span>
-                      {bestQuote.amBestRating && (
-                        <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Shield className="w-3 h-3" />
-                          AM Best: {bestQuote.amBestRating}
-                        </span>
+                    <div>
+                      {isUnlocked ? (
+                        <h3 className="font-bold text-xl text-foreground">{carrierDisplay?.displayName || bestQuote.carrierName}</h3>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <div className="font-bold text-xl select-none text-foreground" style={{ filter: "blur(7px)" }}>
+                            Top Rated Carrier
+                          </div>
+                          <Lock className="w-4 h-4 text-muted-foreground" />
+                        </div>
                       )}
+                      <div className="flex items-center gap-3 mt-0.5">
+                        <span className="text-sm text-muted-foreground">{bestQuote.planName}</span>
+                        {bestQuote.amBestRating && (
+                          <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Shield className="w-3 h-3" />
+                            AM Best: {bestQuote.amBestRating}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
 
-                  {/* StableScore badge */}
-                  <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg ring-2 animate-scale-in ${
+                  {/* Quality score badge */}
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg ring-2 animate-scale-in ${
                     bestQuote.stableScore >= 75
                       ? "bg-gradient-to-br from-green-400 to-emerald-600 ring-green-300"
                       : bestQuote.stableScore >= 50
                         ? "bg-gradient-to-br from-blue-400 to-blue-600 ring-blue-300"
                         : "bg-gradient-to-br from-yellow-400 to-yellow-600 ring-yellow-300"
                   }`}>
-                    <span className="text-xl font-black text-white">{Math.round(bestQuote.stableScore)}</span>
+                    <span className="text-lg font-black text-white">{Math.round(bestQuote.stableScore)}</span>
                   </div>
                 </div>
               </div>
@@ -509,87 +538,6 @@ export default function ResultsPage() {
               {quotes.length} carriers compared
             </span>
           </div>
-
-          {/* Other quotes — collapsed by default */}
-          {otherQuotes.length > 0 && (
-            <div className="mt-8 animate-fade-up-delay-3">
-              <button
-                onClick={() => setShowMoreQuotes(!showMoreQuotes)}
-                className="w-full flex items-center justify-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-3"
-              >
-                <ChevronDown className={`w-4 h-4 transition-transform ${showMoreQuotes ? "rotate-180" : ""}`} />
-                {showMoreQuotes ? "Hide" : "See"} {otherQuotes.length} more {otherQuotes.length === 1 ? "option" : "options"}
-              </button>
-
-              {showMoreQuotes && (
-                <div className="space-y-3 mt-2">
-                  {otherQuotes.map((quote, index) => {
-                    const savings = currentPremium - quote.monthlyPremium
-                    const isCheaper = savings > 0
-
-                    return (
-                      <div
-                        key={`${quote.carrierName}-${quote.planName}-${index}`}
-                        className="bg-white rounded-xl shadow-sm border border-gray-100 p-4"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            {isUnlocked ? (
-                              <h4 className="font-semibold text-sm">{quote.carrierName}</h4>
-                            ) : (
-                              <div className="font-semibold text-sm select-none" style={{ filter: "blur(5px)" }}>
-                                Carrier Name
-                              </div>
-                            )}
-                            <p className="text-xs text-muted-foreground">{quote.planName}</p>
-                          </div>
-
-                          <div className="text-right">
-                            <p className="text-xl font-bold">${quote.monthlyPremium.toFixed(2)}<span className="text-sm font-normal text-muted-foreground">/mo</span></p>
-                            {currentPremium > 0 && isCheaper && (
-                              <p className="text-xs text-green-600 font-medium">Save ${Math.round(savings)}/mo</p>
-                            )}
-                          </div>
-
-                          <div className={`ml-3 w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white ${
-                            quote.stableScore >= 75
-                              ? "bg-green-500"
-                              : quote.stableScore >= 50
-                                ? "bg-blue-500"
-                                : "bg-yellow-500"
-                          }`}>
-                            {Math.round(quote.stableScore)}
-                          </div>
-                        </div>
-
-                        {isUnlocked && (
-                          <div className="flex gap-2 mt-3 pt-3 border-t">
-                            <Button
-                              onClick={() => handleEnrollOnline(quote)}
-                              className="flex-1 bg-[#4ade80] hover:bg-[#22c55e] text-white font-semibold"
-                              size="sm"
-                            >
-                              Enroll
-                              <ArrowRight className="w-3.5 h-3.5 ml-1" />
-                            </Button>
-                            <Button
-                              variant="outline"
-                              onClick={() => handleCallMe(quote)}
-                              className="flex-1 bg-transparent"
-                              size="sm"
-                            >
-                              <Phone className="w-3.5 h-3.5 mr-1" />
-                              Call Me
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
-          )}
 
           {/* Unlock Panel (modal) */}
           {showUnlockPanel && !isUnlocked && (

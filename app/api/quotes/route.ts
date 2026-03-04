@@ -3,6 +3,7 @@ import { fetchCSGQuotes, processCSGQuotes } from "@/lib/csg-api"
 import { calculateStableScore } from "@/lib/stable-score-v2"
 import { calculatePersonalizationBoost } from "@/lib/stable-score"
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
+import { getCarrierDisplayInfo } from "@/lib/carrier-mapping"
 
 export const maxDuration = 30
 
@@ -65,6 +66,7 @@ export async function POST(req: NextRequest) {
       hasHouseholdMember,
       sameCompanyInsurance,
       effectiveDate,
+      currentPremium,
     } = body
 
     console.log("[v0] API: Request parameters:", {
@@ -343,8 +345,8 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    // Sort by final score
-    const sortedQuotes = enrichedQuotes.sort((a, b) => b.finalScore - a.finalScore)
+    // Sort by price ascending (savings-first)
+    const sortedQuotes = enrichedQuotes.sort((a, b) => a.monthlyPremium - b.monthlyPremium)
 
     console.log(
       "[v0] API: Top 5 quotes:",
@@ -359,6 +361,42 @@ export async function POST(req: NextRequest) {
       })),
     )
 
+    // --- Winner selection with bonus carrier logic ---
+    const cheapestQuote = sortedQuotes[0]
+    let selectedQuote = cheapestQuote
+    let selectionReason = "cheapest"
+
+    const bonusCarrierName = process.env.BONUS_CARRIER_NAME || ""
+    const bonusMinSavings = parseFloat(process.env.BONUS_CARRIER_MIN_SAVINGS || "40")
+    const bonusMaxDelta = parseFloat(process.env.BONUS_CARRIER_MAX_DELTA || "10")
+    const parsedCurrentPremium = parseFloat(currentPremium) || 0
+
+    if (bonusCarrierName && cheapestQuote && parsedCurrentPremium > 0) {
+      const bonusQuote = sortedQuotes.find((q) => {
+        const displayInfo = getCarrierDisplayInfo(q.carrierName)
+        return displayInfo.displayName.toLowerCase() === bonusCarrierName.toLowerCase()
+      })
+
+      if (bonusQuote) {
+        const delta = bonusQuote.monthlyPremium - cheapestQuote.monthlyPremium
+        const bonusSavings = parsedCurrentPremium - bonusQuote.monthlyPremium
+
+        if (delta <= bonusMaxDelta && bonusSavings >= bonusMinSavings) {
+          selectedQuote = bonusQuote
+          selectionReason = "bonus_carrier"
+          console.log(`[v0] API: Bonus carrier selected: ${bonusQuote.carrierName} (delta: $${delta.toFixed(2)}, savings: $${bonusSavings.toFixed(2)}/mo)`)
+        } else {
+          selectionReason = "bonus_insufficient"
+          console.log(`[v0] API: Bonus carrier ${bonusCarrierName} skipped (delta: $${delta.toFixed(2)}, savings: $${bonusSavings.toFixed(2)}/mo)`)
+        }
+      } else {
+        selectionReason = "bonus_unavailable"
+        console.log(`[v0] API: Bonus carrier ${bonusCarrierName} not found in quotes`)
+      }
+    }
+
+    console.log(`[v0] API: Selected quote: ${selectedQuote?.carrierName} @ $${selectedQuote?.monthlyPremium}/mo (reason: ${selectionReason})`)
+
     return NextResponse.json({
       success: true,
       quotingAge: age,
@@ -366,6 +404,7 @@ export async function POST(req: NextRequest) {
       loggingKey: loggingKey,
       data: {
         quotes: sortedQuotes,
+        selectedQuote: selectedQuote,
       },
     })
   } catch (error: any) {

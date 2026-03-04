@@ -226,6 +226,24 @@ function normalizeCarrierName(name: string): string {
   return normalized
 }
 
+const FALLBACK_COLORS = [
+  "#2563eb", "#7c3aed", "#db2777", "#ea580c", "#0891b2",
+  "#4f46e5", "#0d9488", "#b45309", "#6366f1", "#059669",
+]
+
+/**
+ * Returns a deterministic fallback initial + color for carriers without logos
+ */
+export function getCarrierLogoFallback(displayName: string): { initial: string; bgColor: string } {
+  const initial = displayName.charAt(0).toUpperCase()
+  let hash = 0
+  for (let i = 0; i < displayName.length; i++) {
+    hash = displayName.charCodeAt(i) + ((hash << 5) - hash)
+  }
+  const bgColor = FALLBACK_COLORS[Math.abs(hash) % FALLBACK_COLORS.length]
+  return { initial, bgColor }
+}
+
 /**
  * Maps a legal carrier name to a simplified display name and logo URL
  */
