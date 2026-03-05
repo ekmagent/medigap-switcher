@@ -28,7 +28,7 @@ export default function HealthDisqualifiedPage() {
 
             <div className="space-y-3">
               <Button asChild size="lg" className="w-full text-lg">
-                <a href="tel:+18001234567">
+                <a href="tel:+18568884641">
                   <Phone className="w-5 h-5 mr-2" />
                   Talk to a Licensed Agent
                 </a>
