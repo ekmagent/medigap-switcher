@@ -53,6 +53,18 @@ export default function VerifyPage2() {
                 <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
                 <span>HIV / AIDS</span>
               </li>
+              <li className="flex items-start gap-2.5 text-[15px]">
+                <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
+                <span>Schizophrenia or bipolar disorder</span>
+              </li>
+              <li className="flex items-start gap-2.5 text-[15px]">
+                <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
+                <span>Diabetes requiring more than 50 units of insulin per day</span>
+              </li>
+              <li className="flex items-start gap-2.5 text-[15px]">
+                <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
+                <span>COPD or emphysema</span>
+              </li>
             </ul>
           </div>
 
