@@ -43,7 +43,11 @@ export default function VerifyPage1() {
               </li>
               <li className="flex items-start gap-2.5 text-[15px]">
                 <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
-                <span>Require supplemental oxygen</span>
+                <span>Require supplemental oxygen or a nebulizer machine</span>
+              </li>
+              <li className="flex items-start gap-2.5 text-[15px]">
+                <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
+                <span>Currently utilizing a pain management clinic or taking heavy prescription opioids</span>
               </li>
             </ul>
           </div>

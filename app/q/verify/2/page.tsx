@@ -35,7 +35,15 @@ export default function VerifyPage2() {
             <ul className="space-y-3">
               <li className="flex items-start gap-2.5 text-[15px]">
                 <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
-                <span>Alzheimer's or dementia</span>
+                <span>Alzheimer's, dementia, or taking memory loss medications (like Aricept or Namenda)</span>
+              </li>
+              <li className="flex items-start gap-2.5 text-[15px]">
+                <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
+                <span>Bipolar disorder or schizophrenia</span>
+              </li>
+              <li className="flex items-start gap-2.5 text-[15px]">
+                <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
+                <span>Diabetes requiring insulin or three or more diabetes medications</span>
               </li>
               <li className="flex items-start gap-2.5 text-[15px]">
                 <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
@@ -52,18 +60,6 @@ export default function VerifyPage2() {
               <li className="flex items-start gap-2.5 text-[15px]">
                 <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
                 <span>HIV / AIDS</span>
-              </li>
-              <li className="flex items-start gap-2.5 text-[15px]">
-                <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
-                <span>Schizophrenia or bipolar disorder</span>
-              </li>
-              <li className="flex items-start gap-2.5 text-[15px]">
-                <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
-                <span>Diabetes requiring more than 50 units of insulin per day</span>
-              </li>
-              <li className="flex items-start gap-2.5 text-[15px]">
-                <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
-                <span>COPD or emphysema</span>
               </li>
             </ul>
           </div>

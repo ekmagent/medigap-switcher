@@ -47,7 +47,7 @@ export default function VerifyPage4() {
               </li>
               <li className="flex items-start gap-2.5 text-[15px]">
                 <span className="text-muted-foreground/60 mt-px">&#x2022;</span>
-                <span>Receiving medications via infusion or injection in a medical facility (excluding B-12 or allergy shots)</span>
+                <span>Currently receiving treatments by infusion or injection in a medical facility (excluding B-12 or allergy shots)</span>
               </li>
             </ul>
           </div>
