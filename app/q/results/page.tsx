@@ -378,11 +378,18 @@ export default function ResultsPage() {
 
           {currentPremium > 0 && bestSavings <= 0 && (
             <div className="text-center mb-6 animate-fade-up">
+              <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 text-xs font-semibold px-3 py-1.5 rounded-full mb-3">
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                You&apos;re already at a competitive rate
+              </div>
               <h1 className="text-3xl font-bold text-foreground">
                 Your Best Rate
               </h1>
               <p className="text-muted-foreground mt-1">
                 for {planLabel} in {formData.state}
+              </p>
+              <p className="text-sm text-muted-foreground mt-3 max-w-xs mx-auto">
+                Good news — you&apos;re not overpaying. Here&apos;s the best available rate from our carriers. A licensed agent can confirm you&apos;re locked in at the right price.
               </p>
             </div>
           )}
