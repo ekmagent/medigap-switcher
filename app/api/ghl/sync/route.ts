@@ -31,6 +31,8 @@ export async function POST(req: NextRequest) {
           bestQuoteStableScore: body.bestQuoteStableScore,
           monthlySavings: body.monthlySavings,
           annualSavings: body.annualSavings,
+          fbp: body.fbp,
+          fbc: body.fbc,
           verifiedAt: new Date().toISOString(),
         }),
       }).catch((err) => {

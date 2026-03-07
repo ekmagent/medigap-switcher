@@ -85,6 +85,7 @@ export default function ResultsPage() {
   const [code, setCode] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [leadId, setLeadId] = useState("")
 
   const currentPremium = parseFloat(formData.currentPremium) || 0
 
@@ -207,6 +208,8 @@ export default function ResultsPage() {
           bestQuoteStableScore: bestQuote?.stableScore,
           monthlySavings: Math.max(0, Math.round(monthlySavings * 100) / 100),
           annualSavings: Math.max(0, Math.round(monthlySavings * 12 * 100) / 100),
+          fbp: getFbp(),
+          fbc: getFbc(),
         }),
       }).catch(() => {})
 
@@ -491,6 +494,7 @@ export default function ResultsPage() {
                   <div className="space-y-3">
                     <a
                       href="tel:+18568884641"
+                      onClick={() => fireAddToCart(bestQuote)}
                       className="flex flex-col items-center justify-center gap-1 w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold shadow-lg hover:shadow-xl transition-[color,background-color,border-color,box-shadow,transform] hover:scale-[1.02] active:scale-[0.98] py-4 rounded-xl"
                     >
                       <span className="flex items-center gap-2 text-xl">
