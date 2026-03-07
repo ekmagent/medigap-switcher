@@ -500,7 +500,7 @@ export default function ResultsPage() {
                           : "Call to Get Started"
                         }
                       </span>
-                      <span className="text-sm font-medium text-white/80">(856) 888-4641</span>
+                      <span className="hidden sm:block text-sm font-medium text-white/80">(856) 888-4641</span>
                     </a>
                     <Button
                       variant="outline"
