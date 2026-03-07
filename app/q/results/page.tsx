@@ -549,124 +549,136 @@ export default function ResultsPage() {
 
           {/* Unlock Panel (modal) */}
           {showUnlockPanel && !isUnlocked && (
-            <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-scale-in">
-                <div className="flex items-center gap-2 mb-2">
-                  <Unlock className="w-5 h-5 text-primary" />
-                  <h3 className="font-bold text-lg">Unlock Your Rate</h3>
-                </div>
-                <p className="text-sm text-muted-foreground mb-5">
-                  Verify your identity to see carrier names and enroll.
-                </p>
+            <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-[#0d4d4d] rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-scale-in">
 
-                {error && (
-                  <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-lg mb-4">
-                    {error}
+                {/* Header */}
+                <div className="px-6 pt-6 pb-4 border-b border-white/10">
+                  <div className="flex items-center gap-2.5 mb-1">
+                    <div className="w-7 h-7 rounded-full bg-[#4ade80]/20 flex items-center justify-center">
+                      <Unlock className="w-3.5 h-3.5 text-[#4ade80]" />
+                    </div>
+                    <h3 className="font-bold text-lg text-white">See Your Rate</h3>
                   </div>
-                )}
+                  <p className="text-sm text-white/60">
+                    Quick verification — we&apos;ll text you a code.
+                  </p>
+                </div>
 
-                {unlockStep === "info" ? (
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-3">
+                <div className="px-6 py-5">
+                  {error && (
+                    <div className="bg-red-500/20 border border-red-400/30 text-red-200 text-sm p-3 rounded-xl mb-4">
+                      {error}
+                    </div>
+                  )}
+
+                  {unlockStep === "info" ? (
+                    <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label htmlFor="firstName" className="text-white/60 text-xs font-medium mb-1.5 block">First Name</Label>
+                          <Input
+                            id="firstName"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            placeholder="John"
+                            autoFocus
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus:border-[#4ade80]"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="lastName" className="text-white/60 text-xs font-medium mb-1.5 block">Last Name</Label>
+                          <Input
+                            id="lastName"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            placeholder="Smith"
+                            className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus:border-[#4ade80]"
+                          />
+                        </div>
+                      </div>
                       <div>
-                        <Label htmlFor="firstName">First Name</Label>
+                        <Label htmlFor="email" className="text-white/60 text-xs font-medium mb-1.5 block">Email</Label>
                         <Input
-                          id="firstName"
-                          value={firstName}
-                          onChange={(e) => setFirstName(e.target.value)}
-                          placeholder="John"
+                          id="email"
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="john@example.com"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus:border-[#4ade80]"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="phone" className="text-white/60 text-xs font-medium mb-1.5 block">Phone Number</Label>
+                        <Input
+                          id="phone"
+                          type="tel"
+                          value={phone}
+                          onChange={(e) => setPhone(formatPhone(e.target.value))}
+                          placeholder="(555) 555-5555"
+                          className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus:border-[#4ade80]"
+                        />
+                      </div>
+                      <p className="text-[11px] leading-snug text-white/35">
+                        By clicking &quot;Send Verification Code,&quot; you consent to receive calls, text messages (including via autodialer and prerecorded/artificial voice), and emails from HealthPlans.now and its licensed agents at the number and email provided, for marketing purposes including quotes and plan information. Consent is not a condition of purchase. Message &amp; data rates may apply. You may revoke consent at any time. View our{" "}
+                        <a href="/privacy" className="underline hover:text-white/60">Privacy Policy</a> and{" "}
+                        <a href="/terms" className="underline hover:text-white/60">Terms of Service</a>.
+                      </p>
+                      <Button
+                        onClick={handleSendCode}
+                        disabled={loading}
+                        className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-[#0d4d4d] font-bold h-12"
+                        size="lg"
+                      >
+                        {loading ? "Sending Code..." : "Send Verification Code"}
+                      </Button>
+                      <button
+                        onClick={() => setShowUnlockPanel(false)}
+                        className="w-full text-sm text-white/40 hover:text-white/70 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <p className="text-sm text-white/60">
+                        We sent a 6-digit code to <span className="text-white font-medium">{formatPhone(phone)}</span>
+                      </p>
+                      <div>
+                        <Label htmlFor="code" className="text-white/60 text-xs font-medium mb-1.5 block">Verification Code</Label>
+                        <Input
+                          id="code"
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={6}
+                          value={code}
+                          onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+                          placeholder="000000"
+                          className="text-center text-2xl tracking-widest bg-white/10 border-white/20 text-white placeholder:text-white/30 focus:border-[#4ade80]"
                           autoFocus
                         />
                       </div>
-                      <div>
-                        <Label htmlFor="lastName">Last Name</Label>
-                        <Input
-                          id="lastName"
-                          value={lastName}
-                          onChange={(e) => setLastName(e.target.value)}
-                          placeholder="Smith"
-                        />
-                      </div>
+                      <Button
+                        onClick={handleVerifyCode}
+                        disabled={loading || code.length !== 6}
+                        className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-[#0d4d4d] font-bold h-12"
+                        size="lg"
+                      >
+                        {loading ? "Verifying..." : "Verify & Unlock"}
+                      </Button>
+                      <button
+                        onClick={() => {
+                          setUnlockStep("info")
+                          setCode("")
+                          setError("")
+                        }}
+                        className="w-full text-sm text-white/40 hover:text-white/70 transition-colors"
+                      >
+                        Use a different phone number
+                      </button>
                     </div>
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="john@example.com"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="phone">Phone Number</Label>
-                      <Input
-                        id="phone"
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(formatPhone(e.target.value))}
-                        placeholder="(555) 555-5555"
-                      />
-                    </div>
-                    <p className="text-[11px] leading-snug text-muted-foreground">
-                      By clicking &quot;Send Verification Code,&quot; you consent to receive calls, text messages (including via autodialer and prerecorded/artificial voice), and emails from HealthPlans.now and its licensed agents at the number and email provided, for marketing purposes including quotes and plan information. Consent is not a condition of purchase. Message &amp; data rates may apply. You may revoke consent at any time. View our{" "}
-                      <a href="/privacy" className="underline hover:text-foreground">Privacy Policy</a> and{" "}
-                      <a href="/terms" className="underline hover:text-foreground">Terms of Service</a>.
-                    </p>
-                    <Button
-                      onClick={handleSendCode}
-                      disabled={loading}
-                      className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold"
-                      size="lg"
-                    >
-                      {loading ? "Sending Code..." : "Send Verification Code"}
-                    </Button>
-                    <button
-                      onClick={() => setShowUnlockPanel(false)}
-                      className="w-full text-sm text-muted-foreground hover:underline"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <p className="text-sm text-muted-foreground">
-                      We sent a 6-digit code to {formatPhone(phone)}
-                    </p>
-                    <div>
-                      <Label htmlFor="code">Verification Code</Label>
-                      <Input
-                        id="code"
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={6}
-                        value={code}
-                        onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                        placeholder="000000"
-                        className="text-center text-2xl tracking-widest"
-                        autoFocus
-                      />
-                    </div>
-                    <Button
-                      onClick={handleVerifyCode}
-                      disabled={loading || code.length !== 6}
-                      className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold"
-                      size="lg"
-                    >
-                      {loading ? "Verifying..." : "Verify & Unlock"}
-                    </Button>
-                    <button
-                      onClick={() => {
-                        setUnlockStep("info")
-                        setCode("")
-                        setError("")
-                      }}
-                      className="w-full text-sm text-muted-foreground hover:underline"
-                    >
-                      Use a different phone number
-                    </button>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           )}
