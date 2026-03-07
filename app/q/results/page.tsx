@@ -489,25 +489,24 @@ export default function ResultsPage() {
               <div className="px-6 py-5 animate-fade-up-delay-3">
                 {isUnlocked ? (
                   <div className="space-y-3">
-                    <Button
-                      onClick={() => handleEnrollOnline(bestQuote)}
-                      className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-lg shadow-lg hover:shadow-xl transition-[color,background-color,border-color,box-shadow,transform] hover:scale-[1.02] active:scale-[0.98] h-14 rounded-xl"
-                      size="lg"
+                    <a
+                      href="tel:+18568884641"
+                      className="flex items-center justify-center gap-3 w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-xl shadow-lg hover:shadow-xl transition-[color,background-color,border-color,box-shadow,transform] hover:scale-[1.02] active:scale-[0.98] h-16 rounded-xl"
                     >
+                      <Phone className="w-6 h-6" />
                       {currentPremium > 0 && bestSavings > 0
-                        ? `Enroll Now to Save $${Math.round(bestAnnualSavings).toLocaleString()}/Year`
-                        : "Enroll Now"
+                        ? `Call to Lock In $${Math.round(bestAnnualSavings).toLocaleString()}/Year Savings`
+                        : "Call to Get Started"
                       }
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </Button>
+                    </a>
                     <Button
                       variant="outline"
-                      onClick={() => handleCallMe(bestQuote)}
+                      onClick={() => handleEnrollOnline(bestQuote)}
                       className="w-full bg-transparent font-medium h-12 rounded-xl"
                       size="lg"
                     >
-                      <Phone className="w-4 h-4 mr-2" />
-                      Have an Agent Call Me Instead
+                      <ArrowRight className="w-4 h-4 mr-2" />
+                      Enroll Online Instead
                     </Button>
                   </div>
                 ) : (
