@@ -491,13 +491,16 @@ export default function ResultsPage() {
                   <div className="space-y-3">
                     <a
                       href="tel:+18568884641"
-                      className="flex items-center justify-center gap-3 w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-xl shadow-lg hover:shadow-xl transition-[color,background-color,border-color,box-shadow,transform] hover:scale-[1.02] active:scale-[0.98] h-16 rounded-xl"
+                      className="flex flex-col items-center justify-center gap-1 w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold shadow-lg hover:shadow-xl transition-[color,background-color,border-color,box-shadow,transform] hover:scale-[1.02] active:scale-[0.98] py-4 rounded-xl"
                     >
-                      <Phone className="w-6 h-6" />
-                      {currentPremium > 0 && bestSavings > 0
-                        ? `Call to Lock In $${Math.round(bestAnnualSavings).toLocaleString()}/Year Savings`
-                        : "Call to Get Started"
-                      }
+                      <span className="flex items-center gap-2 text-xl">
+                        <Phone className="w-6 h-6" />
+                        {currentPremium > 0 && bestSavings > 0
+                          ? `Call to Lock In $${Math.round(bestAnnualSavings).toLocaleString()}/Year`
+                          : "Call to Get Started"
+                        }
+                      </span>
+                      <span className="text-sm font-medium text-white/80">(856) 888-4641</span>
                     </a>
                     <Button
                       variant="outline"
