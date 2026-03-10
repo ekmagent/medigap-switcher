@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { CheckCircle2, Shield, Lock, FileCheck } from "lucide-react"
+import { CheckCircle2, Shield, Lock, FileCheck, Zap, ArrowRight } from "lucide-react"
 
 const carriers = [
   { name: "Aetna", logo: "/images/aetnaahic.jpeg" },
@@ -56,106 +56,120 @@ export default function LandingPage() {
               <div className="grid lg:grid-cols-2 gap-8 items-center">
                 {/* Left content */}
                 <div className="relative z-10">
-                  <h1 className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] mb-4">
-                    Paying too much
-                    <br />
-                    for your <span className="text-[#4ade80]">Medigap</span> plan?
+                  <h1 className="text-white text-4xl sm:text-5xl lg:text-[3.2rem] font-bold leading-[1.1] mb-4">
+                    See If You Could Save on Your{" "}
+                    <span className="text-[#4ade80]">Medigap Plan</span>{" "}
+                    in 2 Minutes
                   </h1>
 
-                  <p className="text-white/90 text-sm tracking-widest uppercase mb-4">
-                    Same coverage. Lower rate. It&apos;s that simple.
-                  </p>
-                  <p className="text-white/70 text-sm mb-8">
-                    Compare rates from 30+ carriers in under 2 minutes. No contact info required to see your savings.
+                  <p className="text-white/70 text-base mb-8 max-w-md">
+                    No phone number or email required to see your possible savings. Only continue if the savings are worth it.
                   </p>
 
                   <Link
                     href="/q/current-plan"
-                    className="inline-block bg-[rgba(116,255,11,1)] hover:bg-[#3fcf74] text-[#0d4d4d] px-12 py-4 rounded-full text-lg transition-all hover:scale-[1.02] active:scale-[0.98] mb-6 font-extrabold"
+                    className="inline-block bg-[rgba(116,255,11,1)] hover:bg-[#3fcf74] text-[#0d4d4d] px-12 py-4 rounded-full text-lg transition-all hover:scale-[1.02] active:scale-[0.98] mb-8 font-extrabold"
                   >
                     CHECK MY SAVINGS
                   </Link>
 
-                  <div className="bg-white/10 rounded-xl px-5 py-4 backdrop-blur-sm max-w-md">
-                    <p className="text-white/90 text-base font-semibold mb-3">
-                      Why are you overpaying for the exact same coverage?
-                    </p>
-                    <ul className="text-white/80 text-base space-y-2 mb-4">
-                      <li className="flex items-start gap-2">
-                        <span className="text-[#4ade80] mt-0.5">&#10003;</span>
-                        <span>See your savings instantly — no phone call needed</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-[#4ade80] mt-0.5">&#10003;</span>
-                        <span>Same Plan F, G, or N — just a better price</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-[#4ade80] mt-0.5">&#10003;</span>
-                        <span>Compare all carriers in one place</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-[#4ade80] mt-0.5">&#10003;</span>
-                        <span>StableScore™ shows which carriers keep rates low</span>
-                      </li>
-                    </ul>
-                    <p className="text-white/70 italic font-semibold text-base">
-                      Fast like a website. Safe like an expert.
-                    </p>
+                  {/* Comparison table */}
+                  <div className="bg-white/10 rounded-2xl overflow-hidden backdrop-blur-sm max-w-lg">
+                    <div className="px-5 py-3 border-b border-white/10">
+                      <p className="text-white font-bold text-sm">
+                        Keep What You Like.{" "}
+                        <span className="text-[#4ade80]">See What Could Cost Less.</span>
+                      </p>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm">
+                        <thead>
+                          <tr className="border-b border-white/10">
+                            <th className="text-left px-5 py-2.5 text-white/50 font-medium text-xs">What matters to you</th>
+                            <th className="text-center px-3 py-2.5 text-white/50 font-medium text-xs">Current plan</th>
+                            <th className="text-center px-3 py-2.5 text-[#4ade80] font-medium text-xs">New same-letter plan</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {[
+                            "Keep my doctors",
+                            "Keep the coverage I'm used to",
+                            "No change to how my plan works",
+                            "Freedom to use any doctor that takes Medicare",
+                            "No change to my separate drug plan",
+                          ].map((row, i) => (
+                            <tr key={i} className="border-b border-white/5">
+                              <td className="px-5 py-2.5 text-white/80 text-xs">{row}</td>
+                              <td className="text-center px-3 py-2.5 text-white/60 text-base">✓</td>
+                              <td className="text-center px-3 py-2.5 text-[#4ade80] text-base">✓</td>
+                            </tr>
+                          ))}
+                          <tr>
+                            <td className="px-5 py-3 text-white/80 text-xs font-medium">Monthly premium</td>
+                            <td className="text-center px-3 py-3 text-white/50 text-xs line-through">$198/mo</td>
+                            <td className="text-center px-3 py-3 text-[#4ade80] text-sm font-bold">$142/mo</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
 
                 {/* Right content - Sample savings card */}
                 <div className="hidden lg:flex justify-center items-center relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#4ade80]/10 to-transparent rounded-full blur-3xl" />
-                  <div className="bg-white rounded-2xl shadow-xl p-5 w-[280px] border border-gray-100 relative z-10">
-                    <div className="flex items-center justify-between mb-4">
+                  <div className="bg-white rounded-2xl shadow-2xl w-[300px] overflow-hidden border border-gray-100 relative z-10">
+                    {/* Card header */}
+                    <div className="bg-gradient-to-r from-[#0d4d4d] to-[#0d6060] px-5 py-4">
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="text-white/70 text-xs uppercase tracking-wide">Your Plan G · NJ</p>
+                        <span className="bg-[#4ade80]/20 text-[#4ade80] text-xs font-semibold px-2 py-0.5 rounded-full">A Rated</span>
+                      </div>
+                      <p className="text-white font-bold text-base">Mutual of Omaha</p>
+                    </div>
+
+                    {/* Savings highlight */}
+                    <div className="bg-[#4ade80] px-5 py-3 flex items-center justify-between">
                       <div>
-                        <p className="font-semibold text-gray-900 text-sm">Your Current Plan G</p>
-                        <p className="text-xs text-gray-500">vs. best available rate</p>
+                        <p className="text-[#0d4d4d] text-xs font-semibold uppercase tracking-wide">Potential Annual Savings</p>
+                        <p className="text-[#0d4d4d] text-2xl font-black">$1,032 / year</p>
                       </div>
-                      <div className="bg-[#4ade80]/10 px-2 py-1 rounded-full">
-                        <span className="text-[#0d4d4d] text-xs font-semibold">A+ Rated</span>
-                      </div>
+                      <Zap className="w-8 h-8 text-[#0d4d4d]/40" />
                     </div>
 
-                    <div className="mb-4">
-                      <p className="text-gray-400 text-sm line-through">$198/mo</p>
-                      <p className="text-3xl font-bold text-gray-900">
-                        $142<span className="text-lg font-normal text-gray-500">/mo</span>
-                      </p>
-                    </div>
-
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
-                      <p className="text-green-700 font-bold text-center">
-                        Save $56/mo ($672/yr)
-                      </p>
-                    </div>
-
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <CheckCircle2 className="w-4 h-4 text-[#4ade80]" />
-                        <span>Exact same coverage</span>
+                    {/* Premium comparison */}
+                    <div className="px-5 py-4 border-b border-gray-100">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-gray-400 text-sm">What you pay now</span>
+                        <span className="text-gray-400 text-sm line-through">$198/mo</span>
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <CheckCircle2 className="w-4 h-4 text-[#4ade80]" />
-                        <span>No coverage gap</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <CheckCircle2 className="w-4 h-4 text-[#4ade80]" />
-                        <span>Any doctor that takes Medicare</span>
-                      </div>
-                    </div>
-
-                    <div className="bg-gradient-to-r from-[#0d4d4d] to-[#0d6d6d] rounded-xl p-3">
                       <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-white/70 text-xs">StableScore™</p>
-                          <p className="text-white font-bold text-lg">94/100</p>
+                        <span className="text-gray-900 text-sm font-semibold">New rate</span>
+                        <span className="text-gray-900 text-xl font-bold">$112<span className="text-sm font-normal text-gray-500">/mo</span></span>
+                      </div>
+                    </div>
+
+                    {/* Checkmarks */}
+                    <div className="px-5 py-4 space-y-2 border-b border-gray-100">
+                      {["Exact same Plan G coverage", "No coverage gap", "Any doctor that takes Medicare"].map((item) => (
+                        <div key={item} className="flex items-center gap-2 text-sm text-gray-600">
+                          <CheckCircle2 className="w-4 h-4 text-[#4ade80] flex-shrink-0" />
+                          <span>{item}</span>
                         </div>
-                        <div className="text-right">
-                          <p className="text-[#4ade80] font-semibold text-sm">Excellent</p>
-                          <p className="text-white/70 text-xs">Price Stability</p>
+                      ))}
+                    </div>
+
+                    {/* StableScore */}
+                    <div className="px-5 py-4">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <p className="text-gray-500 text-xs">StableScore™</p>
+                        <p className="text-[#0d4d4d] text-xs font-semibold">Price Stability Rating</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                          <div className="h-full w-[92%] bg-gradient-to-r from-[#4ade80] to-[#0d4d4d] rounded-full" />
                         </div>
+                        <span className="text-[#0d4d4d] font-black text-lg">92</span>
                       </div>
                     </div>
                   </div>
@@ -197,37 +211,52 @@ export default function LandingPage() {
       {/* How it works */}
       <section className="bg-white py-12 sm:py-16">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 text-center mb-10">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 text-center mb-3">
             How it works
           </h2>
+          <p className="text-center text-gray-500 text-sm mb-10 max-w-md mx-auto">
+            Under 2 minutes. No commitment. See your number — then decide.
+          </p>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-14 h-14 bg-[#0d4d4d] rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-white font-bold text-xl">1</span>
               </div>
               <h3 className="font-semibold text-lg mb-2">Tell us your plan</h3>
-              <p className="text-gray-600 text-sm">
-                Answer a few quick questions about your current Medigap coverage and zip code.
+              <p className="text-gray-600 text-sm mb-2">
+                Your zip, plan letter, and what you pay now. Takes about 60 seconds.
               </p>
+              <p className="text-[#0d4d4d] text-xs font-semibold">No contact info needed yet</p>
             </div>
             <div className="text-center">
               <div className="w-14 h-14 bg-[#0d4d4d] rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-white font-bold text-xl">2</span>
               </div>
               <h3 className="font-semibold text-lg mb-2">See your savings</h3>
-              <p className="text-gray-600 text-sm">
-                Instantly compare rates from 30+ carriers. See exactly how much you could save.
+              <p className="text-gray-600 text-sm mb-2">
+                Real rates from 30+ carriers, instantly. See the exact dollar amount you could keep.
               </p>
+              <p className="text-[#0d4d4d] text-xs font-semibold">If the savings aren't there, walk away</p>
             </div>
             <div className="text-center">
               <div className="w-14 h-14 bg-[#0d4d4d] rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-white font-bold text-xl">3</span>
               </div>
-              <h3 className="font-semibold text-lg mb-2">Switch & save</h3>
-              <p className="text-gray-600 text-sm">
-                Enroll online or have a licensed agent call you. Same coverage, lower price.
+              <h3 className="font-semibold text-lg mb-2">Switch if it makes sense</h3>
+              <p className="text-gray-600 text-sm mb-2">
+                Call us or enroll online. Same coverage — just at a price that actually fits.
               </p>
+              <p className="text-[#0d4d4d] text-xs font-semibold">No pressure, no phone tag</p>
             </div>
+          </div>
+
+          <div className="mt-10 text-center">
+            <Link
+              href="/q/current-plan"
+              className="inline-flex items-center gap-2 bg-[#0d4d4d] hover:bg-[#0d6060] text-white px-8 py-3.5 rounded-full text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98]"
+            >
+              See My Savings Now <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
