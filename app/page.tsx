@@ -94,6 +94,7 @@ export default function LandingPage() {
                         <tbody>
                           {[
                             "Keep My Doctors",
+                            "Same Plan Letter (G, N, or F)",
                             "Keep Same Coverage",
                             "No Change to Drug Plan",
                           ].map((row, i) => (
