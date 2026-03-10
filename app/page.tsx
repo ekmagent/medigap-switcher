@@ -58,7 +58,7 @@ export default function LandingPage() {
                 <div className="relative z-10">
                   <h1 className="text-white text-4xl sm:text-5xl lg:text-[3.2rem] font-bold leading-[1.1] mb-4">
                     See If You Could Save on Your{" "}
-                    <span className="text-[#4ade80]">Medigap Plan</span>{" "}
+                    <span className="text-[#4ade80]">Medicare Supplement</span>{" "}
                     in 2 Minutes
                   </h1>
 
@@ -71,6 +71,7 @@ export default function LandingPage() {
                     className="inline-block bg-[rgba(116,255,11,1)] hover:bg-[#3fcf74] text-[#0d4d4d] px-12 py-4 rounded-full text-lg transition-all hover:scale-[1.02] active:scale-[0.98] mb-8 font-extrabold"
                   >
                     CHECK MY SAVINGS
+
                   </Link>
 
                   {/* Comparison table */}
@@ -87,7 +88,7 @@ export default function LandingPage() {
                           <tr className="border-b border-white/10">
                             <th className="text-left px-5 py-3 text-white/50 font-medium text-base">What matters to you</th>
                             <th className="text-center px-3 py-3 text-white/50 font-medium text-base">Current plan</th>
-                            <th className="text-center px-3 py-3 text-[#4ade80] font-medium text-base">New same-letter plan</th>
+                            <th className="text-center px-3 py-3 text-[#4ade80] font-medium text-base">Switched plan</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -95,7 +96,6 @@ export default function LandingPage() {
                             "Keep My Doctors",
                             "Keep Same Coverage",
                             "No Change to Drug Plan",
-                            "Costs Less Every Month",
                           ].map((row, i) => (
                             <tr key={i} className="border-b border-white/5">
                               <td className="px-5 py-3 text-white/80 text-base">{row}</td>
@@ -103,6 +103,13 @@ export default function LandingPage() {
                               <td className="text-center px-3 py-3 text-[#4ade80] text-xl">✓</td>
                             </tr>
                           ))}
+                          <tr className="border-b border-white/5">
+                            <td className="px-5 py-3 text-white/80 text-base">Costs Less Every Month</td>
+                            <td className="text-center px-3 py-3 text-white/20 text-xl">—</td>
+                            <td className="text-center px-3 py-3">
+                              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#4ade80] text-[#0d4d4d] font-black text-base">✓</span>
+                            </td>
+                          </tr>
                           <tr>
                             <td className="px-5 py-4 text-white/80 text-base font-medium">Monthly premium</td>
                             <td className="text-center px-3 py-4 text-white/60 text-base" style={{textDecoration: "line-through", textDecorationColor: "rgba(255,255,255,0.3)", textDecorationThickness: "1px"}}>$198/mo</td>
