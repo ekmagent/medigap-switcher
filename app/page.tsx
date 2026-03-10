@@ -76,18 +76,18 @@ export default function LandingPage() {
                   {/* Comparison table */}
                   <div className="bg-white/10 rounded-2xl overflow-hidden backdrop-blur-sm max-w-lg">
                     <div className="px-5 py-3 border-b border-white/10">
-                      <p className="text-white font-bold text-sm">
+                      <p className="text-white font-bold text-base">
                         Keep What You Like.{" "}
                         <span className="text-[#4ade80]">See What Could Cost Less.</span>
                       </p>
                     </div>
                     <div className="overflow-x-auto">
-                      <table className="w-full text-sm">
+                      <table className="w-full">
                         <thead>
                           <tr className="border-b border-white/10">
-                            <th className="text-left px-5 py-2.5 text-white/50 font-medium text-xs">What matters to you</th>
-                            <th className="text-center px-3 py-2.5 text-white/50 font-medium text-xs">Current plan</th>
-                            <th className="text-center px-3 py-2.5 text-[#4ade80] font-medium text-xs">New same-letter plan</th>
+                            <th className="text-left px-5 py-3 text-white/50 font-medium text-base">What matters to you</th>
+                            <th className="text-center px-3 py-3 text-white/50 font-medium text-base">Current plan</th>
+                            <th className="text-center px-3 py-3 text-[#4ade80] font-medium text-base">New same-letter plan</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -99,15 +99,15 @@ export default function LandingPage() {
                             "No change to my separate drug plan",
                           ].map((row, i) => (
                             <tr key={i} className="border-b border-white/5">
-                              <td className="px-5 py-2.5 text-white/80 text-xs">{row}</td>
-                              <td className="text-center px-3 py-2.5 text-white/60 text-base">✓</td>
-                              <td className="text-center px-3 py-2.5 text-[#4ade80] text-base">✓</td>
+                              <td className="px-5 py-3 text-white/80 text-base">{row}</td>
+                              <td className="text-center px-3 py-3 text-white/60 text-xl">✓</td>
+                              <td className="text-center px-3 py-3 text-[#4ade80] text-xl">✓</td>
                             </tr>
                           ))}
                           <tr>
-                            <td className="px-5 py-3 text-white/80 text-xs font-medium">Monthly premium</td>
-                            <td className="text-center px-3 py-3 text-white/50 text-xs line-through">$198/mo</td>
-                            <td className="text-center px-3 py-3 text-[#4ade80] text-sm font-bold">$142/mo</td>
+                            <td className="px-5 py-4 text-white/80 text-base font-medium">Monthly premium</td>
+                            <td className="text-center px-3 py-4 text-white/60 text-base" style={{textDecoration: "line-through", textDecorationColor: "rgba(255,255,255,0.3)", textDecorationThickness: "1px"}}>$198/mo</td>
+                            <td className="text-center px-3 py-4 text-[#4ade80] text-lg font-bold">$142/mo</td>
                           </tr>
                         </tbody>
                       </table>
