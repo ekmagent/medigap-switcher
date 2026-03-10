@@ -260,7 +260,7 @@ export default function LandingPage() {
           <div className="mt-10 text-center">
             <Link
               href="/q/current-plan"
-              className="inline-flex items-center gap-2 bg-[#0d4d4d] hover:bg-[#0d6060] text-white px-8 py-3.5 rounded-full text-sm font-bold transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center gap-2 bg-[rgba(116,255,11,1)] hover:bg-[#3fcf74] text-[#0d4d4d] px-8 py-3.5 rounded-full text-sm font-extrabold transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               See My Savings Now <ArrowRight className="w-4 h-4" />
             </Link>
