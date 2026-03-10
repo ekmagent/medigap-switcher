@@ -92,11 +92,10 @@ export default function LandingPage() {
                         </thead>
                         <tbody>
                           {[
-                            "Keep my doctors",
-                            "Keep the coverage I'm used to",
-                            "No change to how my plan works",
-                            "Freedom to use any doctor that takes Medicare",
-                            "No change to my separate drug plan",
+                            "Keep My Doctors",
+                            "Keep Same Coverage",
+                            "No Change to Drug Plan",
+                            "Costs Less Every Month",
                           ].map((row, i) => (
                             <tr key={i} className="border-b border-white/5">
                               <td className="px-5 py-3 text-white/80 text-base">{row}</td>
