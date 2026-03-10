@@ -88,7 +88,7 @@ export default function LandingPage() {
                           <tr className="border-b border-white/10">
                             <th className="text-left px-5 py-3 text-white/50 font-medium text-base">What matters to you</th>
                             <th className="text-center px-3 py-3 text-white/50 font-medium text-base">Current plan</th>
-                            <th className="text-center px-3 py-3 text-[#4ade80] font-medium text-base">Switched plan</th>
+                            <th className="text-center px-3 py-3 text-[#4ade80] font-medium text-base">New Plan</th>
                           </tr>
                         </thead>
                         <tbody>
