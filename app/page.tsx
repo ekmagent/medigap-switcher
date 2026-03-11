@@ -56,13 +56,13 @@ export default function LandingPage() {
               <div className="grid lg:grid-cols-2 gap-8 items-center">
                 {/* Left content */}
                 <div className="relative z-10">
-                  <h1 className="text-white text-4xl sm:text-5xl lg:text-[3.2rem] font-bold leading-[1.1] mb-4">
+                  <h1 className="text-white text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.05] mb-5">
                     See If You Could Save on Your{" "}
                     <span className="text-[#4ade80]">Medicare Supplement</span>{" "}
                     in 2 Minutes
                   </h1>
 
-                  <p className="text-white/70 text-base mb-8 max-w-md">
+                  <p className="text-white/70 text-lg mb-8 max-w-md">
                     No phone number or email required to see your possible savings. Only continue if the savings are worth it.
                   </p>
 
