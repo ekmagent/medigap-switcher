@@ -157,7 +157,11 @@ const carrierMappings: Record<string, CarrierMapping> = {
   "UnitedHealthcare Life Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
   "Golden Rule Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
   "Chesapeake Life Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
-  "Unimerica Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "Unimerica Insurance Company": { displayName: "UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "Centurion Casualty Company": { displayName: "UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "MAMSI Life and Health Insurance Company": { displayName: "UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "PacifiCare Life and Health Insurance Company": { displayName: "UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "Sierra Health and Life Insurance Company": { displayName: "UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
 
   // Cigna
   Cigna: { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
@@ -197,7 +201,14 @@ const carrierMappings: Record<string, CarrierMapping> = {
   "Central States Health & Life Co. of Omaha": { displayName: "Mutual of Omaha", logoUrl: "/images/moo-ms.jpg" },
   "Central States Indemnity Co. of Omaha": { displayName: "Mutual of Omaha", logoUrl: "/images/moo-ms.jpg" },
 
-  // Chubb (formerly ACE/INA)
+  // Chubb (formerly ACE/INA) — includes subsidiaries with no "Chubb/ACE/INA" in name
+  "Federal Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Great Northern Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Pacific Indemnity Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Pacific Employers Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Vigilant Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Westchester Fire Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Bankers Standard Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
   "Insurance Co of N Amer": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
   "Ins Co of N Amer": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
   "Ins Co of N America": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
@@ -229,6 +240,9 @@ const carrierMappings: Record<string, CarrierMapping> = {
   "Aetna Insurance Company of America": { displayName: "Aetna", logoUrl: "/images/aetnaahic.jpeg" },
   "Coventry Health and Life Insurance Company": { displayName: "Aetna", logoUrl: "/images/aetnaahic.jpeg" },
   "First Health Life & Health Insurance Company": { displayName: "Aetna", logoUrl: "/images/aetnaahic.jpeg" },
+  "Pennsylvania Life Insurance Company": { displayName: "Aetna", logoUrl: "/images/aetnaahic.jpeg" },
+  "United Teacher Associates Insurance Company": { displayName: "Aetna", logoUrl: "/images/aetnaahic.jpeg" },
+  "CHC Casualty Risk Retention Group": { displayName: "Aetna", logoUrl: "/images/aetnaahic.jpeg" },
 
   // Bankers Fidelity
   "Bankers Fidelity Life Insurance Company": { displayName: "Bankers Fidelity", logoUrl: "/images/bankers-fidelity.png" },
@@ -273,6 +287,9 @@ const carrierMappings: Record<string, CarrierMapping> = {
   Aflac: { displayName: "Aflac", logoUrl: "/images/aflac-logo.png" },
   "American Family Life Assurance Company of Columbus": { displayName: "Aflac", logoUrl: "/images/aflac-logo.png" },
   "Continental American Insurance Company": { displayName: "Aflac", logoUrl: "/images/aflac-logo.png" },
+  "American Home Life Insurance Company": { displayName: "Aflac", logoUrl: "/images/aflac-logo.png" },
+  "Colonial Penn Life Insurance Company": { displayName: "Aflac", logoUrl: "/images/aflac-logo.png" },
+  "Nassau Life Insurance Company": { displayName: "Aflac", logoUrl: "/images/aflac-logo.png" },
 
   // Medico / Wellabe
   "Medico Ins Co": { displayName: "Wellabe", logoUrl: "/images/wellabe-logo.png" },
