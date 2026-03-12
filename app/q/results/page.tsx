@@ -45,8 +45,8 @@ function useCountUp(target: number, duration = 1200, delay = 400) {
   return value
 }
 
-function CarrierLogo({ carrierName }: { carrierName: string }) {
-  const displayInfo = getCarrierDisplayInfo(carrierName)
+function CarrierLogo({ carrierName, naic }: { carrierName: string; naic?: string | number | null }) {
+  const displayInfo = getCarrierDisplayInfo(carrierName, naic)
   const fallback = getCarrierLogoFallback(displayInfo.displayName)
 
   if (displayInfo.logoUrl) {
@@ -405,7 +405,7 @@ export default function ResultsPage() {
                   <div className="flex items-center gap-3">
                     {/* Carrier logo or placeholder */}
                     {isUnlocked ? (
-                      <CarrierLogo carrierName={bestQuote.carrierName} />
+                      <CarrierLogo carrierName={bestQuote.carrierName} naic={bestQuote.companyNaic} />
                     ) : (
                       <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
                         <Shield className="w-5 h-5 text-gray-400" />
