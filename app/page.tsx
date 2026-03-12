@@ -92,6 +92,18 @@ export default function LandingPage() {
                           </tr>
                         </thead>
                         <tbody>
+                          <tr className="border-b border-white/5">
+                            <td className="px-5 py-4 text-white/80 text-base font-medium">Monthly premium</td>
+                            <td className="text-center px-3 py-4 text-white/60 text-base" style={{textDecoration: "line-through", textDecorationColor: "rgba(255,255,255,0.3)", textDecorationThickness: "1px"}}>$198/mo</td>
+                            <td className="text-center px-3 py-4 text-[#4ade80] text-lg font-bold">$112/mo</td>
+                          </tr>
+                          <tr className="border-b border-white/5">
+                            <td className="px-5 py-3 text-white/80 text-base">Costs Less Every Month</td>
+                            <td className="text-center px-3 py-3 text-white/20 text-xl">—</td>
+                            <td className="text-center px-3 py-3">
+                              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#4ade80] text-[#0d4d4d] font-black text-base">✓</span>
+                            </td>
+                          </tr>
                           {[
                             "Keep My Doctors",
                             "Same Plan Letter (G, N, or F)",
@@ -104,18 +116,6 @@ export default function LandingPage() {
                               <td className="text-center px-3 py-3 text-[#4ade80] text-xl">✓</td>
                             </tr>
                           ))}
-                          <tr className="border-b border-white/5">
-                            <td className="px-5 py-3 text-white/80 text-base">Costs Less Every Month</td>
-                            <td className="text-center px-3 py-3 text-white/20 text-xl">—</td>
-                            <td className="text-center px-3 py-3">
-                              <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#4ade80] text-[#0d4d4d] font-black text-base">✓</span>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className="px-5 py-4 text-white/80 text-base font-medium">Monthly premium</td>
-                            <td className="text-center px-3 py-4 text-white/60 text-base" style={{textDecoration: "line-through", textDecorationColor: "rgba(255,255,255,0.3)", textDecorationThickness: "1px"}}>$198/mo</td>
-                            <td className="text-center px-3 py-4 text-[#4ade80] text-lg font-bold">$142/mo</td>
-                          </tr>
                         </tbody>
                       </table>
                     </div>
