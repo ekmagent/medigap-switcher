@@ -176,6 +176,14 @@ const carrierMappings: Record<string, CarrierMapping> = {
   "Loyal American Life Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Medco Containment Life Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "HealthSpring Life & Health Insurance Company, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "HealthSpring Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "HealthSpring National Health Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Bravo Health Pennsylvania": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Bravo Health Pennsylvania, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Bravo Health New Jersey": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Bravo Health New Jersey, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Bravo Health Mid-Atlantic": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna Specialty Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   CHLIC: { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   Healthspring: { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "American Retirement Life Insurance": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
@@ -389,6 +397,11 @@ export function getCarrierDisplayInfo(legalName: string, naic?: string | number 
   // Tier One → Aflac
   if (lowerLegalName.includes("tier one") || lowerLegalName.includes("tierone")) {
     return { displayName: "Aflac", logoUrl: "/images/aflac-logo.png" }
+  }
+
+  // HealthSpring / Bravo Health → Cigna
+  if (lowerLegalName.includes("healthspring") || lowerLegalName.includes("bravo health")) {
+    return { displayName: "Cigna", logoUrl: "/images/cignams.gif" }
   }
 
   // Chubb / ACE / INA catchall
