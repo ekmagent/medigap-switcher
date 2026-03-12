@@ -143,8 +143,8 @@ export default function ResultsPage() {
   }
 
   const handleVerifyCode = async () => {
-    if (code.length !== 6) {
-      setError("Please enter the 6-digit code")
+    if (code.length !== 4 && code.length !== 6) {
+      setError("Please enter your verification code")
       return
     }
 
@@ -635,7 +635,7 @@ export default function ResultsPage() {
                       </div>
                       <Button
                         onClick={handleVerifyCode}
-                        disabled={loading || code.length !== 6}
+                        disabled={loading || (code.length !== 4 && code.length !== 6)}
                         className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-[#0d4d4d] font-bold h-13 text-base rounded-xl"
                         size="lg"
                       >
