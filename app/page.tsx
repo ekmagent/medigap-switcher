@@ -304,12 +304,45 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Business Classification */}
+      <section className="bg-white py-10 px-4 border-t border-gray-100">
+        <div className="max-w-3xl mx-auto">
+          <h3 className="text-sm font-bold text-gray-700 mb-3">About easyKind Health LLC</h3>
+          <div className="grid sm:grid-cols-2 gap-6 text-xs text-gray-500 leading-relaxed">
+            <div>
+              <p className="mb-2">
+                <strong className="text-gray-700">easyKind Health LLC is a licensed insurance brokerage</strong> (NAIC Industry Code 524210 — Insurance Agents and Brokers). We are a <strong>financial services provider</strong>, not a health or wellness company.
+              </p>
+              <p>
+                Medicare Supplement plans are <strong>financial products</strong> offered by licensed insurance carriers. Comparing and enrolling in these plans is an insurance transaction, not a medical service.
+              </p>
+            </div>
+            <div>
+              <p className="font-semibold text-gray-600 mb-1">We are NOT:</p>
+              <ul className="space-y-1">
+                <li>— A medical provider, clinic, or hospital</li>
+                <li>— A health and wellness company</li>
+                <li>— A telehealth or telemedicine platform</li>
+                <li>— A provider of medical advice, diagnosis, or treatment</li>
+                <li>— A collector or transmitter of Protected Health Information (PHI)</li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-4 text-xs text-gray-400">
+            <a href="https://www.bbb.org/us/nj/cherry-hill/profile/healthcare-consultants/easykind-medicare-0221-90234473" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600 underline">BBB Profile — easyKind Medicare</a>
+            <a href="https://sbs.naic.org/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-600 underline">NAIC License Verification</a>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-[#0a3a3a] py-8 px-4">
         <div className="max-w-3xl mx-auto text-center space-y-3">
           <p className="text-white/50 text-xs leading-relaxed">
-            We are an independent insurance brokerage. We are not a medical provider, clinic, or patient portal.
-            We do not provide medical advice, diagnosis, or treatment. All plans are offered through licensed insurance carriers.
+            easyKind Health LLC is a licensed insurance brokerage and financial services provider (NAIC 524210 — Insurance Agents and Brokers).
+            We are not a medical provider, clinic, patient portal, or health and wellness company.
+            We do not provide medical advice, diagnosis, or treatment.
+            Medicare Supplement plans are financial products offered through licensed insurance carriers.
           </p>
         </div>
       </footer>

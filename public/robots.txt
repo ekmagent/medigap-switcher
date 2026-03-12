@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /q/
+Disallow: /api/
+
+User-agent: facebookexternalhit
+Allow: /
+Disallow: /q/
+Disallow: /api/

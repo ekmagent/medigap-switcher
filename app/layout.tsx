@@ -4,9 +4,50 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Compare Medicare Supplement Rates | Save on Your Medigap Plan",
+  title: "Medicare Supplement Insurance Quotes | easyKind Health LLC — Licensed Insurance Brokerage",
   description:
-    "Already have a Medigap plan? Compare rates from 30+ carriers and see how much you could save by switching. Free, no obligation.",
+    "easyKind Health LLC is a licensed insurance brokerage. Compare Medicare Supplement insurance rates from 30+ carriers. Financial services — not a medical provider.",
+  openGraph: {
+    title: "easyKind Health LLC — Licensed Insurance Brokerage",
+    description: "Licensed insurance agency. Medicare Supplement plan comparison. Financial services.",
+    type: "website",
+    url: "https://switch.healthplans.now",
+  },
+}
+
+const insuranceAgencySchema = {
+  "@context": "https://schema.org",
+  "@type": "InsuranceAgency",
+  "name": "easyKind Health LLC",
+  "alternateName": "easyKind Medicare",
+  "description": "Licensed insurance brokerage specializing in Medicare Supplement plans. Not a medical provider.",
+  "url": "https://switch.healthplans.now",
+  "telephone": "(856) 888-9080",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "1309 Rte 70 W",
+    "addressLocality": "Cherry Hill",
+    "addressRegion": "NJ",
+    "postalCode": "08002"
+  },
+  "sameAs": [
+    "https://www.bbb.org/us/nj/cherry-hill/profile/healthcare-consultants/easykind-medicare-0221-90234473"
+  ],
+  "knowsAbout": ["Medicare Supplement Insurance", "Medigap Plans", "Insurance Comparison"],
+  "areaServed": "US",
+  "priceRange": "$$"
+}
+
+const agentSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Anthony Orner",
+  "jobTitle": "Licensed Insurance Producer",
+  "affiliation": {
+    "@type": "InsuranceAgency",
+    "name": "easyKind Health LLC"
+  },
+  "knowsAbout": ["Insurance", "Medicare Supplement", "Financial Services"]
 }
 
 export default function RootLayout({
@@ -20,6 +61,14 @@ export default function RootLayout({
         {children}
         <Analytics />
         <SpeedInsights />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(insuranceAgencySchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(agentSchema) }}
+        />
       </body>
     </html>
   )
