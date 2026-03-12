@@ -13,7 +13,6 @@ import {
   TrendingDown,
   Shield,
   Phone,
-  ArrowRight,
   CheckCircle2,
   Star,
 } from "lucide-react"
@@ -266,24 +265,6 @@ export default function ResultsPage() {
     }).catch(() => {})
   }
 
-  const handleEnrollOnline = (quote: typeof bestQuote) => {
-    if (quote) {
-      fireAddToCart(quote)
-      localStorage.setItem(
-        "medigap-switcher-selected-quote",
-        JSON.stringify({
-          carrierName: quote.carrierName,
-          planName: quote.planName,
-          monthlyPremium: quote.monthlyPremium,
-          quoteKey: quote.quoteKey,
-          loggingKey: quote.loggingKey,
-          companyNaic: quote.companyNaic,
-        })
-      )
-      router.push("/enroll/date-of-birth")
-    }
-  }
-
   const handleCallMe = async (quote: typeof bestQuote) => {
     fireAddToCart(quote)
     try {
@@ -504,17 +485,8 @@ export default function ResultsPage() {
                           : "Call to Get Started"
                         }
                       </span>
-                      <span className="hidden sm:block text-sm font-medium text-white/80">(856) 888-4641</span>
+                      <span className="hidden sm:block text-sm font-medium text-white/80">(856) 522-4759</span>
                     </a>
-                    <Button
-                      variant="outline"
-                      onClick={() => handleEnrollOnline(bestQuote)}
-                      className="w-full bg-transparent font-medium h-12 rounded-xl"
-                      size="lg"
-                    >
-                      <ArrowRight className="w-4 h-4 mr-2" />
-                      Enroll Online Instead
-                    </Button>
                   </div>
                 ) : (
                   <div className="space-y-3">
@@ -527,7 +499,7 @@ export default function ResultsPage() {
                       Unlock This Rate
                     </Button>
                     <p className="text-center text-xs text-muted-foreground">
-                      Verify your phone number to see the carrier name and enroll
+                      Verify your phone number to see the carrier name and rate
                     </p>
                   </div>
                 )}
@@ -577,65 +549,64 @@ export default function ResultsPage() {
                   )}
 
                   {unlockStep === "info" ? (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-3">
                         <div>
-                          <Label htmlFor="firstName" className="text-white/60 text-xs font-medium mb-1.5 block">First Name</Label>
+                          <Label htmlFor="firstName" className="text-white/80 text-sm font-semibold mb-2 block">First Name</Label>
                           <Input
                             id="firstName"
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
-                            placeholder="John"
+                            placeholder="Jane"
                             autoFocus
-                            className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus:border-[#4ade80]"
+                            className="bg-white border-transparent text-gray-900 placeholder:text-gray-400 text-base h-12 focus:border-[#4ade80] focus:ring-[#4ade80]"
                           />
                         </div>
                         <div>
-                          <Label htmlFor="lastName" className="text-white/60 text-xs font-medium mb-1.5 block">Last Name</Label>
+                          <Label htmlFor="lastName" className="text-white/80 text-sm font-semibold mb-2 block">Last Name</Label>
                           <Input
                             id="lastName"
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
                             placeholder="Smith"
-                            className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus:border-[#4ade80]"
+                            className="bg-white border-transparent text-gray-900 placeholder:text-gray-400 text-base h-12 focus:border-[#4ade80] focus:ring-[#4ade80]"
                           />
                         </div>
                       </div>
                       <div>
-                        <Label htmlFor="email" className="text-white/60 text-xs font-medium mb-1.5 block">Email</Label>
+                        <Label htmlFor="email" className="text-white/80 text-sm font-semibold mb-2 block">Email Address</Label>
                         <Input
                           id="email"
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          placeholder="john@example.com"
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus:border-[#4ade80]"
+                          placeholder="jane@example.com"
+                          className="bg-white border-transparent text-gray-900 placeholder:text-gray-400 text-base h-12 focus:border-[#4ade80] focus:ring-[#4ade80]"
                         />
                       </div>
                       <div>
-                        <Label htmlFor="phone" className="text-white/60 text-xs font-medium mb-1.5 block">Phone Number</Label>
+                        <Label htmlFor="phone" className="text-white/80 text-sm font-semibold mb-2 block">Mobile Number <span className="font-normal text-white/50">(for verification code)</span></Label>
                         <Input
                           id="phone"
                           type="tel"
                           value={phone}
                           onChange={(e) => setPhone(formatPhone(e.target.value))}
                           placeholder="(555) 555-5555"
-                          className="bg-white/10 border-white/20 text-white placeholder:text-white/30 focus:border-[#4ade80]"
+                          className="bg-white border-transparent text-gray-900 placeholder:text-gray-400 text-base h-12 focus:border-[#4ade80] focus:ring-[#4ade80]"
                         />
                       </div>
-                      <p className="text-[11px] leading-snug text-white/35">
-                        By clicking &quot;Send Verification Code,&quot; you consent to receive calls, text messages (including via autodialer and prerecorded/artificial voice), and emails from HealthPlans.now and its licensed agents at the number and email provided, for marketing purposes including quotes and plan information. Consent is not a condition of purchase. Message &amp; data rates may apply. You may revoke consent at any time. View our{" "}
-                        <a href="/privacy" className="underline hover:text-white/60">Privacy Policy</a> and{" "}
-                        <a href="/terms" className="underline hover:text-white/60">Terms of Service</a>.
-                      </p>
                       <Button
                         onClick={handleSendCode}
                         disabled={loading}
-                        className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-[#0d4d4d] font-bold h-12"
+                        className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-[#0d4d4d] font-bold h-13 text-base rounded-xl"
                         size="lg"
                       >
-                        {loading ? "Sending Code..." : "Send Verification Code"}
+                        {loading ? "Sending Code..." : "Send Verification Code →"}
                       </Button>
+                      <p className="text-[11px] leading-snug text-white/40">
+                        By continuing, you consent to receive calls, texts (including autodialed), and emails from HealthPlans.now and licensed agents. Consent is not required to purchase. Msg &amp; data rates may apply.{" "}
+                        <a href="/privacy" className="underline hover:text-white/60">Privacy Policy</a>.
+                      </p>
                       <button
                         onClick={() => setShowUnlockPanel(false)}
                         className="w-full text-sm text-white/40 hover:text-white/70 transition-colors"
@@ -645,11 +616,11 @@ export default function ResultsPage() {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      <p className="text-sm text-white/60">
-                        We sent a 6-digit code to <span className="text-white font-medium">{formatPhone(phone)}</span>
+                      <p className="text-sm text-white/70">
+                        We texted a 6-digit code to <span className="text-white font-semibold">{formatPhone(phone)}</span>
                       </p>
                       <div>
-                        <Label htmlFor="code" className="text-white/60 text-xs font-medium mb-1.5 block">Verification Code</Label>
+                        <Label htmlFor="code" className="text-white/80 text-sm font-semibold mb-2 block">Enter Verification Code</Label>
                         <Input
                           id="code"
                           type="text"
@@ -658,17 +629,17 @@ export default function ResultsPage() {
                           value={code}
                           onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
                           placeholder="000000"
-                          className="text-center text-2xl tracking-widest bg-white/10 border-white/20 text-white placeholder:text-white/30 focus:border-[#4ade80]"
+                          className="text-center text-3xl tracking-[0.5em] font-bold bg-white border-transparent text-gray-900 placeholder:text-gray-300 h-16 focus:border-[#4ade80] focus:ring-[#4ade80]"
                           autoFocus
                         />
                       </div>
                       <Button
                         onClick={handleVerifyCode}
                         disabled={loading || code.length !== 6}
-                        className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-[#0d4d4d] font-bold h-12"
+                        className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-[#0d4d4d] font-bold h-13 text-base rounded-xl"
                         size="lg"
                       >
-                        {loading ? "Verifying..." : "Verify & Unlock"}
+                        {loading ? "Verifying..." : "Verify & See My Rate →"}
                       </Button>
                       <button
                         onClick={() => {
@@ -678,7 +649,7 @@ export default function ResultsPage() {
                         }}
                         className="w-full text-sm text-white/40 hover:text-white/70 transition-colors"
                       >
-                        Use a different phone number
+                        Use a different number
                       </button>
                     </div>
                   )}
