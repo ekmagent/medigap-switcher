@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { track } from "@vercel/analytics"
 import { CheckCircle2, Shield, Lock, FileCheck, Zap, ArrowRight } from "lucide-react"
 
 const carriers = [
@@ -40,6 +41,7 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/q/current-plan"
+              onClick={() => track("cta_clicked", { location: "header" })}
               className="bg-[rgba(116,255,11,1)] hover:bg-[#3fcf74] text-[#0d4d4d] px-4 sm:px-5 py-2.5 rounded-full text-xs sm:text-sm transition-all hover:scale-[1.02] active:scale-[0.98] font-extrabold whitespace-nowrap"
             >
               Check My Savings

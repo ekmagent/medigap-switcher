@@ -39,7 +39,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' data:",
-              "connect-src 'self' https://graph.facebook.com https://api.csgactuarial.com",
+              "connect-src 'self' https://graph.facebook.com https://api.csgactuarial.com https://api.zippopotam.us",
               "frame-ancestors 'none'",
             ].join("; "),
           },
