@@ -65,6 +65,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta property="og:image" content="https://switch.healthplans.now/images/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="easyKind Health LLC — Licensed Insurance Brokerage" />
+      </head>
       <body className="antialiased">
         {children}
         <Analytics />
