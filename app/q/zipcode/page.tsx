@@ -14,7 +14,6 @@ export default function ZipCodePage() {
   const router = useRouter()
   const { formData, updateFormData } = useSwitcherForm()
   const [zip, setZip] = useState(formData.zipCode || "")
-  const [counties, setCounties] = useState<{ name: string; state: string }[]>([])
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -22,7 +21,6 @@ export default function ZipCodePage() {
     const value = e.target.value.replace(/\D/g, "").slice(0, 5)
     setZip(value)
     setError("")
-    setCounties([])
   }
 
   const handleLookup = async () => {
@@ -53,26 +51,15 @@ export default function ZipCodePage() {
       const uniqueCounties = [...new Set(places.map((p: any) => p["place name"]))]
         .map((name) => ({ name: name as string, state }))
 
-      if (uniqueCounties.length === 1) {
-        updateFormData("zipCode", zip)
-        updateFormData("county", uniqueCounties[0].name)
-        updateFormData("state", state)
-        router.push("/q/date-of-birth")
-      } else {
-        setCounties(uniqueCounties)
-      }
+      updateFormData("zipCode", zip)
+      updateFormData("county", uniqueCounties[0].name)
+      updateFormData("state", state)
+      router.push("/q/date-of-birth")
     } catch {
       setError("Failed to look up zip code. Please try again.")
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleCountySelect = (county: string, state: string) => {
-    updateFormData("zipCode", zip)
-    updateFormData("county", county)
-    updateFormData("state", state)
-    router.push("/q/date-of-birth")
   }
 
   return (
@@ -107,27 +94,9 @@ export default function ZipCodePage() {
             {error && (
               <p className="text-destructive text-sm mt-2">{error}</p>
             )}
-
-            {counties.length > 1 && (
-              <div className="mt-4">
-                <p className="text-sm font-medium mb-2">Select your county:</p>
-                <div className="space-y-2">
-                  {counties.map((county) => (
-                    <button
-                      key={county.name}
-                      onClick={() => handleCountySelect(county.name, county.state)}
-                      className="w-full text-left p-3 rounded-lg border border-gray-200 hover:border-primary transition-colors"
-                    >
-                      {county.name}, {county.state}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
 
-          {counties.length === 0 && (
-            <Button
+          <Button
               onClick={handleLookup}
               disabled={zip.length !== 5 || loading}
               className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-lg shadow-md hover:shadow-lg transition-[color,background-color,border-color,box-shadow,transform] hover:scale-[1.02] active:scale-[0.98]"
@@ -135,7 +104,6 @@ export default function ZipCodePage() {
             >
               {loading ? "Looking up..." : "Continue"}
             </Button>
-          )}
         </div>
     </StepWrapper>
   )
