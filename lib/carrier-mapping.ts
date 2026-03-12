@@ -92,20 +92,20 @@ const naicMappings: Record<string, CarrierMapping> = {
   "69132": { displayName: "Manhattan Life", logoUrl: "/images/manhattan-life-logo.png" },
   "67326": { displayName: "Manhattan Life", logoUrl: "/images/manhattan-life-logo.png" },
 
-  // ACE/INA/Chubb
-  "20699": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "22713": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "22667": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "20702": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "60348": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "18279": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "43575": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "20281": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "20303": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "20346": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "22748": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "20397": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "21121": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  // Chubb (formerly ACE/INA)
+  "20699": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "22713": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "22667": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "20702": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "60348": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "18279": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "43575": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "20281": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "20303": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "20346": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "22748": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "20397": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "21121": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
 
   // UnitedHealthcare / AARP
   "96016": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
@@ -197,16 +197,20 @@ const carrierMappings: Record<string, CarrierMapping> = {
   "Central States Health & Life Co. of Omaha": { displayName: "Mutual of Omaha", logoUrl: "/images/moo-ms.jpg" },
   "Central States Indemnity Co. of Omaha": { displayName: "Mutual of Omaha", logoUrl: "/images/moo-ms.jpg" },
 
-  // Ace/Chubb
-  "Insurance Co of N Amer": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "Insurance Company of North America": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "INSURANCE COMPANY OF NORTH AMERICA": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  ICNA: { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  ACE: { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  Chubb: { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "ACE American Insurance Company": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "ACE Life Insurance Company": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
-  "Indemnity Insurance Company of North America": { displayName: "Ace/Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  // Chubb (formerly ACE/INA)
+  "Insurance Co of N Amer": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Ins Co of N Amer": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Ins Co of N America": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Insurance Company of North America": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "INSURANCE COMPANY OF NORTH AMERICA": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  INA: { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  ICNA: { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  ACE: { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  Chubb: { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "ACE American Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "ACE Life Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Indemnity Insurance Company of North America": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Indemnity Ins Co of N Amer": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
 
   // Aetna
   "Aetna Hlth Ins Co": { displayName: "Aetna", logoUrl: "/images/aetnaahic.jpeg" },
@@ -294,8 +298,11 @@ const carrierMappings: Record<string, CarrierMapping> = {
   "American Benefit Life Ins Co": { displayName: "American Benefit Life" },
 }
 
-// Common suffixes to remove
+// Common legal suffixes to strip for display fallback
 const suffixesToRemove = [
+  /,?\s+Inc\.?$/i,
+  /,?\s+LLC\.?$/i,
+  /,?\s+Ltd\.?$/i,
   /\s+Insurance Company of America$/i,
   /\s+Insurance Company$/i,
   /\s+Ins Co$/i,
@@ -308,26 +315,10 @@ const suffixesToRemove = [
   /\s+Insurance and Annuity Company$/i,
 ]
 
-// Common abbreviations to expand
-const abbreviationsToExpand: Record<string, string> = {
-  Hlth: "Health",
-  Hlthcare: "Healthcare",
-  Natl: "National",
-  Amer: "American",
-  Ins: "Insurance",
-  Co: "Company",
-  Assur: "Assurance",
-  BCBS: "Blue Cross Blue Shield",
-}
-
 function normalizeCarrierName(name: string): string {
   let normalized = name
   for (const suffix of suffixesToRemove) {
     normalized = normalized.replace(suffix, "")
-  }
-  for (const [abbr, full] of Object.entries(abbreviationsToExpand)) {
-    const regex = new RegExp(`\\b${abbr}\\b`, "gi")
-    normalized = normalized.replace(regex, full)
   }
   return normalized.replace(/\s+/g, " ").trim()
 }
@@ -380,7 +371,20 @@ export function getCarrierDisplayInfo(legalName: string, naic?: string | number 
 
   // Tier One → Aflac
   if (lowerLegalName.includes("tier one") || lowerLegalName.includes("tierone")) {
-    return { displayName: "Aflac" }
+    return { displayName: "Aflac", logoUrl: "/images/aflac-logo.png" }
+  }
+
+  // Chubb / ACE / INA catchall
+  if (
+    lowerLegalName.includes("chubb") ||
+    lowerLegalName.includes(" ace ") ||
+    lowerLegalName.startsWith("ace ") ||
+    lowerLegalName.includes("ins co of n amer") ||
+    lowerLegalName.includes("insurance co of n amer") ||
+    lowerLegalName.includes("insurance company of north amer") ||
+    lowerLegalName.includes("indemnity insurance company of north")
+  ) {
+    return { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" }
   }
 
   // Partial name match
