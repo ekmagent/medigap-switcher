@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation"
 import { useSwitcherForm } from "@/contexts/switcher-form-context"
 import { QuoteProgress } from "@/components/quote-progress"
 import { StepWrapper } from "@/components/step-wrapper"
+import { track } from "@vercel/analytics"
 
 export default function GenderPage() {
   const router = useRouter()
   const { formData, updateFormData } = useSwitcherForm()
 
   const handleSelect = (gender: string) => {
+    track("quiz_gender_selected", { gender })
     updateFormData("gender", gender)
     router.push("/q/tobacco")
   }

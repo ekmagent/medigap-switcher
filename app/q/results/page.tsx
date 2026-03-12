@@ -17,6 +17,7 @@ import {
   Star,
 } from "lucide-react"
 import { generateEventId, getFbp, getFbc } from "@/lib/fb-pixel"
+import { track } from "@vercel/analytics"
 
 function useCountUp(target: number, duration = 1200, delay = 400) {
   const [value, setValue] = useState(0)
@@ -88,6 +89,20 @@ export default function ResultsPage() {
 
   const currentPremium = parseFloat(formData.currentPremium) || 0
 
+  // Track results viewed once on mount
+  const trackedView = useRef(false)
+  useEffect(() => {
+    if (trackedView.current || !quotes.length) return
+    trackedView.current = true
+    const savings = (currentPremium - (quotes[0]?.monthlyPremium || 0)) * 12
+    track("results_viewed", {
+      has_savings: savings > 0,
+      annual_savings: Math.max(0, Math.round(savings)),
+      quotes_count: quotes.length,
+      plan: formData.currentPlan || "unknown",
+    })
+  }, [quotes])
+
   // Use API-selected quote, fallback to cheapest from quotes array
   const bestQuote = ctxSelectedQuote || quotes[0]
 
@@ -121,6 +136,7 @@ export default function ResultsPage() {
 
     setError("")
 
+    track("verification_code_sent")
     // Show code input immediately (optimistic) so user is ready when SMS arrives
     setUnlockStep("verify")
 
@@ -233,6 +249,7 @@ export default function ResultsPage() {
       updateFormData("lastName", lastName)
       updateFormData("email", email)
       updateFormData("phone", rawPhone)
+      track("phone_verified", { annual_savings: Math.max(0, Math.round(bestAnnualSavings)) })
       updateFormData("isUnlocked", true)
       setIsUnlocked(true)
       setShowUnlockPanel(false)
@@ -475,7 +492,7 @@ export default function ResultsPage() {
                   <div className="space-y-3">
                     <a
                       href="tel:+18565224759"
-                      onClick={() => fireAddToCart(bestQuote)}
+                      onClick={() => { track("call_cta_clicked", { annual_savings: Math.max(0, Math.round(bestAnnualSavings)) }); fireAddToCart(bestQuote) }}
                       className="flex flex-col items-center justify-center gap-1 w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold shadow-lg hover:shadow-xl transition-[color,background-color,border-color,box-shadow,transform] hover:scale-[1.02] active:scale-[0.98] py-4 rounded-xl"
                     >
                       <span className="flex items-center gap-2 text-xl">
@@ -491,7 +508,7 @@ export default function ResultsPage() {
                 ) : (
                   <div className="space-y-3">
                     <Button
-                      onClick={() => setShowUnlockPanel(true)}
+                      onClick={() => { track("unlock_panel_opened"); setShowUnlockPanel(true) }}
                       className="w-full bg-[#4ade80] hover:bg-[#22c55e] text-white font-bold text-lg shadow-lg hover:shadow-xl transition-[color,background-color,border-color,box-shadow,transform] hover:scale-[1.02] active:scale-[0.98] h-14 rounded-xl"
                       size="lg"
                     >

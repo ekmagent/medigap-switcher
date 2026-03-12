@@ -7,6 +7,7 @@ import { QuoteProgress } from "@/components/quote-progress"
 import { Button } from "@/components/ui/button"
 import { DollarSign } from "lucide-react"
 import { StepWrapper } from "@/components/step-wrapper"
+import { track } from "@vercel/analytics"
 
 export default function CurrentPremiumPage() {
   const router = useRouter()
@@ -24,6 +25,7 @@ export default function CurrentPremiumPage() {
 
   const handleContinue = () => {
     if (!value || parseFloat(value) <= 0) return
+    track("quiz_premium_entered", { premium: parseFloat(value) })
     updateFormData("currentPremium", value)
     router.push("/q/zipcode")
   }

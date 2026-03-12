@@ -6,6 +6,7 @@ import { useSwitcherForm } from "@/contexts/switcher-form-context"
 import { QuoteProgress } from "@/components/quote-progress"
 import { ChevronDown } from "lucide-react"
 import { StepWrapper } from "@/components/step-wrapper"
+import { track } from "@vercel/analytics"
 
 const PRIMARY_PLANS = [
   { value: "G", label: "Plan G", description: "Most popular — you pay only the Part B deductible" },
@@ -24,6 +25,7 @@ export default function CurrentPlanPage() {
   const [showOther, setShowOther] = useState(false)
 
   const handleSelect = (plan: string) => {
+    track("quiz_plan_selected", { plan })
     updateFormData("currentPlan", plan)
     router.push("/q/current-premium")
   }

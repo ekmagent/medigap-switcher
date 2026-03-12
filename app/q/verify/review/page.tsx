@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { CheckCircle2 } from "lucide-react"
+import { track } from "@vercel/analytics"
 
 export default function HealthDisqualifiedPage() {
   const [firstName, setFirstName] = useState("")
@@ -13,6 +14,10 @@ export default function HealthDisqualifiedPage() {
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    track("health_disqualified")
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -27,6 +32,7 @@ export default function HealthDisqualifiedPage() {
       })
 
       if (!res.ok) throw new Error("Submission failed")
+      track("ineligible_form_submitted")
       setSubmitted(true)
     } catch {
       setError("Something went wrong. Please try again.")

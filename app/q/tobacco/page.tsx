@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation"
 import { useSwitcherForm } from "@/contexts/switcher-form-context"
 import { QuoteProgress } from "@/components/quote-progress"
 import { StepWrapper } from "@/components/step-wrapper"
+import { track } from "@vercel/analytics"
 
 export default function TobaccoPage() {
   const router = useRouter()
   const { formData, updateFormData } = useSwitcherForm()
 
   const handleSelect = (tobacco: string) => {
+    track("quiz_tobacco_selected", { tobacco })
     updateFormData("tobacco", tobacco)
     router.push("/q/household")
   }

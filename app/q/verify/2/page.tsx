@@ -2,11 +2,13 @@
 
 import { useRouter } from "next/navigation"
 import { QuoteProgress } from "@/components/quote-progress"
+import { track } from "@vercel/analytics"
 
 export default function VerifyPage2() {
   const router = useRouter()
 
   const handleAnswer = (yes: boolean) => {
+    track("health_q2_answered", { answer: yes ? "yes" : "no" })
     if (yes) {
       router.push("/q/verify/review")
     } else {

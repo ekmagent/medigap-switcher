@@ -70,6 +70,7 @@ export default function LandingPage() {
 
                   <Link
                     href="/q/current-plan"
+                    onClick={() => track("cta_clicked", { location: "hero" })}
                     className="inline-block bg-[rgba(116,255,11,1)] hover:bg-[#3fcf74] text-[#0d4d4d] px-12 py-4 rounded-full text-lg transition-all hover:scale-[1.02] active:scale-[0.98] mb-8 font-extrabold"
                   >
                     CHECK MY SAVINGS
@@ -264,6 +265,7 @@ export default function LandingPage() {
           <div className="mt-10 text-center">
             <Link
               href="/q/current-plan"
+              onClick={() => track("cta_clicked", { location: "how_it_works" })}
               className="inline-flex items-center gap-2 bg-[rgba(116,255,11,1)] hover:bg-[#3fcf74] text-[#0d4d4d] px-8 py-3.5 rounded-full text-sm font-extrabold transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               See My Savings Now <ArrowRight className="w-4 h-4" />

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { getMedigapRateAge } from "@/lib/medigap-age"
 import { StepWrapper } from "@/components/step-wrapper"
+import { track } from "@vercel/analytics"
 
 const MONTHS = [
   { value: 1, short: "Jan" },
@@ -58,6 +59,7 @@ export default function DateOfBirthPage() {
     const day = fullDob.includes("/") ? parseInt(fullDob.split("/")[1]) || 15 : 15
     const quotingAge = getMedigapRateAge(birthYear, birthMonth, day, effectiveYear, effectiveMonth)
 
+    track("quiz_dob_entered", { age: quotingAge })
     updateFormData("dateOfBirth", fullDob)
     updateFormData("quotingAge", quotingAge)
     updateFormData("effectiveDate", effectiveDate)

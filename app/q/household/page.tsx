@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation"
 import { useSwitcherForm } from "@/contexts/switcher-form-context"
 import { QuoteProgress } from "@/components/quote-progress"
 import { StepWrapper } from "@/components/step-wrapper"
+import { track } from "@vercel/analytics"
 
 export default function HouseholdPage() {
   const router = useRouter()
   const { formData, updateFormData } = useSwitcherForm()
 
   const handleSelect = (value: string) => {
+    track("quiz_household_answered", { household: value })
     updateFormData("household", value)
     router.push("/q/verify")
   }
