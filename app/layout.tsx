@@ -12,6 +12,14 @@ export const metadata: Metadata = {
     description: "Licensed insurance agency. Medicare Supplement plan comparison. Financial services.",
     type: "website",
     url: "https://switch.healthplans.now",
+    images: [
+      {
+        url: "https://switch.healthplans.now/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "easyKind Health LLC — Licensed Insurance Brokerage",
+      },
+    ],
   },
 }
 
