@@ -232,10 +232,13 @@ export async function sendCAPIEvent(params: {
   try {
     console.log(`[switcher] FB CAPI: Sending ${eventName} event (ID: ${uniqueEventId})`)
 
-    const url = `https://graph.facebook.com/v21.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`
+    const url = `https://graph.facebook.com/v21.0/${PIXEL_ID}/events`
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${ACCESS_TOKEN}`,
+      },
       body: JSON.stringify(payload),
     })
 
@@ -279,7 +282,10 @@ export async function sendCAPIEvent(params: {
 
         const shadowResponse = await fetch(url, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${ACCESS_TOKEN}`,
+          },
           body: JSON.stringify(shadowPayload),
         })
         const shadowResult = await shadowResponse.json()

@@ -70,7 +70,24 @@ export async function POST(req: NextRequest) {
       referrerUrl,
     } = body
 
+    // Input validation
+    if (!firstName || typeof firstName !== "string" || firstName.trim().length < 1) {
+      return NextResponse.json({ success: false, error: "Invalid first name" }, { status: 400 })
+    }
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+      return NextResponse.json({ success: false, error: "Invalid email" }, { status: 400 })
+    }
+    if (!phone) {
+      return NextResponse.json({ success: false, error: "Phone number required" }, { status: 400 })
+    }
+    if (zipCode && !/^\d{5}$/.test(zipCode)) {
+      return NextResponse.json({ success: false, error: "Invalid zip code" }, { status: 400 })
+    }
+
     const normalizedPhone = normalizePhoneNumber(phone)
+    if (!normalizedPhone || normalizedPhone.length !== 10) {
+      return NextResponse.json({ success: false, error: "Invalid phone number" }, { status: 400 })
+    }
 
     console.log("[v0] Creating lead")
 

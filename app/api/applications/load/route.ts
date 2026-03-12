@@ -12,17 +12,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Application ID required" }, { status: 400 })
     }
 
-    // This prevents IDOR - users can only load their own application data
+    // IDOR protection: session cookie must match the requested applicationId
     const cookieStore = await cookies()
     const sessionAppId = cookieStore.get("enrollment_session")?.value
-
-    // Allow access if:
-    // 1. Session cookie matches the requested applicationId (resumed session)
-    // 2. No session cookie but request has valid leadId (initial enrollment flow)
     const leadId = searchParams.get("leadId")
 
-    if (sessionAppId && sessionAppId !== applicationId) {
-      console.error("[v0] Session mismatch - session:", sessionAppId, "requested:", applicationId)
+    if (!sessionAppId || sessionAppId !== applicationId) {
+      console.error("[v0] Unauthorized application load attempt for:", applicationId)
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 })
     }
 
@@ -170,12 +166,7 @@ export async function GET(request: NextRequest) {
       leadId: app.lead_id,
       status: app.status,
 
-      hasSavedSSN: !!app.encrypted_ssn,
-      hasSavedMBI: !!app.encrypted_medicare_number,
-      hasSavedAccountNumber: !!app.encrypted_account_number,
-      hasSavedRoutingNumber: !!app.encrypted_routing_number,
-
-      // Clear sensitive values
+      // Sensitive fields not collected in this flow
       ssn: "",
       mbi: "",
       accountNumber: "",

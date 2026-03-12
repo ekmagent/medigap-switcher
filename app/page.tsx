@@ -204,8 +204,10 @@ export default function LandingPage() {
                   onError={(e) => {
                     e.currentTarget.style.display = "none"
                     if (e.currentTarget.parentElement) {
-                      e.currentTarget.parentElement.innerHTML =
-                        `<span class="text-gray-400 text-xs font-medium">${carrier.name}</span>`
+                      const span = document.createElement("span")
+                      span.className = "text-gray-400 text-xs font-medium"
+                      span.textContent = carrier.name
+                      e.currentTarget.parentElement.appendChild(span)
                     }
                   }}
                 />

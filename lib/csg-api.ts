@@ -98,8 +98,11 @@ export async function fetchCSGQuotes(params: {
   if (!response.ok) {
     const errorText = await response.text()
     console.error("[v0] CSG: Quote fetch failed:", response.status)
-    console.error("[v0] CSG: Error details:", errorText.substring(0, 500))
-    throw new Error(`CSG quotes API failed: ${response.status} - ${errorText}`)
+    // Check for known errors before discarding error body
+    if (errorText.includes("Max Session Reached") || errorText.includes("maximum number of sessions")) {
+      throw new Error("CSG API: Maximum sessions reached (5). Please close old sessions at https://tools.csgactuarial.com/auth/manage-account/sessions")
+    }
+    throw new Error(`CSG quotes API failed: ${response.status}`)
   }
 
   const loggingKey = response.headers.get("csg-log-key") || response.headers.get("csg-log-uuid")

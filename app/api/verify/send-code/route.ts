@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { sendVerificationCode } from "@/lib/twilio"
 import { normalizePhoneNumber } from "@/lib/phone-utils"
+import { checkRateLimit } from "@/lib/rate-limit"
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,6 +21,18 @@ export async function POST(request: NextRequest) {
     const normalized = normalizePhoneNumber(phone)
     if (!normalized || normalized.length !== 10) {
       return NextResponse.json({ success: false, error: "Invalid phone number" }, { status: 400 })
+    }
+
+    // Per-phone rate limit: max 3 codes per 10 minutes per phone number
+    const phoneRateLimit = checkRateLimit(`verify:${normalized}`, {
+      maxRequests: 3,
+      windowMs: 10 * 60 * 1000,
+    })
+    if (!phoneRateLimit.success) {
+      return NextResponse.json(
+        { success: false, error: "Too many verification attempts for this number. Please try again later." },
+        { status: 429 },
+      )
     }
 
     const result = await sendVerificationCode(normalized)

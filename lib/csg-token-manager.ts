@@ -74,7 +74,7 @@ async function createAndStoreToken(): Promise<string> {
 
     if (!response.ok) {
       const errorText = await response.text()
-      console.error("[v0] CSG Token: Authentication failed:", response.status, errorText)
+      console.error("[v0] CSG Token: Authentication failed with status:", response.status)
 
       if (errorText.includes("Max Session Reached") || errorText.includes("maximum number of sessions")) {
         throw new Error(
@@ -82,7 +82,7 @@ async function createAndStoreToken(): Promise<string> {
         )
       }
 
-      throw new Error(`CSG authentication failed: ${response.status} - ${errorText}`)
+      throw new Error(`CSG authentication failed: ${response.status}`)
     }
 
     const data = await response.json()

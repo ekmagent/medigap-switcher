@@ -28,7 +28,8 @@ export async function POST(req: NextRequest) {
       customData: {
         value: annualValue,
         currency: "USD",
-        content_name: body.carrierName ? `${body.carrierName} ${body.planName}` : body.planName,
+        content_name: "supplemental_insurance_plan",
+        content_category: "insurance",
       },
       leadId: body.leadId,
       applicationId: body.applicationId,

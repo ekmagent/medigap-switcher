@@ -25,28 +25,18 @@ export async function POST(req: NextRequest) {
 
     let copiedMetadata = {}
     let copiedHealthAnswers = {}
-    let copiedEncryptedData = {
-      ssn: null,
-      mbi: null,
-      routing: null,
-      account: null,
-    }
 
     if (copyFromApplicationId) {
       console.log("[v0] Copying data from application:", copyFromApplicationId)
 
       // Verify the source application belongs to the same lead (SECURITY CHECK)
       const sourceApp = await sql`
-        SELECT 
+        SELECT
           lead_id,
           metadata,
-          health_answers,
-          encrypted_ssn,
-          encrypted_medicare_number,
-          encrypted_routing_number,
-          encrypted_account_number
-        FROM applications 
-        WHERE id = ${copyFromApplicationId} 
+          health_answers
+        FROM applications
+        WHERE id = ${copyFromApplicationId}
         AND lead_id = ${leadId}
         LIMIT 1
       `
@@ -80,29 +70,16 @@ export async function POST(req: NextRequest) {
           // Medicare dates
           partAEffectiveDate: sourceMetadata.partAEffectiveDate,
           partBEffectiveDate: sourceMetadata.partBEffectiveDate,
-          // Payment info (non-sensitive)
-          paymentMethod: sourceMetadata.paymentMethod,
-          accountType: sourceMetadata.accountType,
-          financialInstitution: sourceMetadata.financialInstitution,
-          accountHolderName: sourceMetadata.accountHolderName,
         }
 
         // Copy health answers (these don't change between plans)
         copiedHealthAnswers = source.health_answers || {}
 
-        // Copy encrypted sensitive data (already encrypted, safe to copy)
-        copiedEncryptedData = {
-          ssn: source.encrypted_ssn,
-          mbi: source.encrypted_medicare_number,
-          routing: source.encrypted_routing_number,
-          account: source.encrypted_account_number,
-        }
-
         console.log("[v0] Copied personal data from previous application")
 
         // Mark the old application as superseded
         await sql`
-          UPDATE applications 
+          UPDATE applications
           SET status = 'superseded', updated_at = NOW()
           WHERE id = ${copyFromApplicationId}
         `
@@ -136,10 +113,6 @@ export async function POST(req: NextRequest) {
         plan_selection,
         metadata,
         health_answers,
-        encrypted_ssn,
-        encrypted_medicare_number,
-        encrypted_routing_number,
-        encrypted_account_number,
         last_activity_at
       )
       VALUES (
@@ -150,10 +123,6 @@ export async function POST(req: NextRequest) {
         ${selectedPlan || null},
         ${JSON.stringify(finalMetadata)},
         ${JSON.stringify(copiedHealthAnswers)},
-        ${copiedEncryptedData.ssn},
-        ${copiedEncryptedData.mbi},
-        ${copiedEncryptedData.routing},
-        ${copiedEncryptedData.account},
         NOW()
       )
       RETURNING id
