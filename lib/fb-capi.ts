@@ -1,6 +1,6 @@
 import { getNeonClient } from "@/lib/neon-client"
 
-const SAFE_EVENT_SOURCE_URL = "https://switch.healthplans.now"
+const SAFE_EVENT_SOURCE_URL = "https://switcher.healthplans.now"
 
 function getEventSourceUrl(): string {
   return SAFE_EVENT_SOURCE_URL
