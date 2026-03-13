@@ -482,6 +482,35 @@ export function getCarrierDisplayInfo(legalName: string, naic?: string | number 
     return { displayName: "Bankers Fidelity", logoUrl: "/images/bankers-fidelity.png" }
   }
 
+  // Wellabe / Medico catchall
+  if (lowerLegalName.includes("wellabe") || lowerLegalName.startsWith("medico")) {
+    return { displayName: "Wellabe", logoUrl: "/images/wellabe-logo.png" }
+  }
+
+  // Humana state-plan catchall ("humana health plan of...", "humana benefit plan of...", etc.)
+  if (lowerLegalName.includes("humana")) {
+    return { displayName: "Humana", logoUrl: "/images/humanamedicare.png" }
+  }
+
+  // Aetna catchall — Accendo, Coventry, Continental Life (Brentwood) all map here
+  if (
+    lowerLegalName.includes("aetna") ||
+    lowerLegalName.includes("accendo") ||
+    lowerLegalName.includes("coventry health")
+  ) {
+    return { displayName: "Aetna", logoUrl: "/images/aetnaahic.jpeg" }
+  }
+
+  // Mutual of Omaha catchall
+  if (lowerLegalName.includes("omaha")) {
+    return { displayName: "Mutual of Omaha", logoUrl: "/images/moo-ms.jpg" }
+  }
+
+  // Cigna keyword catchall (catches any remaining Cigna/Connecticut General variants)
+  if (lowerLegalName.includes("cigna") || lowerLegalName.includes("medco containment")) {
+    return { displayName: "Cigna", logoUrl: "/images/cignams.gif" }
+  }
+
   // Chubb / ACE / INA catchall
   if (
     lowerLegalName.includes("chubb") ||
