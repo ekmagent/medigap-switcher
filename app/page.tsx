@@ -1,7 +1,9 @@
 "use client"
 
+import { useEffect } from "react"
 import Link from "next/link"
 import { track } from "@vercel/analytics"
+import { getFbc } from "@/lib/fb-pixel"
 import { CheckCircle2, Shield, Lock, FileCheck, Zap, ArrowRight } from "lucide-react"
 
 const carriers = [
@@ -28,6 +30,8 @@ function SecurityBadge({ icon, title, description }: { icon: React.ReactNode; ti
 }
 
 export default function LandingPage() {
+  useEffect(() => { getFbc() }, [])
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
