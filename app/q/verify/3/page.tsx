@@ -8,7 +8,7 @@ export default function VerifyPage3() {
   const router = useRouter()
 
   const handleAnswer = (yes: boolean) => {
-    track("underwriting_q3_answered", { answer: yes ? "yes" : "no" })
+    track("eligibility_q3_answered", { answer: yes ? "yes" : "no" })
     if (yes) {
       router.push("/q/verify/review")
     } else {
