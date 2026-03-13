@@ -142,7 +142,7 @@ const naicMappings: Record<string, CarrierMapping> = {
 
 // Legal company name → CarrierMapping
 const carrierMappings: Record<string, CarrierMapping> = {
-  // AARP / UnitedHealthcare
+  // AARP / UnitedHealthcare — covers state plans, AARP-branded names, and "United HealthCare" spacing variants
   "AARP Medicare Supplement Insurance Plans, insured by United Healthcare Insurance Company of America": {
     displayName: "AARP/UnitedHealthcare",
     logoUrl: "/images/aarp-uhc-logo.png",
@@ -151,39 +151,69 @@ const carrierMappings: Record<string, CarrierMapping> = {
     displayName: "AARP/UnitedHealthcare",
     logoUrl: "/images/aarp-uhc-logo.png",
   },
+  "AARP - United HealthCare Insurance Company of New York": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "AARP - UNITEDHEALTHCARE OF ARIZONA, INC.": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
   "UnitedHealthcare Ins Co": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
   "UnitedHealthcare Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
   "UnitedHealthcare Insurance Company of America": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
   "UnitedHealthcare Life Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "United HealthCare Insurance Company of New York": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "United HealthCare of Alabama, Inc.": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
   "Golden Rule Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
   "Chesapeake Life Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
-  "Unimerica Insurance Company": { displayName: "UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
-  "Centurion Casualty Company": { displayName: "UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
-  "MAMSI Life and Health Insurance Company": { displayName: "UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
-  "PacifiCare Life and Health Insurance Company": { displayName: "UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
-  "Sierra Health and Life Insurance Company": { displayName: "UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "Unimerica Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "Centurion Casualty Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "MAMSI Life and Health Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "PacifiCare Life and Health Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "Sierra Health and Life Insurance Company": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
+  "Sierra Health and Life Insurance Company, Inc.": { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" },
 
-  // Cigna
+  // Cigna / HealthSpring — covers raw API names, CSV variants, parenthetical tags, ALL CAPS
   Cigna: { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Cigna National Health Ins Co": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Cigna Hlth Ins Co": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Cigna Health and Life Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "CIGNA HEALTH AND LIFE INSURANCE COMPANY": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna Health and Life Insurance Company (Special Medicare Advantage Charter)": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Connecticut General Life Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Connecticut General Life Insurance Company (CGLIC)": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Conn General Life Ins Co": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Life Insurance Company of North America": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Life Insurance Company of North America (LINA)": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "American Retirement Life Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "AMERICAN RETIREMENT LIFE INSURANCE COMPANY": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "AMERICAN RETIREMENT LIFE INSURANCE COMPANY (CIGNA)": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Loyal American Life Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Loyal American Life Insurance Company (CIGNA)": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Medco Containment Life Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "MEDCO CONTAINMENT LIFE INSURANCE COMPANY": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "MEDCO CONTAINMENT LIFE INSURANCE COMPANY (CIGNA)": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "HealthSpring Life & Health Insurance Company, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "HealthSpring Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "HealthSpring Insurance Company (f/k/a CIC)": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "HealthSpring National Health Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "HealthSpring National Health Insurance Company (f/k/a CNHIC)": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "HealthSpring of Florida, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "HealthSpring of Tennessee, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Bravo Health Pennsylvania": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Bravo Health Pennsylvania, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Bravo Health New Jersey": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Bravo Health New Jersey, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Bravo Health Mid-Atlantic": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Bravo Health Mid-Atlantic, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "Cigna Specialty Insurance Company": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of Arizona, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of Florida, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of Georgia, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of Illinois, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of New Jersey, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of North Carolina, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of Ohio, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of South Carolina, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of St. Louis, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of Tennessee, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of Texas, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
+  "Cigna HealthCare of Utah, Inc.": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   CHLIC: { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   Healthspring: { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
   "American Retirement Life Insurance": { displayName: "Cigna", logoUrl: "/images/cignams.gif" },
@@ -209,7 +239,7 @@ const carrierMappings: Record<string, CarrierMapping> = {
   "Central States Health & Life Co. of Omaha": { displayName: "Mutual of Omaha", logoUrl: "/images/moo-ms.jpg" },
   "Central States Indemnity Co. of Omaha": { displayName: "Mutual of Omaha", logoUrl: "/images/moo-ms.jpg" },
 
-  // Chubb (formerly ACE/INA) — includes subsidiaries with no "Chubb/ACE/INA" in name
+  // Chubb (formerly ACE/INA) — includes all CSV names and common abbreviation variants
   "Federal Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
   "Great Northern Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
   "Pacific Indemnity Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
@@ -217,7 +247,12 @@ const carrierMappings: Record<string, CarrierMapping> = {
   "Vigilant Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
   "Westchester Fire Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
   "Bankers Standard Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "ACE Property and Casualty Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "ACE PROPERTY AND CASUALTY INSURANCE COMPANY": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "ACE Fire Underwriters Insurance Company": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
   "Insurance Co of N Amer": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Insurance Co of N America": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
+  "Insurance Co of N America Amer": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
   "Ins Co of N Amer": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
   "Ins Co of N America": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
   "Insurance Company of North America": { displayName: "Chubb", logoUrl: "/images/ina-chubb-logo.png" },
@@ -323,12 +358,28 @@ const carrierMappings: Record<string, CarrierMapping> = {
   "American Benefit Life Ins Co": { displayName: "American Benefit Life" },
 }
 
-// Common legal suffixes to strip for display fallback
+// Common legal suffixes to strip for display fallback (order matters: more specific first)
 const suffixesToRemove = [
+  // Parenthetical qualifiers like "(f/k/a CIC)", "(LINA)", "(Aetna)", "(a CVS company...)"
+  /\s*\([^)]+\)\s*$/,
+  // State-specific suffixes
+  /,?\s+of New York$/i,
+  /,?\s+of Florida$/i,
+  /,?\s+of Arizona$/i,
+  /,?\s+of Illinois$/i,
+  /,?\s+of Ohio$/i,
+  /,?\s+of Tennessee$/i,
+  /,?\s+of Texas$/i,
+  /,?\s+of California$/i,
+  /,?\s+of Louisiana$/i,
+  /,?\s+of Missouri$/i,
+  /,?\s+of Kentucky$/i,
+  /,?\s+of the United States$/i,
+  /,?\s+of America$/i,
+  // Legal entity suffixes
   /,?\s+Inc\.?$/i,
   /,?\s+LLC\.?$/i,
   /,?\s+Ltd\.?$/i,
-  /\s+Insurance Company of America$/i,
   /\s+Insurance Company$/i,
   /\s+Ins Co$/i,
   /\s+Life Insurance Company$/i,
@@ -338,6 +389,8 @@ const suffixesToRemove = [
   /\s+Healthcare Services Inc$/i,
   /\s+Amer Ins Co$/i,
   /\s+Insurance and Annuity Company$/i,
+  /\s+Assurance Company$/i,
+  /\s+Assur Co$/i,
 ]
 
 function normalizeCarrierName(name: string): string {
@@ -345,7 +398,12 @@ function normalizeCarrierName(name: string): string {
   for (const suffix of suffixesToRemove) {
     normalized = normalized.replace(suffix, "")
   }
-  return normalized.replace(/\s+/g, " ").trim()
+  normalized = normalized.replace(/\s+/g, " ").trim()
+  // Convert ALL CAPS to Title Case for readability
+  if (normalized.length > 2 && normalized === normalized.toUpperCase()) {
+    normalized = normalized.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())
+  }
+  return normalized
 }
 
 const FALLBACK_COLORS = [
@@ -399,9 +457,29 @@ export function getCarrierDisplayInfo(legalName: string, naic?: string | number 
     return { displayName: "Aflac", logoUrl: "/images/aflac-logo.png" }
   }
 
-  // HealthSpring / Bravo Health → Cigna
-  if (lowerLegalName.includes("healthspring") || lowerLegalName.includes("bravo health")) {
+  // HealthSpring / Bravo Health / Connecticut General → Cigna
+  if (
+    lowerLegalName.includes("healthspring") ||
+    lowerLegalName.includes("bravo health") ||
+    lowerLegalName.includes("conn general") ||
+    lowerLegalName.includes("connecticut general")
+  ) {
     return { displayName: "Cigna", logoUrl: "/images/cignams.gif" }
+  }
+
+  // UnitedHealthcare — handles "United HealthCare" (with space) and AARP state-plan variants
+  if (
+    lowerLegalName.includes("unitedhealthcare") ||
+    lowerLegalName.includes("united healthcare") ||
+    lowerLegalName.includes("united health care") ||
+    (lowerLegalName.includes("aarp") && (lowerLegalName.includes("united") || lowerLegalName.includes("uhc")))
+  ) {
+    return { displayName: "AARP/UnitedHealthcare", logoUrl: "/images/aarp-uhc-logo.png" }
+  }
+
+  // Bankers Fidelity / Atlantic Capital catchall
+  if (lowerLegalName.includes("bankers fidelity") || lowerLegalName.includes("atlantic capital life")) {
+    return { displayName: "Bankers Fidelity", logoUrl: "/images/bankers-fidelity.png" }
   }
 
   // Chubb / ACE / INA catchall
