@@ -1,6 +1,9 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { PostHogProvider } from "./providers"
+import { PostHogPageview } from "@/components/posthog-pageview"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -70,7 +73,12 @@ export default function RootLayout({
         <meta property="og:image:alt" content="easyKind Health LLC — Licensed Insurance Brokerage" />
       </head>
       <body className="antialiased">
-        {children}
+        <PostHogProvider>
+          <Suspense fallback={null}>
+            <PostHogPageview />
+          </Suspense>
+          {children}
+        </PostHogProvider>
         <Analytics />
         <SpeedInsights />
         <script
