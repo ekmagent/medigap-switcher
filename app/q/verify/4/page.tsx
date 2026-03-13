@@ -8,7 +8,7 @@ export default function VerifyPage4() {
   const router = useRouter()
 
   const handleAnswer = (yes: boolean) => {
-    track("health_q4_answered", { answer: yes ? "yes" : "no" })
+    track("underwriting_q4_answered", { answer: yes ? "yes" : "no" })
     if (yes) {
       router.push("/q/verify/review")
     } else {

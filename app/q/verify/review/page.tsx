@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { CheckCircle2 } from "lucide-react"
 import { track } from "@vercel/analytics"
 
-export default function HealthDisqualifiedPage() {
+export default function UnderwritingReviewPage() {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [phone, setPhone] = useState("")
@@ -16,7 +16,7 @@ export default function HealthDisqualifiedPage() {
   const [error, setError] = useState("")
 
   useEffect(() => {
-    track("health_disqualified")
+    track("underwriting_ineligible")
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -68,7 +68,7 @@ export default function HealthDisqualifiedPage() {
               Switching carriers may not be an option right now
             </h1>
             <p className="text-amber-800 text-[15px] leading-relaxed mb-3">
-              Based on your health history, most Medicare Supplement carriers will likely decline a new application. <span className="font-semibold">We recommend staying with your current plan</span> — your existing coverage cannot be taken away due to health conditions.
+              Based on your underwriting review, most Medicare Supplement carriers will likely decline a new application. <span className="font-semibold">We recommend staying with your current plan</span> — your existing coverage cannot be taken away due to health conditions.
             </p>
             <p className="text-amber-700 text-[14px] leading-relaxed">
               If your current premium has become unaffordable, or if you're interested in adding dental coverage, we may still be able to help. Fill out the form below and a licensed agent will reach out to explore what options are available to you.
