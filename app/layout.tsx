@@ -38,9 +38,7 @@ const insuranceAgencySchema = {
     "addressRegion": "NJ",
     "postalCode": "08002"
   },
-  "sameAs": [
-    "https://www.bbb.org/us/nj/cherry-hill/profile/healthcare-consultants/easykind-medicare-0221-90234473"
-  ],
+  "sameAs": [],
   "knowsAbout": ["Medicare Supplement Insurance", "Medigap Plans", "Insurance Comparison"],
   "areaServed": "US",
   "priceRange": "$$"
