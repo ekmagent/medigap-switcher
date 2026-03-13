@@ -6,12 +6,12 @@ import { QuoteProgress } from "@/components/quote-progress"
 import { StepWrapper } from "@/components/step-wrapper"
 import { track } from "@vercel/analytics"
 
-export default function TobaccoPage() {
+export default function LifestylePage() {
   const router = useRouter()
   const { formData, updateFormData } = useSwitcherForm()
 
   const handleSelect = (tobacco: string) => {
-    track("quiz_tobacco_selected", { tobacco })
+    track("quiz_lifestyle_selected", { tobacco })
     updateFormData("tobacco", tobacco)
     router.push("/q/household")
   }
@@ -25,7 +25,7 @@ export default function TobaccoPage() {
             Have you used tobacco products in the last 12 months?
           </h1>
           <p className="text-center text-muted-foreground mb-8">
-            Includes cigarettes, cigars, e-cigarettes, vaping, and chewing tobacco
+            This is an insurance rating factor that may affect your quoted premiums
           </p>
 
           <div className="space-y-3">

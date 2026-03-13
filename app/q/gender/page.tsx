@@ -13,7 +13,7 @@ export default function GenderPage() {
   const handleSelect = (gender: string) => {
     track("quiz_gender_selected", { gender })
     updateFormData("gender", gender)
-    router.push("/q/tobacco")
+    router.push("/q/lifestyle")
   }
 
   return (
