@@ -6,61 +6,18 @@ import { useDentalForm } from "@/contexts/dental-form-context"
 import { trackDental } from "@/lib/dental-pixel"
 import type { DentalPlan } from "@/lib/dental-quotes"
 import { StepWrapper } from "@/components/step-wrapper"
+import { Check } from "lucide-react"
 
 function price(n: number) {
   return Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`
 }
 
-function Row({ label, value, good }: { label: string; value: string; good?: boolean }) {
+function Feature({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-1 text-[10px] leading-tight">
-      <span className="text-gray-400">{label}</span>
-      <span className={good ? "font-bold text-[#0d7a4d]" : "font-bold text-gray-800"}>{value}</span>
-    </div>
-  )
-}
-
-function PlanCard({ plan, onSelect }: { plan: DentalPlan; onSelect: (id: string) => void }) {
-  const hl = plan.recommended
-  return (
-    <div
-      className={`relative rounded-xl border-2 bg-white px-2 text-center ${
-        hl ? "border-[#4ade80] shadow-xl pt-5 pb-3 -mt-2 z-10" : "border-gray-200 shadow-sm pt-3 pb-3"
-      }`}
-    >
-      {hl && (
-        <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 whitespace-nowrap">
-          <span className="bg-[#4ade80] text-[#0d4d4d] text-[9px] font-extrabold uppercase tracking-wide px-2 py-0.5 rounded-full shadow">
-            Most Popular
-          </span>
-        </div>
-      )}
-
-      <p className="text-[11px] font-bold uppercase tracking-wide text-[#0d4d4d]">{plan.tier}</p>
-      <p className={`font-black text-[#0d4d4d] leading-none ${hl ? "text-2xl" : "text-xl"}`}>
-        {price(plan.monthlyPremium)}
-        <span className="text-[10px] font-bold">/mo</span>
-      </p>
-      <p className="text-[9px] font-semibold text-[#4ade80] mb-2">${plan.annualMax.toLocaleString()}/yr max</p>
-
-      <div className="space-y-1 border-t border-gray-100 pt-2 mb-3 text-left">
-        <Row label="Cleanings" value={`${plan.coverage.preventive}%`} />
-        <Row label="Fillings" value={`${plan.coverage.basic}%`} />
-        <Row label="Major work" value={`${plan.coverage.major}%`} />
-        <Row label="Deductible" value={`$${plan.deductible}`} />
-        <Row label="Vision + hearing" value={plan.visionHearing ? "Yes" : "—"} good={plan.visionHearing} />
-        <Row label="Medicare Savings Audit" value={plan.savingsAudit ? "Yes" : "—"} good={plan.savingsAudit} />
-      </div>
-
-      <button
-        onClick={() => onSelect(plan.id)}
-        className={`w-full font-extrabold rounded-lg py-2 text-[11px] whitespace-nowrap transition-[color,background-color,transform] active:scale-95 ${
-          hl ? "bg-[#4ade80] hover:bg-[#22c55e] text-[#0d4d4d]" : "bg-[#0d4d4d] hover:bg-[#0a3a3a] text-white"
-        }`}
-      >
-        Choose {plan.tier}
-      </button>
-    </div>
+    <li className="flex items-start gap-2.5 text-base leading-snug text-gray-800">
+      <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#0d7a4d]" strokeWidth={3} />
+      <span>{children}</span>
+    </li>
   )
 }
 
@@ -75,7 +32,7 @@ export default function QuotePickingPage() {
     phone: formData.phone,
   }
 
-  // CompleteRegistration fires once they reach the three-options page (after the
+  // CompleteRegistration fires once they reach the options page (after the
   // contact data is hydrated so the CAPI event carries customer params).
   const firedReg = useRef(false)
   useEffect(() => {
@@ -104,9 +61,10 @@ export default function QuotePickingPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Most expensive first for anchoring: Platinum -> Gold -> Bronze.
-  const order = ["platinum", "gold", "bronze"]
-  const plans = order.map((id) => quotes.find((q) => q.id === id)).filter(Boolean) as DentalPlan[]
+  const byId = (id: string) => quotes.find((q) => q.id === id) as DentalPlan | undefined
+  const gold = byId("gold")
+  const platinum = byId("platinum")
+  const bronze = byId("bronze")
 
   const area = formData.county ? `${formData.county}, ${formData.state}` : "your area"
 
@@ -119,7 +77,7 @@ export default function QuotePickingPage() {
   }
 
   const handlePick = (id: string) => {
-    const plan = plans.find((p) => p.id === id)
+    const plan = quotes.find((p) => p.id === id)
     updateFormData("preference", id)
     // AddToCart = selected one of the three options, then into enrollment.
     // No content_name/category — we don't send dental/insurance descriptors to Meta.
@@ -132,20 +90,20 @@ export default function QuotePickingPage() {
 
   return (
     <StepWrapper step={12}>
-      <div className="max-w-md mx-auto">
-        <h1 className="text-xl font-bold text-center mb-1">
+      <div className="mx-auto max-w-md">
+        <h1 className="mb-1 text-center text-2xl font-bold">
           Your plans{formData.firstName ? `, ${formData.firstName}` : ""}
         </h1>
-        <p className="text-center text-xs text-muted-foreground mb-3 px-2">
+        <p className="mb-5 px-2 text-center text-sm text-muted-foreground">
           We compared the dental plans available in <span className="font-semibold text-foreground">{area}</span> —{" "}
           <span className="font-semibold text-[#0d4d4d]">Mutual of Omaha</span> is the best fit.
         </p>
 
-        {isLoadingQuotes && plans.length === 0 ? (
-          <div className="text-center text-muted-foreground py-8">Pulling your rates…</div>
-        ) : plans.length === 0 ? (
+        {isLoadingQuotes && quotes.length === 0 ? (
+          <div className="py-8 text-center text-muted-foreground">Pulling your rates…</div>
+        ) : !gold ? (
           <div className="rounded-xl border border-gray-200 bg-white p-6 text-center">
-            <p className="font-semibold text-gray-900 mb-1">We've got your details</p>
+            <p className="mb-1 font-semibold text-gray-900">We've got your details</p>
             <p className="text-sm text-muted-foreground">
               These plans aren't offered in your state just yet — but someone from our team will reach out
               shortly to go over the options that are available to you.
@@ -153,15 +111,104 @@ export default function QuotePickingPage() {
           </div>
         ) : (
           <>
-            <p className="text-[11px] text-center text-[#0d4d4d] font-medium mb-3 px-2">
-              <span className="font-bold">Our pick: Gold.</span> {recReason}
-            </p>
-            <div className="grid grid-cols-[1fr_1.18fr_1fr] gap-1.5 items-start">
-              {plans.map((plan) => (
-                <PlanCard key={plan.id} plan={plan} onSelect={handlePick} />
-              ))}
+            {/* Platinum — the price anchor. First number their eyes hit: the ceiling. */}
+            {platinum && (
+              <button
+                onClick={() => handlePick("platinum")}
+                className="mb-4 flex w-full items-center justify-between gap-3 rounded-2xl bg-[#0d4d4d] px-5 py-4 text-left shadow-lg transition-transform active:scale-[0.99]"
+              >
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-widest text-[#fbbf24]">Platinum Protection</p>
+                  <p className="mt-0.5 text-sm text-white/70">
+                    Max ${platinum.annualMax.toLocaleString()}/yr · + vision &amp; hearing
+                  </p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className="text-2xl font-black leading-none text-white">
+                    {price(platinum.monthlyPremium)}
+                    <span className="text-sm font-bold text-white/70">/mo</span>
+                  </p>
+                  <p className="text-xs font-semibold text-[#fbbf24]">Choose →</p>
+                </div>
+              </button>
+            )}
+
+            {/* Gold — the hero / target offer. After $88, this $72 reads as the deal. */}
+            <div className="relative mb-4 rounded-2xl border-2 border-[#4ade80] bg-white px-5 pb-5 pt-7 shadow-xl">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <span className="whitespace-nowrap rounded-full bg-[#4ade80] px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-[#0d4d4d] shadow">
+                  ★ Most Popular
+                </span>
+              </div>
+
+              <p className="text-center text-base font-bold uppercase tracking-wide text-[#0d4d4d]">Gold Protection</p>
+              <p className="mt-1 text-center font-black leading-none text-[#0d4d4d]">
+                <span className="text-5xl">{price(gold.monthlyPremium)}</span>
+                <span className="text-xl font-bold">/mo</span>
+              </p>
+              <p className="mb-5 mt-2 text-center text-base font-semibold text-[#0d7a4d]">
+                ${gold.annualMax.toLocaleString()} in benefits every year
+              </p>
+
+              <ul className="mb-6 space-y-3">
+                <Feature>
+                  <b>{gold.coverage.preventive}%</b> on cleanings, exams &amp; X-rays
+                </Feature>
+                <Feature>
+                  <b>$0 deductible</b> on preventive care
+                </Feature>
+                <Feature>
+                  <b>{gold.coverage.basic}%</b> on fillings &amp; basic care
+                </Feature>
+                <Feature>
+                  <b>{gold.coverage.major}%</b> on crowns, dentures &amp; implants
+                </Feature>
+                <Feature>
+                  Low <b>${gold.deductible} annual deductible</b>
+                </Feature>
+                {gold.savingsAudit && (
+                  <Feature>
+                    Free <b>Medicare Savings Audit</b> included
+                  </Feature>
+                )}
+              </ul>
+
+              <button
+                onClick={() => handlePick("gold")}
+                className="w-full rounded-xl bg-[#4ade80] py-4 text-xl font-extrabold text-[#0d4d4d] transition-transform hover:bg-[#22c55e] active:scale-95"
+              >
+                Choose Gold Protection →
+              </button>
+              <p className="mt-3 px-1 text-center text-sm text-[#0d4d4d]">
+                <span className="font-bold">Our pick.</span> {recReason}
+              </p>
             </div>
-            <p className="text-[10px] text-center text-muted-foreground mt-3">
+
+            {/* Bronze — the muted downsell / safety net at the bottom. */}
+            {bronze && (
+              <button
+                onClick={() => handlePick("bronze")}
+                className="flex w-full items-center justify-between gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-left transition-transform active:scale-[0.99]"
+              >
+                <div>
+                  <p className="text-base font-semibold text-gray-600">
+                    Basic Protection — <span className="uppercase">Bronze</span>
+                  </p>
+                  <p className="text-sm text-gray-400">
+                    ${bronze.annualMax.toLocaleString()}/yr · ${bronze.deductible} deductible · {bronze.coverage.major}% major
+                  </p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className="text-xl font-bold leading-none text-gray-600">
+                    {price(bronze.monthlyPremium)}
+                    <span className="text-xs font-bold">/mo</span>
+                  </p>
+                  <p className="text-xs font-medium text-gray-400">Choose →</p>
+                </div>
+              </button>
+            )}
+
+            <p className="mt-5 px-2 text-center text-sm text-muted-foreground">
               Tap a plan to lock in your rate. We'll call to confirm — nothing is charged today.
             </p>
           </>

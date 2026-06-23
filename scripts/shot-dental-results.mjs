@@ -64,8 +64,9 @@ try {
   // Let the StepWrapper check-flash overlay clear so it doesn't hide content.
   await page.waitForFunction(() => !document.querySelector(".animate-step-check"), { timeout: 5000 })
   await new Promise((r) => setTimeout(r, 500))
-  await page.screenshot({ path: OUT }) // viewport only -> exactly what's above the fold
-  console.log("saved", OUT)
+  await page.screenshot({ path: OUT }) // viewport -> above the fold (Gold hero)
+  await page.screenshot({ path: OUT.replace(".png", "-full.png"), fullPage: true })
+  console.log("saved", OUT, "and full page")
 } catch (e) {
   console.error("shot failed:", e.message)
 } finally {
