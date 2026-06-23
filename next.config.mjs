@@ -6,6 +6,20 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  async rewrites() {
+    // beforeFiles: runs before filesystem routes, so it overrides the "/" page.
+    return {
+      beforeFiles: [
+        // smile.healthplans.now serves the dental funnel at its root.
+        // (switch.healthplans.now and others keep the Medigap homepage at /.)
+        {
+          source: "/",
+          has: [{ type: "host", value: "smile.healthplans.now" }],
+          destination: "/dental",
+        },
+      ],
+    }
+  },
   async headers() {
     return [
       {
@@ -35,11 +49,11 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://connect.facebook.net https://maps.googleapis.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' data:",
-              "connect-src 'self' https://graph.facebook.com https://api.csgactuarial.com https://api.zippopotam.us https://us.i.posthog.com https://*.posthog.com",
+              "connect-src 'self' https://graph.facebook.com https://www.facebook.com https://api.csgactuarial.com https://api.zippopotam.us https://maps.googleapis.com https://places.googleapis.com https://us.i.posthog.com https://*.posthog.com",
               "frame-ancestors 'none'",
             ].join("; "),
           },

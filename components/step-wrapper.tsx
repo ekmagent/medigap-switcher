@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 
 const ENCOURAGEMENTS: Record<number, string> = {
   1: "",
@@ -25,13 +25,9 @@ export function StepWrapper({
   // Start visible so server-rendered HTML is never blank on slow connections
   const [showCheck, setShowCheck] = useState(false)
   const [animateIn, setAnimateIn] = useState(false)
-  const hasAnimated = useRef(false)
   const encouragement = ENCOURAGEMENTS[step] || ""
 
   useEffect(() => {
-    if (hasAnimated.current) return
-    hasAnimated.current = true
-
     if (step > 1) {
       setShowCheck(true)
       const checkTimer = setTimeout(() => {
