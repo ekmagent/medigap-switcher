@@ -1,30 +1,54 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useDentalForm } from "@/contexts/dental-form-context"
 import { trackDental } from "@/lib/dental-pixel"
 import type { DentalPlan } from "@/lib/dental-quotes"
 import { StepWrapper } from "@/components/step-wrapper"
-import { Check } from "lucide-react"
+import { Check, ChevronDown } from "lucide-react"
 
 function price(n: number) {
   // Whole-dollar display for legibility; exact rate still flows to tracking/GHL.
   return `$${Math.round(n)}`
 }
 
-function Feature({ children }: { children: React.ReactNode }) {
+/** Inline detail panel: coverage breakdown + an honest waiting-period note. */
+function PlanDetails({ plan, extra }: { plan: DentalPlan; extra?: string }) {
   return (
-    <li className="flex items-start gap-2.5 text-base leading-snug text-gray-800">
-      <Check className="mt-0.5 h-5 w-5 shrink-0 text-[#0d7a4d]" strokeWidth={3} />
-      <span>{children}</span>
-    </li>
+    <div className="mt-3 border-t border-gray-100 pt-3">
+      <dl className="space-y-1.5 text-sm">
+        <Line label="Cleanings, exams & X-rays" value={`${plan.coverage.preventive}%`} />
+        <Line label="Fillings & basic care" value={`${plan.coverage.basic}%`} />
+        <Line label="Crowns, dentures & implants" value={`${plan.coverage.major}%`} />
+        <Line label="Benefit max each year" value={`$${plan.annualMax.toLocaleString()}`} />
+        <Line label="Annual deductible" value={`$${plan.deductible}`} />
+        {plan.visionHearing && <Line label="Vision & hearing" value="Included" />}
+        {extra && <Line label={extra} value="Included" />}
+      </dl>
+      <div className="mt-3 rounded-lg bg-amber-50 px-3 py-2.5 text-sm leading-snug text-amber-900">
+        <span className="font-bold">Good to know:</span> cleanings &amp; exams are covered right away. Fillings,
+        crowns and other major work have a waiting period before coverage begins — your specialist confirms the
+        exact timing. The same rate applies at any age.
+      </div>
+    </div>
+  )
+}
+
+function Line({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <dt className="text-gray-600">{label}</dt>
+      <dd className="font-bold text-gray-900">{value}</dd>
+    </div>
   )
 }
 
 export default function QuotePickingPage() {
   const router = useRouter()
   const { formData, updateFormData, quotes, setQuotes, isLoadingQuotes, setIsLoadingQuotes } = useDentalForm()
+  const [open, setOpen] = useState<string | null>(null)
+  const toggle = (id: string) => setOpen((cur) => (cur === id ? null : id))
 
   const eventUser = {
     email: formData.email,
@@ -69,12 +93,11 @@ export default function QuotePickingPage() {
 
   const area = formData.county ? `${formData.county}, ${formData.state}` : "your area"
 
-  // Point them to the middle (Gold) plan, justified by what they told us earlier.
-  let recReason = "Gold is our most-picked plan — full coverage at the smart price."
+  let recReason = "Full coverage at the smart price."
   if (formData.preference === "comprehensive" || formData.coverageFocus === "major") {
-    recReason = "You wanted protection for bigger work — Gold covers it without Platinum's higher price."
+    recReason = "Covers the bigger work without Platinum's higher price."
   } else if (formData.preference === "basic" || formData.coverageFocus === "preventative") {
-    recReason = "You wanted preventive covered — Gold does that, plus 80% on fillings."
+    recReason = "Preventive covered, plus 80% on fillings."
   }
 
   const handlePick = (id: string) => {
@@ -89,15 +112,28 @@ export default function QuotePickingPage() {
     router.push("/dental/enroll")
   }
 
+  // The "read more" toggle — expands details inline; never navigates.
+  function MoreToggle({ id }: { id: string }) {
+    return (
+      <button
+        onClick={() => toggle(id)}
+        className="flex items-center gap-1 text-sm font-semibold text-[#0d7a4d]"
+      >
+        {open === id ? "Hide details" : "See what's included"}
+        <ChevronDown className={`h-4 w-4 transition-transform ${open === id ? "rotate-180" : ""}`} />
+      </button>
+    )
+  }
+
   return (
     <StepWrapper step={12}>
       <div className="mx-auto max-w-md">
-        <h1 className="mb-1 text-center text-2xl font-bold">
+        <h1 className="mb-0.5 text-center text-2xl font-bold">
           Your plans{formData.firstName ? `, ${formData.firstName}` : ""}
         </h1>
-        <p className="mb-5 px-2 text-center text-sm text-muted-foreground">
-          We compared the dental plans available in <span className="font-semibold text-foreground">{area}</span> —{" "}
-          <span className="font-semibold text-[#0d4d4d]">Mutual of Omaha</span> is the best fit.
+        <p className="mb-3 px-2 text-center text-sm text-muted-foreground">
+          Available in <span className="font-semibold text-foreground">{area}</span> through{" "}
+          <span className="font-semibold text-[#0d4d4d]">Mutual of Omaha</span>.
         </p>
 
         {isLoadingQuotes && quotes.length === 0 ? (
@@ -112,109 +148,116 @@ export default function QuotePickingPage() {
           </div>
         ) : (
           <>
-            {/* Platinum — the price anchor. First number their eyes hit: the ceiling. */}
+            {/* Platinum — the white anchor card. Bold $88 = the ceiling. */}
             {platinum && (
-              <button
-                onClick={() => handlePick("platinum")}
-                className="mb-4 flex w-full items-center justify-between gap-3 rounded-2xl bg-[#0d4d4d] px-5 py-4 text-left shadow-lg transition-transform active:scale-[0.99]"
-              >
-                <div>
-                  <p className="text-xs font-extrabold uppercase tracking-widest text-[#fbbf24]">Platinum Protection</p>
-                  <p className="mt-0.5 text-sm text-white/70">
-                    Max ${platinum.annualMax.toLocaleString()}/yr · + vision &amp; hearing
-                  </p>
-                </div>
-                <div className="shrink-0 text-right">
-                  <p className="text-2xl font-black leading-none text-white">
+              <div className="mb-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-extrabold uppercase tracking-wide text-[#0d4d4d]">Platinum Protection</p>
+                    <p className="text-sm text-gray-500">Most coverage · adds vision &amp; hearing</p>
+                  </div>
+                  <p className="shrink-0 text-3xl font-black leading-none text-[#0d4d4d]">
                     {price(platinum.monthlyPremium)}
-                    <span className="text-sm font-bold text-white/70">/mo</span>
+                    <span className="text-sm font-bold">/mo</span>
                   </p>
-                  <p className="text-xs font-semibold text-[#fbbf24]">Choose →</p>
                 </div>
-              </button>
+                {open === "platinum" && <PlanDetails plan={platinum} />}
+                <div className="mt-3 flex items-center justify-between">
+                  <MoreToggle id="platinum" />
+                  <button
+                    onClick={() => handlePick("platinum")}
+                    className="rounded-lg border-2 border-[#0d4d4d] px-5 py-2 text-base font-extrabold text-[#0d4d4d] transition-transform active:scale-95"
+                  >
+                    Choose
+                  </button>
+                </div>
+              </div>
             )}
 
             {/* Gold — the hero / target offer. After $88, this $72 reads as the deal. */}
-            <div className="relative mb-4 rounded-2xl border-2 border-[#4ade80] bg-white px-5 pb-5 pt-7 shadow-xl">
+            <div className="relative mb-3 rounded-2xl border-2 border-[#4ade80] bg-white px-4 pb-4 pt-5 shadow-xl">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <span className="whitespace-nowrap rounded-full bg-[#4ade80] px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-[#0d4d4d] shadow">
                   ★ Most Popular
                 </span>
               </div>
 
-              <p className="text-center text-base font-bold uppercase tracking-wide text-[#0d4d4d]">Gold Protection</p>
-              <p className="mt-1 text-center font-black leading-none text-[#0d4d4d]">
-                <span className="text-5xl">{price(gold.monthlyPremium)}</span>
-                <span className="text-xl font-bold">/mo</span>
-              </p>
-              <p className="mb-5 mt-2 text-center text-base font-semibold text-[#0d7a4d]">
-                ${gold.annualMax.toLocaleString()} in benefits every year
-              </p>
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-extrabold uppercase tracking-wide text-[#0d4d4d]">Gold Protection</p>
+                  <p className="text-sm font-semibold text-[#0d7a4d]">${gold.annualMax.toLocaleString()}/yr in benefits</p>
+                </div>
+                <p className="shrink-0 font-black leading-none text-[#0d4d4d]">
+                  <span className="text-4xl">{price(gold.monthlyPremium)}</span>
+                  <span className="text-base font-bold">/mo</span>
+                </p>
+              </div>
 
-              <ul className="mb-6 space-y-3">
-                <Feature>
-                  <b>{gold.coverage.preventive}%</b> on cleanings, exams &amp; X-rays
-                </Feature>
-                <Feature>
-                  <b>$0 deductible</b> on preventive care
-                </Feature>
-                <Feature>
-                  <b>{gold.coverage.basic}%</b> on fillings &amp; basic care
-                </Feature>
-                <Feature>
-                  <b>{gold.coverage.major}%</b> on crowns, dentures &amp; implants
-                </Feature>
-                <Feature>
-                  Low <b>${gold.deductible} annual deductible</b>
-                </Feature>
-                {gold.savingsAudit && (
-                  <Feature>
-                    Free <b>Medicare Savings Audit</b> included
-                  </Feature>
-                )}
-              </ul>
+              <div className="mt-3 grid grid-cols-2 gap-x-3 gap-y-1.5">
+                <Tick>100% cleanings &amp; exams</Tick>
+                <Tick>$0 preventive deductible</Tick>
+                <Tick>{gold.coverage.basic}% fillings &amp; basics</Tick>
+                <Tick>{gold.coverage.major}% major work</Tick>
+              </div>
 
               <button
                 onClick={() => handlePick("gold")}
-                className="w-full rounded-xl bg-[#4ade80] py-4 text-xl font-extrabold text-[#0d4d4d] transition-transform hover:bg-[#22c55e] active:scale-95"
+                className="mt-3 w-full rounded-xl bg-[#4ade80] py-4 text-xl font-extrabold text-[#0d4d4d] transition-transform hover:bg-[#22c55e] active:scale-95"
               >
                 Choose Gold Protection →
               </button>
-              <p className="mt-3 px-1 text-center text-sm text-[#0d4d4d]">
+              <p className="mt-2 text-center text-sm text-[#0d4d4d]">
                 <span className="font-bold">Our pick.</span> {recReason}
               </p>
+
+              <div className="mt-2 flex justify-center">
+                <MoreToggle id="gold" />
+              </div>
+              {open === "gold" && <PlanDetails plan={gold} extra={gold.savingsAudit ? "Free Medicare Savings Audit" : undefined} />}
             </div>
 
-            {/* Bronze — the muted downsell / safety net at the bottom. */}
+            {/* Bronze — the muted downsell / safety net. */}
             {bronze && (
-              <button
-                onClick={() => handlePick("bronze")}
-                className="flex w-full items-center justify-between gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-left transition-transform active:scale-[0.99]"
-              >
-                <div>
-                  <p className="text-base font-semibold text-gray-600">
-                    Basic Protection — <span className="uppercase">Bronze</span>
-                  </p>
-                  <p className="text-sm text-gray-400">
-                    ${bronze.annualMax.toLocaleString()}/yr · ${bronze.deductible} deductible · {bronze.coverage.major}% major
-                  </p>
-                </div>
-                <div className="shrink-0 text-right">
-                  <p className="text-xl font-bold leading-none text-gray-600">
+              <div className="mb-3 rounded-2xl border border-gray-200 bg-gray-50 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-bold uppercase tracking-wide text-gray-600">Basic Protection</p>
+                    <p className="text-sm text-gray-400">Preventive focus · lower benefit max</p>
+                  </div>
+                  <p className="shrink-0 text-2xl font-black leading-none text-gray-600">
                     {price(bronze.monthlyPremium)}
-                    <span className="text-xs font-bold">/mo</span>
+                    <span className="text-sm font-bold">/mo</span>
                   </p>
-                  <p className="text-xs font-medium text-gray-400">Choose →</p>
                 </div>
-              </button>
+                {open === "bronze" && <PlanDetails plan={bronze} />}
+                <div className="mt-3 flex items-center justify-between">
+                  <MoreToggle id="bronze" />
+                  <button
+                    onClick={() => handlePick("bronze")}
+                    className="rounded-lg border border-gray-300 px-5 py-2 text-base font-bold text-gray-600 transition-transform active:scale-95"
+                  >
+                    Choose
+                  </button>
+                </div>
+              </div>
             )}
 
-            <p className="mt-5 px-2 text-center text-sm text-muted-foreground">
-              Tap a plan to lock in your rate. We'll call to confirm — nothing is charged today.
+            <p className="px-2 text-center text-xs text-muted-foreground">
+              Rates are illustrative and confirmed by your licensed agent. Some services have a waiting period.
+              Nothing is charged today.
             </p>
           </>
         )}
       </div>
     </StepWrapper>
+  )
+}
+
+function Tick({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-start gap-1.5 text-sm leading-tight text-gray-800">
+      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0d7a4d]" strokeWidth={3} />
+      <span>{children}</span>
+    </div>
   )
 }

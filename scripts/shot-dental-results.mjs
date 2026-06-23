@@ -64,9 +64,20 @@ try {
   // Let the StepWrapper check-flash overlay clear so it doesn't hide content.
   await page.waitForFunction(() => !document.querySelector(".animate-step-check"), { timeout: 5000 })
   await new Promise((r) => setTimeout(r, 500))
-  await page.screenshot({ path: OUT }) // viewport -> above the fold (Gold hero)
+  await page.addStyleTag({ content: "nextjs-portal,[data-nextjs-dev-tools-button]{display:none!important}" })
+  await page.screenshot({ path: OUT }) // viewport -> above the fold (all 3 collapsed)
   await page.screenshot({ path: OUT.replace(".png", "-full.png"), fullPage: true })
-  console.log("saved", OUT, "and full page")
+  // Expand the Platinum anchor to verify the details panel + waiting-period note.
+  const expanded = await page.evaluate(() => {
+    const b = [...document.querySelectorAll("button")].find((x) => /see what's included/i.test(x.textContent || ""))
+    if (b) { b.click(); return true }
+    return false
+  })
+  if (expanded) {
+    await new Promise((r) => setTimeout(r, 400))
+    await page.screenshot({ path: OUT.replace(".png", "-expanded.png"), fullPage: true })
+  }
+  console.log("saved", OUT, ", full, and expanded")
 } catch (e) {
   console.error("shot failed:", e.message)
 } finally {
