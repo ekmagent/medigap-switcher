@@ -49,7 +49,7 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://connect.facebook.net https://maps.googleapis.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://connect.facebook.net https://maps.googleapis.com https://us-assets.i.posthog.com https://us.i.posthog.com",
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' data:",
