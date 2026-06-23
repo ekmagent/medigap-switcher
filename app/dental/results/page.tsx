@@ -9,7 +9,8 @@ import { StepWrapper } from "@/components/step-wrapper"
 import { Check } from "lucide-react"
 
 function price(n: number) {
-  return Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`
+  // Whole-dollar display for legibility; exact rate still flows to tracking/GHL.
+  return `$${Math.round(n)}`
 }
 
 function Feature({ children }: { children: React.ReactNode }) {

@@ -25,7 +25,7 @@ export default function EnrollPage() {
   const { formData, updateFormData, quotes } = useDentalForm()
 
   const plan = quotes.find((q) => q.id === formData.preference)
-  const price = plan ? (Number.isInteger(plan.monthlyPremium) ? `$${plan.monthlyPremium}` : `$${plan.monthlyPremium.toFixed(2)}`) : ""
+  const price = plan ? `$${Math.round(plan.monthlyPremium)}` : ""
 
   const eventUser = {
     email: formData.email,
