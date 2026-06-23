@@ -29,10 +29,9 @@ await page.setViewport({ width: 390, height: 740, deviceScaleFactor: 2, isMobile
 
 try {
   await page.goto(`${BASE}/dental`, { waitUntil: "networkidle2" })
-  await clickByText(page, "SEE MY OPTIONS")
-  await waitPath(page, "/dental/zipcode")
+  await page.waitForSelector("#zip")
   await page.type("#zip", "08003")
-  await clickByText(page, "Continue")
+  await clickByText(page, "See my plans")
   await waitPath(page, "/dental/coverage-now")
   await clickByText(page, "Yes, I have dental coverage now")
   await waitPath(page, "/dental/coverage-focus")

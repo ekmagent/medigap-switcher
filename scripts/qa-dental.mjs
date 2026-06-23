@@ -104,19 +104,15 @@ const run = async () => {
   })
 
   try {
-    // 1. Landing
+    // 1. Landing — the zip box is in the hero and starts the funnel
     await page.goto(`${BASE}/dental`, { waitUntil: "networkidle2" })
     ;(await hasText(page, "Doesn't Cost More")) ? pass("landing renders headline") : fail("landing headline missing")
-    await clickByText(page, "SEE MY OPTIONS")
-
-    // 2. Zip
-    await waitPath(page, "/dental/zipcode")
     await page.waitForSelector("#zip")
     await page.type("#zip", "08003")
-    pass("zipcode step loaded, entered 08003")
-    await clickByText(page, "Continue")
+    pass("landing: entered zip 08003 in hero")
+    await clickByText(page, "See my plans")
 
-    // 3. Coverage now — also verify the step-transition overlay doesn't get stuck
+    // 2. Coverage now (zipcode step is skipped) — verify the overlay doesn't get stuck
     await waitPath(page, "/dental/coverage-now")
     pass("coverage-now step loaded")
     await assertOverlayClears(page, "coverage-now")

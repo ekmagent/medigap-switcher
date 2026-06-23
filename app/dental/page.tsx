@@ -1,13 +1,13 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Script from "next/script"
 import { useRouter } from "next/navigation"
 import { track } from "@vercel/analytics"
 import { useDentalForm } from "@/contexts/dental-form-context"
 import { getFbc, getFbp } from "@/lib/fb-pixel"
 import { DENTAL_PIXEL_ID } from "@/lib/dental-pixel"
-import { CheckCircle2, Shield, Lock, Clock, ArrowRight, Star } from "lucide-react"
+import { CheckCircle2, Shield, Lock, Clock, Star } from "lucide-react"
 
 const COVERAGE = [
   { label: "Routine visits", detail: "Checkups & cleanings", pct: "100%", note: "$0 out of pocket" },
@@ -23,7 +23,10 @@ const CARRIERS = [
 
 export default function DentalLandingPage() {
   const router = useRouter()
-  const { updateFormData } = useDentalForm()
+  const { updateFormData, setQuotes } = useDentalForm()
+  const [zip, setZip] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     updateFormData("fbc", getFbc() || "")
@@ -42,9 +45,48 @@ export default function DentalLandingPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const start = (location: string) => {
-    track("dental_cta_clicked", { location })
-    router.push("/dental/zipcode")
+  const handleStart = async () => {
+    track("dental_cta_clicked", { location: "hero_zip" })
+    if (zip.length !== 5) {
+      setError("Please enter your 5-digit zip code")
+      return
+    }
+    setLoading(true)
+    setError("")
+    try {
+      const res = await fetch(`https://api.zippopotam.us/us/${zip}`)
+      if (!res.ok) {
+        setError("Please check your zip code and try again")
+        setLoading(false)
+        return
+      }
+      const data = await res.json()
+      const places = data.places || []
+      if (!places.length) {
+        setError("We couldn't find that zip code")
+        setLoading(false)
+        return
+      }
+      const state = places[0]["state abbreviation"]
+      updateFormData("zipCode", zip)
+      updateFormData("county", places[0]["place name"])
+      updateFormData("state", state)
+      // Pre-fetch quotes so the results page is instant.
+      fetch("/api/dental/quotes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ zip, state }),
+      })
+        .then((r) => r.json())
+        .then((d) => {
+          if (d?.success && Array.isArray(d.quotes)) setQuotes(d.quotes)
+        })
+        .catch(() => {})
+      router.push("/dental/coverage-now")
+    } catch {
+      setError("Something went wrong — please try again")
+      setLoading(false)
+    }
   }
 
   return (
@@ -62,38 +104,56 @@ export default function DentalLandingPage() {
         fbq('init', '${DENTAL_PIXEL_ID}');
         fbq('track', 'PageView');`}
       </Script>
-      {/* Hero */}
+
+      {/* Hero — the zip box is the only thing to do */}
       <section className="bg-white px-4 pt-3 pb-0">
         <div className="max-w-7xl mx-auto">
           <div className="bg-[#0d4d4d] rounded-[2rem] overflow-hidden relative">
             <div className="px-6 sm:px-10 lg:px-16 py-10 sm:py-14 lg:py-16">
               <div className="grid lg:grid-cols-2 gap-10 items-center">
-                {/* Left */}
                 <div className="relative z-10">
                   <div className="inline-flex items-center gap-1.5 bg-white/10 text-white/90 text-xs font-semibold px-3 py-1.5 rounded-full mb-5">
                     <Star className="w-3.5 h-3.5 text-[#4ade80]" />
                     Same price whether you're 18 or 70
                   </div>
 
-                  <h1 className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] mb-5">
-                    Dental Coverage That{" "}
-                    <span className="text-[#4ade80]">Doesn't Cost More</span>{" "}
-                    As You Age
+                  <h1 className="text-white text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] mb-4">
+                    Dental Coverage That <span className="text-[#4ade80]">Doesn't Cost More</span> As You Age
                   </h1>
 
-                  <p className="text-white/70 text-lg mb-8 max-w-md">
-                    Routine visits fully covered, lower bills on everything else, and a price that never goes up
-                    with age. See your real rates from a well-known carrier in under a minute.
+                  <p className="text-white/70 text-lg mb-6 max-w-md">
+                    Enter your zip to see your real rates — takes under a minute.
                   </p>
 
-                  <button
-                    onClick={() => start("hero")}
-                    className="inline-flex items-center gap-2 bg-[rgba(116,255,11,1)] hover:bg-[#3fcf74] text-[#0d4d4d] px-12 py-4 rounded-full text-lg transition-all hover:scale-[1.02] active:scale-[0.98] mb-6 font-extrabold"
-                  >
-                    SEE MY OPTIONS <ArrowRight className="w-5 h-5" />
-                  </button>
+                  <div className="max-w-md">
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <input
+                        id="zip"
+                        type="text"
+                        inputMode="numeric"
+                        value={zip}
+                        onChange={(e) => {
+                          setZip(e.target.value.replace(/\D/g, "").slice(0, 5))
+                          setError("")
+                        }}
+                        onKeyDown={(e) => e.key === "Enter" && handleStart()}
+                        placeholder="Enter your zip code"
+                        maxLength={5}
+                        autoFocus
+                        className="w-full sm:flex-1 sm:min-w-0 rounded-full px-5 py-4 text-[#0d4d4d] text-lg font-semibold placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4ade80]"
+                      />
+                      <button
+                        onClick={handleStart}
+                        disabled={loading}
+                        className="w-full sm:w-auto bg-[rgba(116,255,11,1)] hover:bg-[#3fcf74] text-[#0d4d4d] px-8 py-4 rounded-full text-lg font-extrabold whitespace-nowrap transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70"
+                      >
+                        {loading ? "…" : "See my plans"}
+                      </button>
+                    </div>
+                    {error && <p className="text-amber-200 text-sm mt-2 ml-2">{error}</p>}
+                  </div>
 
-                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-white/60 text-sm">
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-white/60 text-sm mt-5">
                     <span className="flex items-center gap-1.5">
                       <Clock className="w-4 h-4 text-[#4ade80]" /> Under 60 seconds
                     </span>
@@ -106,15 +166,14 @@ export default function DentalLandingPage() {
                   </div>
                 </div>
 
-                {/* Right - sample plan card */}
-                <div className="flex justify-center items-center relative">
+                {/* Sample plan card — desktop only, keeps mobile lean */}
+                <div className="hidden lg:flex justify-center items-center relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#4ade80]/10 to-transparent rounded-full blur-3xl" />
                   <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden border border-gray-100 relative z-10">
                     <div className="bg-gradient-to-r from-[#0d4d4d] to-[#0d6060] px-5 py-4">
                       <p className="text-white/70 text-xs uppercase tracking-wide">Sample dental plan</p>
                       <p className="text-white font-bold text-base">Your dentist, covered</p>
                     </div>
-
                     <div className="px-5 py-4 space-y-3">
                       {COVERAGE.map((c) => (
                         <div key={c.label} className="flex items-center justify-between">
@@ -129,7 +188,6 @@ export default function DentalLandingPage() {
                         </div>
                       ))}
                     </div>
-
                     <div className="bg-[#4ade80] px-5 py-3 flex items-center justify-between">
                       <div>
                         <p className="text-[#0d4d4d] text-xs font-semibold uppercase tracking-wide">Starting around</p>
@@ -149,15 +207,15 @@ export default function DentalLandingPage() {
         </div>
       </section>
 
-      {/* Carrier logos */}
-      <section className="bg-white py-10 border-b border-gray-100">
+      {/* Carrier logos — slim trust */}
+      <section className="bg-white py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <p className="text-center text-gray-500 text-sm mb-7">Coverage offered through carriers you know</p>
+          <p className="text-center text-gray-500 text-sm mb-5">Coverage offered through carriers you know</p>
           <div className="flex items-center justify-center gap-8 sm:gap-12 flex-wrap">
             {CARRIERS.map((carrier) => (
               <div
                 key={carrier.name}
-                className="h-12 w-28 flex items-center justify-center grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100"
+                className="h-10 w-24 flex items-center justify-center grayscale hover:grayscale-0 transition-all opacity-70 hover:opacity-100"
               >
                 <img
                   src={carrier.logo}
@@ -179,77 +237,8 @@ export default function DentalLandingPage() {
         </div>
       </section>
 
-      {/* Coverage breakdown band */}
-      <section className="bg-white py-12 sm:py-16">
-        <div className="max-w-5xl mx-auto px-4">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 text-center mb-3">
-            How much your plan covers
-          </h2>
-          <p className="text-center text-gray-500 text-sm mb-10 max-w-md mx-auto">
-            Lower, more predictable out-of-pocket costs on the dental care you actually use.
-          </p>
-          <div className="grid md:grid-cols-3 gap-6">
-            {COVERAGE.map((c) => (
-              <div
-                key={c.label}
-                className="bg-gray-50 rounded-2xl p-6 border border-gray-100 text-center"
-              >
-                <p className="text-[#0d4d4d] text-4xl font-black mb-2">{c.pct}</p>
-                <p className="font-semibold text-gray-900 mb-1">{c.label}</p>
-                <p className="text-gray-500 text-sm mb-3">{c.detail}</p>
-                <span className="inline-block bg-[#4ade80]/15 text-[#0d7a4d] text-xs font-bold px-3 py-1 rounded-full">
-                  {c.note}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why different */}
-      <section className="bg-gray-50 py-12 sm:py-16">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 text-center mb-10">
-            Why people choose this plan
-          </h2>
-          <div className="grid sm:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-14 h-14 bg-[#0d4d4d] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="w-6 h-6 text-[#4ade80]" />
-              </div>
-              <h3 className="font-semibold text-lg mb-2">Age doesn't change your price</h3>
-              <p className="text-gray-600 text-sm">The same monthly rate whether you're 18 or 70.</p>
-            </div>
-            <div className="text-center">
-              <div className="w-14 h-14 bg-[#0d4d4d] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-6 h-6 text-[#4ade80]" />
-              </div>
-              <h3 className="font-semibold text-lg mb-2">A well-known carrier</h3>
-              <p className="text-gray-600 text-sm">Coverage you can trust, not a no-name discount card.</p>
-            </div>
-            <div className="text-center">
-              <div className="w-14 h-14 bg-[#0d4d4d] rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle2 className="w-6 h-6 text-[#4ade80]" />
-              </div>
-              <h3 className="font-semibold text-lg mb-2">One predictable rate</h3>
-              <p className="text-gray-600 text-sm">A simple flat monthly cost you can budget around — no surprises.</p>
-            </div>
-          </div>
-
-          <div className="mt-12 text-center">
-            <button
-              onClick={() => start("why_different")}
-              className="inline-flex items-center gap-2 bg-[rgba(116,255,11,1)] hover:bg-[#3fcf74] text-[#0d4d4d] px-10 py-4 rounded-full text-base font-extrabold transition-all hover:scale-[1.02] active:scale-[0.98]"
-            >
-              See My Options <ArrowRight className="w-5 h-5" />
-            </button>
-            <p className="text-gray-400 text-xs mt-3">Takes under a minute · No obligation</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust & Security */}
-      <section className="bg-white py-12 border-t border-gray-100">
+      {/* Trust strip */}
+      <section className="bg-white py-8 border-t border-gray-100">
         <div className="max-w-3xl mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-8">
             <div className="flex items-center gap-3">

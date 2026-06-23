@@ -9,11 +9,11 @@ const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: "new" })
 const page = await browser.newPage()
-await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true })
+await page.setViewport({ width: 390, height: 740, deviceScaleFactor: 2, isMobile: true })
 try {
   await page.goto(`${BASE}/dental`, { waitUntil: "networkidle2" })
-  await new Promise((r) => setTimeout(r, 500))
-  await page.screenshot({ path: "/tmp/dental-landing.png", fullPage: true })
+  await new Promise((r) => setTimeout(r, 600))
+  await page.screenshot({ path: "/tmp/dental-landing.png" }) // viewport = above the fold
   console.log("saved /tmp/dental-landing.png")
 } catch (e) {
   console.error("shot failed:", e.message)
