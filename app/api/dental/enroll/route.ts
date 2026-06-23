@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
 import { normalizePhoneNumber } from "@/lib/phone-utils"
 import { ghlEnabled, upsertDentalContact, addDentalNote, upsertDentalOpportunity, buildDentalNote } from "@/lib/ghl-dental"
+import { notifyDentalEnrollment } from "@/lib/dental-slack"
 
 export async function POST(req: NextRequest) {
   const clientIp = getClientIp(req)
@@ -71,9 +72,11 @@ export async function POST(req: NextRequest) {
       submittedAt: new Date().toISOString(),
     }
 
+    const fullAddress = `${street}${unit ? ` ${unit}` : ""}, ${city}, ${state} ${zipCode}`
+    let ghlContactId: string | undefined
     if (ghlEnabled()) {
       try {
-        const contactId = await upsertDentalContact({
+        ghlContactId = await upsertDentalContact({
           firstName,
           lastName,
           email,
@@ -87,22 +90,27 @@ export async function POST(req: NextRequest) {
           tags: ["dental-enrolled", plan ? `plan-${String(plan).toLowerCase()}` : ""].filter(Boolean),
         })
         await addDentalNote(
-          contactId,
+          ghlContactId,
           buildDentalNote("Enrollment", {
+            firstName,
+            lastName,
+            email,
+            phone: normalizedPhone || phone,
+            dateOfBirth,
             plan,
             monthlyPremium,
             effectiveDate,
             canMakeDecisions,
             gender,
-            address: `${street}${unit ? ` ${unit}` : ""}, ${city}, ${state} ${zipCode}`,
+            address: fullAddress,
           }),
         )
-        await upsertDentalOpportunity(contactId, {
+        await upsertDentalOpportunity(ghlContactId, {
           name: `Dental — ${firstName} ${lastName || ""} — ${plan || ""}`.trim(),
           monetaryValue: typeof monthlyPremium === "number" ? monthlyPremium : null,
           stageId: process.env.GHL_DENTAL_STAGE_ENROLLED,
         })
-        console.log("[dental] GHL enrollment synced:", contactId)
+        console.log("[dental] GHL enrollment synced:", ghlContactId)
       } catch (err: any) {
         console.error("[dental] GHL enrollment sync error:", err?.message)
       }
@@ -118,6 +126,19 @@ export async function POST(req: NextRequest) {
         console.log("[dental] No GHL configured; enrollment not forwarded:", { firstName, plan })
       }
     }
+
+    // Hotter Slack ping — they've selected a plan and are enrolling.
+    await notifyDentalEnrollment({
+      contactId: ghlContactId,
+      firstName,
+      lastName,
+      email,
+      phone: normalizedPhone || phone,
+      plan,
+      monthlyPremium,
+      effectiveDate,
+      address: fullAddress,
+    }).catch(() => {})
 
     return NextResponse.json({ success: true })
   } catch (error: any) {

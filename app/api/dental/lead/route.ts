@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { checkRateLimit, getClientIp } from "@/lib/rate-limit"
 import { normalizePhoneNumber } from "@/lib/phone-utils"
 import { ghlEnabled, upsertDentalContact, addDentalNote, upsertDentalOpportunity, buildDentalNote } from "@/lib/ghl-dental"
+import { notifyDentalLead } from "@/lib/dental-slack"
 
 export async function POST(req: NextRequest) {
   const clientIp = getClientIp(req)
@@ -105,9 +106,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Push to GoHighLevel (direct API). Best-effort: never break the user response.
+    let ghlContactId: string | undefined
     if (ghlEnabled()) {
       try {
-        const contactId = await upsertDentalContact({
+        ghlContactId = await upsertDentalContact({
           firstName,
           lastName,
           email,
@@ -122,8 +124,13 @@ export async function POST(req: NextRequest) {
           tags: ["dental-lead"],
         })
         await addDentalNote(
-          contactId,
+          ghlContactId,
           buildDentalNote("Lead", {
+            firstName,
+            lastName,
+            email,
+            phone: normalizedPhone,
+            dateOfBirth,
             hasDentalNow,
             coverageFocus,
             onMedicare,
@@ -142,12 +149,12 @@ export async function POST(req: NextRequest) {
             referrerUrl,
           }),
         )
-        await upsertDentalOpportunity(contactId, {
+        await upsertDentalOpportunity(ghlContactId, {
           name: `Dental — ${firstName} ${lastName || ""}`.trim(),
           monetaryValue: typeof quotedGoldPremium === "number" ? quotedGoldPremium : null,
           stageId: process.env.GHL_DENTAL_STAGE_NEW,
         })
-        console.log("[dental] GHL lead synced:", contactId)
+        console.log("[dental] GHL lead synced:", ghlContactId)
       } catch (err: any) {
         console.error("[dental] GHL lead sync error:", err?.message)
       }
@@ -163,6 +170,30 @@ export async function POST(req: NextRequest) {
         console.log("[dental] No GHL configured; lead not forwarded:", { firstName, phone: normalizedPhone })
       }
     }
+
+    // Real-time Slack chime so the team can pursue the lead fast (best-effort).
+    await notifyDentalLead({
+      contactId: ghlContactId,
+      firstName,
+      lastName,
+      email,
+      phone: normalizedPhone,
+      dateOfBirth,
+      county,
+      state,
+      zipCode,
+      hasDentalNow,
+      coverageFocus,
+      onMedicare,
+      medicareType,
+      preference,
+      quotedPlatinumPremium,
+      quotedGoldPremium,
+      quotedBronzePremium,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+    }).catch(() => {})
 
     return NextResponse.json({ success: true })
   } catch (error: any) {

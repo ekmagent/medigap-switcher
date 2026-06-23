@@ -8,6 +8,15 @@
  * opportunity. DVH/policy custom fields are intentionally left for official signup.
  */
 
+import {
+  quoteLines,
+  ageFromDob,
+  yesNo,
+  coverageFocusLabel,
+  preferenceLabel,
+  medicareLabel,
+} from "./dental-format"
+
 const BASE = "https://services.leadconnectorhq.com"
 const VERSION = "2021-07-28"
 
@@ -173,13 +182,42 @@ export async function upsertDentalOpportunity(
   return created?.opportunity?.id || created?.id
 }
 
-/** Build a readable note + JSON block for pull-in/out. */
-export function buildDentalNote(kind: "Lead" | "Enrollment", obj: Record<string, unknown>): string {
-  const lines = [`Dental ${kind} — via funnel`, ""]
-  for (const [k, v] of Object.entries(obj)) {
-    if (v == null || v === "") continue
-    lines.push(`${k}: ${typeof v === "object" ? JSON.stringify(v) : v}`)
+/** Dialer-ready note: contact summary, their answers, the 3 quotes + a JSON block. */
+export function buildDentalNote(kind: "Lead" | "Enrollment", d: Record<string, any>): string {
+  const lines: string[] = []
+  const age = ageFromDob(d.dateOfBirth)
+  const name = [d.firstName, d.lastName].filter(Boolean).join(" ")
+  const loc = `${[d.county, d.state].filter(Boolean).join(", ")}${d.zipCode ? ` ${d.zipCode}` : ""}`.trim()
+  const prem = (n: any) =>
+    n == null ? "" : (Number.isInteger(n) ? `$${n}` : `$${Number(n).toFixed(2)}`) + "/mo"
+
+  if (kind === "Lead") {
+    lines.push(`🦷 DENTAL LEAD${name ? ` — ${name}` : ""}`, "")
+    lines.push("CONTACT")
+    lines.push(`  ${d.phone || "—"} · ${d.email || "—"}`)
+    lines.push(`  DOB ${d.dateOfBirth || "—"}${age != null ? ` (age ${age})` : ""} · ${loc || "—"}`)
+    lines.push("", "WHAT THEY TOLD US")
+    lines.push(`  Has dental now: ${yesNo(d.hasDentalNow)}   |   Wants: ${coverageFocusLabel(d.coverageFocus)}`)
+    lines.push(`  On Medicare: ${medicareLabel(d.onMedicare, d.medicareType)}   |   Leaning: ${preferenceLabel(d.preference)}`)
+    lines.push("", "THEIR 3 QUOTES — Mutual of Omaha (same price at any age)")
+    for (const q of quoteLines({
+      platinum: d.quotedPlatinumPremium,
+      gold: d.quotedGoldPremium,
+      bronze: d.quotedBronzePremium,
+    })) {
+      lines.push(`  ${q}`)
+    }
+    const src = [d.utmSource, d.utmMedium, d.utmCampaign].filter(Boolean).join(" / ")
+    lines.push("", `SOURCE  ${src || "—"}`)
+  } else {
+    lines.push(`🦷 DENTAL ENROLLMENT${name ? ` — ${name}` : ""}`, "")
+    lines.push(`SELECTED: ${d.plan || "—"} ${prem(d.monthlyPremium)}`.trim())
+    lines.push(`  Effective: ${d.effectiveDate || "—"}`)
+    lines.push(`  Mailing: ${d.address || "—"}`)
+    lines.push(`  Gender: ${d.gender || "—"}   |   Makes own decisions: ${yesNo(d.canMakeDecisions)}`)
+    lines.push(`  ${d.phone || "—"} · ${d.email || "—"} · DOB ${d.dateOfBirth || "—"}`)
   }
-  lines.push("", "```json", JSON.stringify({ kind, ...obj }, null, 2), "```")
+
+  lines.push("", "```json", JSON.stringify({ kind, ...d }, null, 2), "```")
   return lines.join("\n")
 }
