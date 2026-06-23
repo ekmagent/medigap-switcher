@@ -140,7 +140,7 @@ export default function DentalLandingPage() {
                         placeholder="Enter your zip code"
                         maxLength={5}
                         autoFocus
-                        className="w-full sm:flex-1 sm:min-w-0 rounded-full px-5 py-4 text-[#0d4d4d] text-lg font-semibold placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4ade80]"
+                        className="w-full sm:flex-1 sm:min-w-0 rounded-full bg-white px-5 py-4 text-[#0d4d4d] text-lg font-semibold placeholder:text-gray-400 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#4ade80]"
                       />
                       <button
                         onClick={handleStart}

@@ -116,6 +116,7 @@ export async function upsertDentalContact(input: DentalContactInput): Promise<st
     postalCode: input.zipCode || undefined,
     dateOfBirth: dobIso(input.dateOfBirth),
     source: "Dental Funnel",
+    assignedTo: process.env.GHL_DENTAL_OWNER_ID || undefined,
     tags: input.tags && input.tags.length ? input.tags : undefined,
     customFields: customFields.length ? customFields : undefined,
   }
@@ -143,6 +144,7 @@ export async function upsertDentalOpportunity(
   const { locationId } = cfg()
   const pipelineId = process.env.GHL_DENTAL_PIPELINE_ID
   const stageId = opts.stageId || process.env.GHL_DENTAL_STAGE_NEW
+  const ownerId = process.env.GHL_DENTAL_OWNER_ID || undefined
   if (!pipelineId || !stageId) {
     console.log("[dental] GHL: no pipeline configured; skipping opportunity")
     return
@@ -166,6 +168,7 @@ export async function upsertDentalOpportunity(
       pipelineStageId: stageId,
       name: opts.name,
       monetaryValue: opts.monetaryValue ?? undefined,
+      assignedTo: ownerId,
     })
     return existingId
   }
@@ -178,6 +181,7 @@ export async function upsertDentalOpportunity(
     status: "open",
     contactId,
     monetaryValue: opts.monetaryValue ?? undefined,
+    assignedTo: ownerId,
   })
   return created?.opportunity?.id || created?.id
 }
