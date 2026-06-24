@@ -97,7 +97,7 @@ export default function PhonePage() {
       <div className="max-w-md mx-auto">
         <h1 className="text-2xl font-bold text-center mb-2">Last thing — the best number to reach you</h1>
         <p className="text-center text-muted-foreground mb-8">
-          We'll give you a quick call to go over your two options.
+          We'll give you a quick call to go over your options.
         </p>
 
         <div className="bg-white rounded-xl p-6 shadow-sm mb-6">
@@ -129,9 +129,10 @@ export default function PhonePage() {
         </Button>
 
         <p className="text-center text-[11px] leading-snug text-muted-foreground mt-4">
-          By continuing, you consent to receive calls, texts (including autodialed), and emails from
-          easyKind Health LLC and its agents at the number provided regarding dental coverage. Consent is not
-          required to purchase. Msg &amp; data rates may apply. See our{" "}
+          By continuing, you consent to receive calls and texts (including by autodialer or a
+          prerecorded/artificial voice) and emails from easyKind Health LLC and its agents at the number
+          provided regarding dental coverage. Consent is not required to purchase. Message frequency varies;
+          msg &amp; data rates may apply. Reply STOP to opt out, HELP for help. See our{" "}
           <a href="/privacy" className="underline hover:text-foreground">Privacy Policy</a> and{" "}
           <a href="/terms" className="underline hover:text-foreground">Terms</a>.
         </p>
