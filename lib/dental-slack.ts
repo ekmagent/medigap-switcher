@@ -27,11 +27,15 @@ async function postSlack(text: string, blocks: unknown[]) {
     return
   }
   try {
-    await fetch(url, {
+    const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text, blocks }),
     })
+    if (!res.ok) {
+      const detail = await res.text().catch(() => "")
+      console.error(`[dental] Slack webhook ${res.status}: ${detail.slice(0, 200)}`)
+    }
   } catch (e: any) {
     console.error("[dental] Slack notify error:", e?.message)
   }

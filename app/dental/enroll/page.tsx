@@ -34,10 +34,20 @@ export default function EnrollPage() {
     phone: formData.phone,
   }
 
+  // Block direct page loads: enroll is only reachable by funnel completers
+  // (sessionStorage flag set at the phone step) — otherwise CAPI could fire off stale data.
+  useEffect(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("dental_funnel") !== "1") {
+      router.replace("/dental")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // InitiateCheckout fires once when they start the enrollment (after data hydrates).
   const firedCheckout = useRef(false)
   useEffect(() => {
-    if (!firedCheckout.current && (formData.email || formData.firstName)) {
+    const fromFunnel = typeof window !== "undefined" && sessionStorage.getItem("dental_funnel") === "1"
+    if (!firedCheckout.current && fromFunnel && (formData.email || formData.firstName)) {
       firedCheckout.current = true
       trackDental("InitiateCheckout", {
         custom: { value: plan?.monthlyPremium, currency: "USD" },

@@ -77,6 +77,12 @@ export default function PhonePage() {
         return
       }
       updateFormData("submitted", true)
+      // Session-scoped marker: proves this person came through the funnel (and gave
+      // TCPA consent) this session. results/enroll gate their CAPI events + access on it
+      // so a direct page load can't fire conversions off stale localStorage.
+      try {
+        sessionStorage.setItem("dental_funnel", "1")
+      } catch {}
       router.push("/dental/results")
     } catch {
       setError("Something went wrong. Please try again.")
@@ -124,7 +130,7 @@ export default function PhonePage() {
 
         <p className="text-center text-[11px] leading-snug text-muted-foreground mt-4">
           By continuing, you consent to receive calls, texts (including autodialed), and emails from
-          HealthPlans.now and its agents at the number provided regarding dental coverage. Consent is not
+          easyKind Health LLC and its agents at the number provided regarding dental coverage. Consent is not
           required to purchase. Msg &amp; data rates may apply. See our{" "}
           <a href="/privacy" className="underline hover:text-foreground">Privacy Policy</a> and{" "}
           <a href="/terms" className="underline hover:text-foreground">Terms</a>.

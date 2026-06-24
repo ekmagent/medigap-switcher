@@ -57,11 +57,21 @@ export default function QuotePickingPage() {
     phone: formData.phone,
   }
 
+  // Block direct page loads: only funnel completers (sessionStorage flag set at the
+  // phone step) may view results — otherwise stale localStorage could fire CAPI.
+  useEffect(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("dental_funnel") !== "1") {
+      router.replace("/dental")
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // CompleteRegistration fires once they reach the options page (after the
   // contact data is hydrated so the CAPI event carries customer params).
   const firedReg = useRef(false)
   useEffect(() => {
-    if (!firedReg.current && (formData.email || formData.firstName)) {
+    const fromFunnel = typeof window !== "undefined" && sessionStorage.getItem("dental_funnel") === "1"
+    if (!firedReg.current && fromFunnel && (formData.email || formData.firstName)) {
       firedReg.current = true
       trackDental("CompleteRegistration", { user: eventUser })
     }
