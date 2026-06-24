@@ -41,6 +41,20 @@ export default function DentalLandingPage() {
       updateFormData("utmContent", params.get("utm_content") || "")
       updateFormData("utmTerm", params.get("utm_term") || "")
       updateFormData("referrerUrl", document.referrer || "")
+      // Strip utm_* from the visible URL so the browser Pixel's auto PageView doesn't
+      // send them to Meta (parts of URLs after the domain). Already captured above for
+      // GHL. Keep fbclid/gclid — fbclid is Meta's own id and feeds _fbc matching.
+      try {
+        const u = new URL(window.location.href)
+        let changed = false
+        for (const p of ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"]) {
+          if (u.searchParams.has(p)) {
+            u.searchParams.delete(p)
+            changed = true
+          }
+        }
+        if (changed) window.history.replaceState(null, "", u.pathname + u.search + u.hash)
+      } catch {}
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
