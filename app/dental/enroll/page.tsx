@@ -117,6 +117,13 @@ export default function EnrollPage() {
         return
       }
       updateFormData("enrollSubmitted", true)
+      // SubmitApplication = they completed the address/application form. Distinct from
+      // InitiateCheckout (enroll mount). Purchase is uploaded offline once the carrier
+      // app is e-signed. value/currency only — no dental descriptors to Meta.
+      trackDental("SubmitApplication", {
+        custom: { value: plan?.monthlyPremium, currency: "USD" },
+        user: eventUser,
+      })
       setDone(true)
       if (typeof window !== "undefined") window.scrollTo({ top: 0 })
     } catch {
