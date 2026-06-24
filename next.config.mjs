@@ -20,6 +20,22 @@ const nextConfig = {
       ],
     }
   },
+  async redirects() {
+    // smile.healthplans.now must never expose "/dental" in the browser URL — the Meta
+    // browser pixel sends the page URL (dl) to Meta, and "dental" is a health term.
+    // Bounce the exact /dental path to "/", where the rewrite above serves the same
+    // landing at a clean URL. Redirects run before rewrites, so there's no loop.
+    // Funnel routes (/dental/coverage-now, etc.) are NOT matched (source is exact) and
+    // never fire the browser pixel; CAPI is origin-only — so nothing else leaks the path.
+    return [
+      {
+        source: "/dental",
+        has: [{ type: "host", value: "smile.healthplans.now" }],
+        destination: "/",
+        permanent: false,
+      },
+    ]
+  },
   async headers() {
     return [
       {
