@@ -29,14 +29,14 @@ export interface DentalPlan {
   deductible: number
   recommended: boolean
   coverage: DentalPlanCoverage
-  visionHearing: boolean // bundled vision & hearing rider (Platinum only)
+  visionHearing: boolean // bundled vision rider (Platinum only)
   savingsAudit: boolean // exclusive Medicare Savings Audit perk (Platinum + Gold, not Bronze)
 }
 
 const PREFERRED: DentalPlanCoverage = { preventive: 100, basic: 80, major: 50 }
 const PROTECTION: DentalPlanCoverage = { preventive: 100, basic: 50, major: 50 }
 
-// Vision & hearing rider added on top of Platinum's dental premium, to bundle it
+// Vision rider added on top of Platinum's dental premium, to bundle it
 // as the premium tier and widen the gap so Gold (dental-only) reads as the
 // no-brainer middle. Flat $8.28/mo in every state (user-confirmed).
 const VISION_HEARING_ADDON = 8.28
@@ -57,9 +57,9 @@ const TIER_MAP: {
 }[] = [
   {
     id: "platinum",
-    form: "DNT2I", // Preferred, $5,000 max + bundled vision & hearing
+    form: "DNT2I", // Preferred, $5,000 max + bundled vision
     tier: "Platinum",
-    tagline: "Dental + vision & hearing",
+    tagline: "Dental + vision",
     annualMax: 5000,
     deductible: 50,
     recommended: false,

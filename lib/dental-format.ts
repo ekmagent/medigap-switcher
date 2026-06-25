@@ -6,7 +6,7 @@
 // Static per-tier plan details. Prices are dynamic (passed in from the quote).
 const TIERS = [
   { id: "gold", name: "Gold", max: 3000, coverage: "100/80/50", deductible: 50, extra: "", recommended: true },
-  { id: "platinum", name: "Platinum", max: 5000, coverage: "100/80/50", deductible: 50, extra: " · +vision & hearing", recommended: false },
+  { id: "platinum", name: "Platinum", max: 5000, coverage: "100/80/50", deductible: 50, extra: " · +vision", recommended: false },
   { id: "bronze", name: "Bronze", max: 1500, coverage: "100/50/50", deductible: 100, extra: "", recommended: false },
 ] as const
 

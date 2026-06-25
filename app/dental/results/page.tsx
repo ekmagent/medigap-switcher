@@ -23,7 +23,7 @@ function PlanDetails({ plan, extra }: { plan: DentalPlan; extra?: string }) {
         <Line label="Crowns, dentures & implants" value={`${plan.coverage.major}%`} />
         <Line label="Benefit max each year" value={`$${plan.annualMax.toLocaleString()}`} />
         <Line label="Annual deductible" value={`$${plan.deductible}`} />
-        {plan.visionHearing && <Line label="Vision & hearing" value="Included" />}
+        {plan.visionHearing && <Line label="Vision" value="Included" />}
         {extra && <Line label={extra} value="Included" />}
       </dl>
       <div className="mt-3 rounded-lg bg-amber-50 px-3 py-2.5 text-sm leading-snug text-amber-900">
@@ -164,7 +164,7 @@ export default function QuotePickingPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-sm font-extrabold uppercase tracking-wide text-[#0d4d4d]">Platinum Protection</p>
-                    <p className="text-sm text-gray-500">Most coverage · adds vision &amp; hearing</p>
+                    <p className="text-sm text-gray-500">Most coverage · adds vision</p>
                   </div>
                   <p className="shrink-0 text-3xl font-black leading-none text-[#0d4d4d]">
                     {price(platinum.monthlyPremium)}
